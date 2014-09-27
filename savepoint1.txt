@@ -1,9 +1,0 @@
-1 1 * Framsida med info om hemsidans syfte och hur den används. KLART
-1 3 * Blogg med syfte att göra mig mer medveten om mitt arbete. KLART
-1 1 * Om-sida med relevant, lättläst information om mig och min kunskap. KLART
-1 1 * Kontakt-sida med kontaktinformation. KLART
-1 2 * Huvudmeny med ändrande CSS-kod beroende på navigering. KLART
-
-METOD * Objektorienterad filbaserad hantering av artiklar.
-METOD ** Både bloggartiklar och statiska artiklar. Det ska inte vara någon skillnad
-mellan dem, bara var de visas.
