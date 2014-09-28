@@ -28,8 +28,8 @@ var getURLHash = function (parameterName) {
 iwmViewer.controller("iwmViewerCtrl", function ($scope) {
     "use strict";
     
-    /* Get the problem object as a string from the hash in the URL */
-    var problemString = getURLHash("problem");
+    /* Get the problem object as a string from the hash in the URL and decode it (remove the %-stuff) */
+    var problemString = decodeURIComponent(getURLHash("problem"));
     
     /* Generate the problem object from the string if it's defined.
      * Otherwise, create a problem with the title "Problem not found". */
