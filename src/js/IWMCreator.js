@@ -6,7 +6,7 @@ var iwmCreator = angular.module("iwmCreator", []);
 iwmCreator.filter("uriencode", function () {
     "use strict";
     
-    return window.escape;
+    return encodeURIComponent;
 });
 
 /* Controller for create-math-problem.html */
