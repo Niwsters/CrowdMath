@@ -10,7 +10,7 @@ var iwmViewer = angular.module("iwmViewer", []);
  */
 var getURLHash = function (parameterName) {
     "use strict";
-    var sPageURL = window.location.hash.substring(1),
+    var sPageURL = location.href.split("#")[1],
         sURLVariables = sPageURL.split('&'),
         sParameterName,
         i;
@@ -29,12 +29,12 @@ iwmViewer.controller("iwmViewerCtrl", function ($scope) {
     "use strict";
     
     /* Get the problem object as a string from the hash in the URL and decode it (remove the %-stuff) */
-    var problemString = decodeURIComponent(getURLHash("problem"));
+    var problemURIString = getURLHash("problem");
     
     /* Generate the problem object from the string if it's defined.
      * Otherwise, create a problem with the title "Problem not found". */
-    if (problemString) {
-        $scope.problem = JSON.parse(problemString);
+    if (problemURIString) {
+        $scope.problem = JSON.parse(decodeURIComponent(problemURIString));
     } else {
         $scope.problem = {title: "Problem not found"};
     }
