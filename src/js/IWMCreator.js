@@ -3,6 +3,12 @@
 
 var iwmCreator = angular.module("iwmCreator", []);
 
+iwmCreator.filter("uriencode", function () {
+    "use strict";
+    
+    return window.escape;
+});
+
 /* Controller for create-math-problem.html */
 iwmCreator.controller("iwmCreatorCtrl", function ($scope) {
     "use strict";

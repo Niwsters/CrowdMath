@@ -36,6 +36,6 @@
     <button ng-click="hideLink = false">Create link</button>
     
     <!-- The link to the problem in the viewer -->
-    <a ng-hide="hideLink" href="{{link}}{{problem}}">{{link}}{{problem}}</a>
+    <a ng-hide="hideLink" href="{{link}}{{problem}}">{{link}}{{problem | json | uriencode}}</a>
 </body>
 </html>
