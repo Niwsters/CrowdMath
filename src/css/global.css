@@ -1,3 +1,17 @@
+body {
+    display: block; /* Allows the button (and more) to be centered */
+    
+    /* Centers the page */
+    margin-left: auto;
+    margin-right: auto;
+    
+    /* Text stuff */
+    font-family: sans-serif;
+    text-align: center;
+    
+    max-width: 720px;
+}
+
 button {
     /* Placing */
     display: block;
@@ -18,4 +32,19 @@ button {
 
 p {
     margin-top: 30px;
+}
+
+a {
+    display: block; /* Needed for the margin-top to work */
+    margin-top: 30px;
+    
+    word-wrap: break-word; /* Prevents a long link from going outside the container */
+}
+
+button:hover {
+    background: #DE3E3E;
+}
+
+button:active {
+    background: #FF4747;
 }
