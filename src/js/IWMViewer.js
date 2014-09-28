@@ -43,4 +43,7 @@ iwmViewer.controller("iwmViewerCtrl", function ($scope) {
     if ($scope.problem.title === "" || $scope.problem.title === undefined) {
         $scope.problem.title = "Unnamed problem";
     }
+    
+    /* Hides the answer on default */
+    $scope.hideAnswer = true;
 });

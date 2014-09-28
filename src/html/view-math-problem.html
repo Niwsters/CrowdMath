@@ -8,6 +8,7 @@
     <meta name="author" content="Sebastian Everett Eriksson">
     
     <link rel="stylesheet" href="../css/view-math-problem.css">
+    <link rel="stylesheet" href="../css/global.css">
     
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     
@@ -19,6 +20,20 @@
 </head>
 
 <body ng-controller="iwmViewerCtrl">
+    
+    <!-- Shows the problem's title -->
     <h1>{{problem.title}}</h1>
+    
+    <!-- Shows the problem's description -->
+    <p>{{problem.description}}</p>
+    
+    <!-- This button shows the answer when pressed -->
+    <button ng-hide="!hideAnswer" ng-click="hideAnswer = false">Show answer</button>
+    
+    <!-- This button hides the answer when pressed -->
+    <button ng-hide="hideAnswer" ng-click="hideAnswer = true">Hide answer</button>
+    
+    <!-- Shows the answer when hideAnswer is false -->
+    <p ng-hide="hideAnswer">{{problem.answer}}</p>
 </body>
 </html>

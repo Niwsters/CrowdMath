@@ -7,22 +7,14 @@ body {
     text-align: center;
 }
 
-button {
-    /* Placing */
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
+label {
+    display: block; /* Puts it on a separate line */
     
-    /* Design */
-    color: white;
-    font-family: sans-serif;
-    font-size: 1em;
-    background: #FF4747;
-    padding: .5em 1em;
-    border: 0;
-    border-radius: 3px;
-    text-shadow: 0 1px 1px #912424;
+    margin-top: 30px;
+}
+
+textarea {
+    width: 20em;
 }
 
 button:hover {

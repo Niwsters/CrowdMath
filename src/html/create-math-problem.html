@@ -7,7 +7,9 @@
     <meta name="description" content="Intize Web Math - Problem Creator">
     <meta name="author" content="Sebastian Everett Eriksson">
     
+    <!-- Load CSS sheets -->
     <link rel="stylesheet" href="../css/create-math-problem.css">
+    <link rel="stylesheet" href="../css/global.css">
     
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     
@@ -20,8 +22,20 @@
 
 <body ng-controller="iwmCreatorCtrl">
     <h1>Create a math problem!</h1>
-    <label>Name the problem: </label><input type="text" ng-model="problem.title">
-    <button ng-click="hideLink = false">Create Link</button>
+    
+    <!-- Create the title of the problem -->
+    <label>Name the problem</label><input type="text" ng-model="problem.title">
+    
+    <!-- Create the description of the problem -->
+    <label>Describe the problem</label><textarea ng-model="problem.description"></textarea>
+    
+    <!-- Create the answer to the problem -->
+    <label>Describe the answer</label><textarea ng-model="problem.answer"></textarea>
+    
+    <!-- This "Create link"-button simply unhides the link, which is generated even when it's hidden. -->
+    <button ng-click="hideLink = false">Create link</button>
+    
+    <!-- The link to the problem in the viewer -->
     <a ng-hide="hideLink" href="{{link}}{{problem}}">{{link}}{{problem}}</a>
 </body>
 </html>
