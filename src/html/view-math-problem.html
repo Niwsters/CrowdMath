@@ -7,7 +7,6 @@
     <meta name="description" content="Intize Web Math - Problem Viewer">
     <meta name="author" content="Sebastian Everett Eriksson">
     
-    <link rel="stylesheet" href="../css/view-math-problem.css">
     <link rel="stylesheet" href="../css/global.css">
     
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -27,12 +26,28 @@
     <!-- Shows the problem's description -->
     <p>{{problem.description}}</p>
     
-    <!-- This button shows the answer when pressed -->
-    <button ng-hide="!hideAnswer" ng-click="hideAnswer = false">Show answer</button>
+    <!-- When the answer contains more than numbers -->
+    <div ng-show="!isAnswerANumber">
+        
+        <!-- This button shows the answer when pressed -->
+        <button ng-show="hideAnswer" ng-click="hideAnswer = false">Show answer</button>
+        
+        <!-- This button hides the answer when pressed -->
+        <button ng-show="!hideAnswer" ng-click="hideAnswer = true">Hide answer</button>
+        
+    </div>
     
-    <!-- This button hides the answer when pressed -->
-    <button ng-hide="hideAnswer" ng-click="hideAnswer = true">Hide answer</button>
-    
+    <!-- When the answer contains only numbers -->
+    <div ng-show="isAnswerANumber">
+        
+        <!-- This input is for submitting an answer -->
+        <label>Write your answer</label><input type="text" ng-model="submittedAnswer" ng-change="checkAnswer()">
+        
+        <!-- This is for showing correct/incorrect feedback -->
+        <p class="correctFeedback" ng-show="answerSubmitted && answerCorrect">&#x2713;</p> <!-- Checkmark -->
+        <p class="incorrectFeedback" ng-show="answerSubmitted && !answerCorrect">&#x2717;</p> <!-- Cross -->
+        
+    </div>
     <!-- Shows the answer when hideAnswer is false -->
     <p ng-hide="hideAnswer">{{problem.answer}}</p>
 </body>

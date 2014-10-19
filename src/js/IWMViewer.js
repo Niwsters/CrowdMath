@@ -45,6 +45,7 @@ var getURLHash = function (parameterName) {
 iwmViewer.controller("iwmViewerCtrl", function ($scope) {
     "use strict";
     
+    /* ----- CREATE THE PROBLEM FROM URL ----- */
     /* Get the problem object as a string from the hash */
     var problemURIString = getURLHash("problem");
     
@@ -53,14 +54,41 @@ iwmViewer.controller("iwmViewerCtrl", function ($scope) {
     if (problemURIString) {
         $scope.problem = JSON.parse(decodeURIComponent(problemURIString));
     } else {
-        $scope.problem = {title: "Problem not found"};
+        $scope.problem = {
+            title: "Problem not found",
+            answer: "0"
+        };
     }
     
-    /* If the problem's title is empty or undefined, set it to "Unnamed problem". */
+    /* If the problem's answer is empty or undefined, set it to "Undefined answer" */
+    if ($scope.problem.answer === "" || $scope.problem.answer === undefined) {
+        $scope.problem.answer = "Undefined answer";
+    }
+    
+    /* Check if the problem contains only numbers */
+    $scope.isAnswerANumber = /^\d+$/.test($scope.problem.answer);
+    
+    /* If the problem's title is empty or undefined, set it to "Unnamed problem" */
     if ($scope.problem.title === "" || $scope.problem.title === undefined) {
         $scope.problem.title = "Unnamed problem";
     }
     
     /* Hides the answer on default */
     $scope.hideAnswer = true;
+    
+    /* Checks if the submitted answer is correct 
+       when the problem's answer contains only numbers */
+    $scope.checkAnswer = function () {
+        if ($scope.submittedAnswer !== "") {
+            $scope.answerSubmitted = true;
+        } else {
+            $scope.answerSubmitted = false;
+        }
+        
+        if ($scope.problem.answer === $scope.submittedAnswer) {
+            $scope.answerCorrect = true;
+        } else {
+            $scope.answerCorrect = false;
+        }
+    };
 });
