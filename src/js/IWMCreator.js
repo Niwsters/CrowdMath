@@ -3,6 +3,7 @@
 
 var iwmCreator = angular.module("iwmCreator", []);
 
+/* A filter that refers to encodeURIComponent. Not tested due to simplicity. */
 iwmCreator.filter("uriencode", function () {
     "use strict";
     
