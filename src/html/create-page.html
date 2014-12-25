@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html lang="en" ng-app="iwmCreatePage">
+<head>
+<meta charset="utf-8">
+    <title>Intize Web Math - Problem Creator</title>
+    <meta name="description" content="Intize Web Math - Problem Creator">
+    <meta name="author" content="Sebastian Everett Eriksson">
+    
+    <!-- Load CSS sheets -->
+    <link rel="stylesheet" href="../css/global.css">
+    
+    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    
+    <!-- Load angular.js library -->
+    <script type="text/javascript" src="../../lib/angular/angular.min.js"></script>
+    
+    <script type="text/javascript" src="../../src/js/IWMCreatePage.js"></script>
+    
+</head>
+
+<body ng-controller="iwmCreatePageCtrl">
+    <h1>Create a math page!</h1>
+    <h2>Add components and share your math knowledge</h2>
+
+    <container></container>
+
+    <button ng-click="addComponent()">Add component</button>
+</body>
+</html>

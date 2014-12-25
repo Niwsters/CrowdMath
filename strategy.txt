@@ -1,0 +1,14 @@
+Liberating math literature by simplifying creation and unrestricting publishing possibilities.
+
+Creation is simplified by removing all obstacles except communicating mathematics.
+* The following content can easily be created:
+	* Text
+	* Question (with numerical or literal answer)
+	* Graph
+	* Image
+* The content are put into pages
+* The pages are put into a book
+
+Publishing is unrestricted by making all content accessible by everyone.
+* The created books are put up on an open website
+* All books and pages can easily be printed
