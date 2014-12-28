@@ -1,3 +1,14 @@
+randomString = function(length) {
+	var possible, text;
+
+	possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+	for(var i=0; i<length; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+
+	return text;
+}
+
 stepDefinitionsWrapper = function() {
 	this.World = require("../support/world.js").World;
 
@@ -12,6 +23,12 @@ stepDefinitionsWrapper = function() {
 		});
 
 		callback();
+	});
+
+	this.When(/^I write text into the textarea that appears$/, function(callback){
+		var text = randomString();
+		this.browser.fill('textarea', text);
+		callback(this.browser.assert.attribute('textarea', 'value', text));
 	});
 
 	this.Then(/^I should see a new textarea appear$/, function(callback) {
