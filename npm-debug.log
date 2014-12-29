@@ -1,10 +1,10 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'zombie' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', '-g', 'install', 'phantomjs' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink /usr/bin/node
-5 verbose cache add [ 'zombie', null ]
-6 verbose cache add name=undefined spec="zombie" args=["zombie",null]
+5 verbose cache add [ 'phantomjs', null ]
+6 verbose cache add name=undefined spec="phantomjs" args=["phantomjs",null]
 7 verbose parsed url { protocol: null,
 7 verbose parsed url   slashes: null,
 7 verbose parsed url   auth: null,
@@ -14,254 +14,192 @@
 7 verbose parsed url   hash: null,
 7 verbose parsed url   search: null,
 7 verbose parsed url   query: null,
-7 verbose parsed url   pathname: 'zombie',
-7 verbose parsed url   path: 'zombie',
-7 verbose parsed url   href: 'zombie' }
-8 silly lockFile 0d956d41-zombie zombie
-9 verbose lock zombie /home/niwo/.npm/0d956d41-zombie.lock
-10 silly lockFile 0d956d41-zombie zombie
-11 silly lockFile 0d956d41-zombie zombie
-12 verbose addNamed [ 'zombie', '' ]
+7 verbose parsed url   pathname: 'phantomjs',
+7 verbose parsed url   path: 'phantomjs',
+7 verbose parsed url   href: 'phantomjs' }
+8 silly lockFile 30d7cd7d-phantomjs phantomjs
+9 verbose lock phantomjs /home/niwo/.npm/30d7cd7d-phantomjs.lock
+10 silly lockFile 30d7cd7d-phantomjs phantomjs
+11 silly lockFile 30d7cd7d-phantomjs phantomjs
+12 verbose addNamed [ 'phantomjs', '' ]
 13 verbose addNamed [ null, '*' ]
-14 silly lockFile 9a7cb86a-zombie zombie@
-15 verbose lock zombie@ /home/niwo/.npm/9a7cb86a-zombie.lock
-16 silly addNameRange { name: 'zombie', range: '*', hasData: false }
-17 verbose request where is /zombie
+14 silly lockFile 29cf7fd6-phantomjs phantomjs@
+15 verbose lock phantomjs@ /home/niwo/.npm/29cf7fd6-phantomjs.lock
+16 silly addNameRange { name: 'phantomjs', range: '*', hasData: false }
+17 verbose request where is /phantomjs
 18 verbose request registry https://registry.npmjs.org/
-19 verbose request id d470b3680d1c1484
-20 verbose url raw /zombie
-21 verbose url resolving [ 'https://registry.npmjs.org/', './zombie' ]
-22 verbose url resolved https://registry.npmjs.org/zombie
-23 verbose request where is https://registry.npmjs.org/zombie
-24 info trying registry request attempt 1 at 15:19:36
-25 http GET https://registry.npmjs.org/zombie
-26 http 200 https://registry.npmjs.org/zombie
+19 verbose request id 5e67abfe3df29de0
+20 verbose url raw /phantomjs
+21 verbose url resolving [ 'https://registry.npmjs.org/', './phantomjs' ]
+22 verbose url resolved https://registry.npmjs.org/phantomjs
+23 verbose request where is https://registry.npmjs.org/phantomjs
+24 info trying registry request attempt 1 at 18:02:54
+25 http GET https://registry.npmjs.org/phantomjs
+26 http 200 https://registry.npmjs.org/phantomjs
 27 silly registry.get cb [ 200,
-27 silly registry.get   { date: 'Thu, 25 Dec 2014 14:19:37 GMT',
+27 silly registry.get   { date: 'Sun, 28 Dec 2014 17:02:55 GMT',
 27 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-27 silly registry.get     etag: '"4B374GWEWNKO58BOKFT9QG0SZ"',
+27 silly registry.get     etag: '"BP25I2XDD7HG8FO3MYS5P6JT2"',
 27 silly registry.get     'content-type': 'application/json',
 27 silly registry.get     'cache-control': 'max-age=60',
-27 silly registry.get     'content-length': '222756',
+27 silly registry.get     'content-length': '91067',
 27 silly registry.get     'accept-ranges': 'bytes',
 27 silly registry.get     via: '1.1 varnish',
 27 silly registry.get     age: '0',
-27 silly registry.get     'x-served-by': 'cache-ams4146-AMS',
-27 silly registry.get     'x-cache': 'MISS',
-27 silly registry.get     'x-cache-hits': '0',
-27 silly registry.get     'x-timer': 'S1419517177.373603,VS0,VE535',
+27 silly registry.get     'x-served-by': 'cache-fra1245-FRA',
+27 silly registry.get     'x-cache': 'HIT',
+27 silly registry.get     'x-cache-hits': '1',
+27 silly registry.get     'x-timer': 'S1419786174.592279,VS0,VE706',
 27 silly registry.get     vary: 'Accept',
 27 silly registry.get     'keep-alive': 'timeout=10, max=50',
 27 silly registry.get     connection: 'Keep-Alive' } ]
-28 silly addNameRange number 2 { name: 'zombie', range: '*', hasData: true }
-29 silly addNameRange versions [ 'zombie',
-29 silly addNameRange   [ '0.12.1',
-29 silly addNameRange     '0.12.2',
-29 silly addNameRange     '0.12.3',
-29 silly addNameRange     '0.12.4',
-29 silly addNameRange     '0.12.5',
-29 silly addNameRange     '0.12.6',
-29 silly addNameRange     '0.12.7',
-29 silly addNameRange     '0.12.8',
-29 silly addNameRange     '0.12.9',
-29 silly addNameRange     '0.12.10',
-29 silly addNameRange     '0.12.11',
-29 silly addNameRange     '0.12.12',
-29 silly addNameRange     '0.12.13',
-29 silly addNameRange     '0.12.14',
-29 silly addNameRange     '0.12.15',
-29 silly addNameRange     '0.13.0',
-29 silly addNameRange     '0.13.1',
-29 silly addNameRange     '0.13.2',
-29 silly addNameRange     '0.13.3',
-29 silly addNameRange     '0.13.4',
-29 silly addNameRange     '0.13.6',
-29 silly addNameRange     '0.13.7',
-29 silly addNameRange     '0.13.8',
-29 silly addNameRange     '0.13.9',
-29 silly addNameRange     '0.13.10',
-29 silly addNameRange     '0.13.11',
-29 silly addNameRange     '0.13.12',
-29 silly addNameRange     '0.13.13',
-29 silly addNameRange     '0.13.14',
-29 silly addNameRange     '1.0.0',
-29 silly addNameRange     '1.1.0',
-29 silly addNameRange     '1.1.1',
-29 silly addNameRange     '1.1.2',
-29 silly addNameRange     '1.1.3',
-29 silly addNameRange     '1.1.4',
-29 silly addNameRange     '1.1.5',
-29 silly addNameRange     '1.1.6',
-29 silly addNameRange     '1.1.7',
-29 silly addNameRange     '1.2.0',
-29 silly addNameRange     '1.3.0',
-29 silly addNameRange     '1.3.1',
-29 silly addNameRange     '1.4.0',
-29 silly addNameRange     '1.4.1',
-29 silly addNameRange     '2.0.0-alpha1',
-29 silly addNameRange     '2.0.0-alpha2',
-29 silly addNameRange     '2.0.0-alpha3',
-29 silly addNameRange     '2.0.0-alpha4',
-29 silly addNameRange     '2.0.0-alpha5',
-29 silly addNameRange     '2.0.0-alpha6',
-29 silly addNameRange     '2.0.0-alpha7',
-29 silly addNameRange     '2.0.0-alpha8',
-29 silly addNameRange     '2.0.0-alpha9',
-29 silly addNameRange     '2.0.0-alpha10',
-29 silly addNameRange     '2.0.0-alpha11',
-29 silly addNameRange     '2.0.0-alpha12',
-29 silly addNameRange     '2.0.0-alpha13',
-29 silly addNameRange     '2.0.0-alpha14',
-29 silly addNameRange     '2.0.0-alpha15',
-29 silly addNameRange     '2.0.0-alpha16',
-29 silly addNameRange     '2.0.0-alpha17',
-29 silly addNameRange     '2.0.0-alpha18',
-29 silly addNameRange     '2.0.0-alpha19',
-29 silly addNameRange     '2.0.0-alpha20',
-29 silly addNameRange     '2.0.0-alpha21',
-29 silly addNameRange     '2.0.0-alpha22',
-29 silly addNameRange     '2.0.0-alpha23',
-29 silly addNameRange     '2.0.0-alpha24',
-29 silly addNameRange     '2.0.0-alpha25',
-29 silly addNameRange     '2.0.0-alpha26',
-29 silly addNameRange     '2.0.0-alpha27',
-29 silly addNameRange     '2.0.0-alpha28',
-29 silly addNameRange     '2.0.0-alpha29',
-29 silly addNameRange     '2.0.0-alpha30',
-29 silly addNameRange     '2.0.0-alpha31',
-29 silly addNameRange     '2.0.0',
-29 silly addNameRange     '2.0.1',
-29 silly addNameRange     '2.0.2',
-29 silly addNameRange     '2.0.3',
-29 silly addNameRange     '2.0.4',
-29 silly addNameRange     '2.0.5',
-29 silly addNameRange     '2.0.6',
-29 silly addNameRange     '2.0.7',
-29 silly addNameRange     '2.0.8',
-29 silly addNameRange     '2.1.0',
-29 silly addNameRange     '2.1.1',
-29 silly addNameRange     '2.2.0',
-29 silly addNameRange     '2.2.1',
-29 silly addNameRange     '2.3.0',
-29 silly addNameRange     '2.3.1',
-29 silly addNameRange     '2.3.2',
-29 silly addNameRange     '2.4.0',
-29 silly addNameRange     '2.5.0',
-29 silly addNameRange     '2.5.1' ] ]
-30 verbose addNamed [ 'zombie', '2.5.1' ]
-31 verbose addNamed [ '2.5.1', '2.5.1' ]
-32 silly lockFile c3dd7c1b-zombie-2-5-1 zombie@2.5.1
-33 verbose lock zombie@2.5.1 /home/niwo/.npm/c3dd7c1b-zombie-2-5-1.lock
-34 silly lockFile 86651895-pmjs-org-zombie-zombie-2-5-1-tgz https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-35 verbose lock https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz /home/niwo/.npm/86651895-pmjs-org-zombie-zombie-2-5-1-tgz.lock
-36 verbose addRemoteTarball [ 'https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz',
-36 verbose addRemoteTarball   '67e87555f02ec56527a3ba2f1461896c83cdad02' ]
-37 info retry fetch attempt 1 at 15:19:38
-38 verbose fetch to= /tmp/npm-12152-WYOPs4TS/registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-39 http GET https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-40 http 200 https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-41 silly lockFile 86651895-pmjs-org-zombie-zombie-2-5-1-tgz https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-42 silly lockFile 86651895-pmjs-org-zombie-zombie-2-5-1-tgz https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz
-43 silly lockFile c3dd7c1b-zombie-2-5-1 zombie@2.5.1
-44 silly lockFile c3dd7c1b-zombie-2-5-1 zombie@2.5.1
-45 silly lockFile 9a7cb86a-zombie zombie@
-46 silly lockFile 9a7cb86a-zombie zombie@
-47 silly resolved [ { name: 'zombie',
-47 silly resolved     version: '2.5.1',
-47 silly resolved     description: 'Insanely fast, full-stack, headless browser testing using Node.js',
-47 silly resolved     homepage: 'http://zombie.labnotes.org/',
-47 silly resolved     author:
-47 silly resolved      { name: 'Assaf Arkin',
-47 silly resolved        email: 'assaf@labnotes.org',
-47 silly resolved        url: 'http://labnotes.org/' },
-47 silly resolved     contributors: [ [Object], [Object], [Object], [Object] ],
-47 silly resolved     keywords:
-47 silly resolved      [ 'test',
-47 silly resolved        'tests',
-47 silly resolved        'testing',
-47 silly resolved        'TDD',
-47 silly resolved        'spec',
-47 silly resolved        'specs',
-47 silly resolved        'BDD',
-47 silly resolved        'headless',
-47 silly resolved        'browser',
-47 silly resolved        'html',
-47 silly resolved        'html5',
-47 silly resolved        'dom',
-47 silly resolved        'css',
-47 silly resolved        'javascript',
-47 silly resolved        'integration',
-47 silly resolved        'ajax',
-47 silly resolved        'full-stack',
-47 silly resolved        'DSL' ],
-47 silly resolved     main: 'lib/zombie',
-47 silly resolved     scripts:
-47 silly resolved      { build: 'gulp build',
-47 silly resolved        test: 'mocha',
-47 silly resolved        prepublish: 'gulp build',
-47 silly resolved        postpublish: 'gulp tag' },
-47 silly resolved     engines: { node: '0.10.x' },
-47 silly resolved     dependencies:
-47 silly resolved      { bluebird: '^2.3.11',
-47 silly resolved        debug: '^2.0.0',
-47 silly resolved        eventsource: '^0.1.4',
-47 silly resolved        'iconv-lite': '^0.4.0',
-47 silly resolved        jsdom: '1.4.0',
-47 silly resolved        lazybird: '^1.0.0',
-47 silly resolved        mime: '^1.2.11',
-47 silly resolved        ms: '^0.7.0',
-47 silly resolved        request: '^2.48.0',
-47 silly resolved        'tough-cookie': '^0.12.1',
-47 silly resolved        ws: '^0.6.0' },
-47 silly resolved     devDependencies:
-47 silly resolved      { 'body-parser': '^1.10.0',
-47 silly resolved        'coffee-script': '^1.8.0',
-47 silly resolved        'cookie-parser': '^1.3.3',
-47 silly resolved        express: '^4.10.4',
-47 silly resolved        gulp: '^3.8.10',
-47 silly resolved        'gulp-clean': '^0.3.1',
-47 silly resolved        'gulp-coffee': '^2.2.0',
-47 silly resolved        'gulp-exec': '^2.1.1',
-47 silly resolved        'gulp-notify': '^2.0.1',
-47 silly resolved        'gulp-util': '^3.0.1',
-47 silly resolved        mocha: '^2.0.1',
-47 silly resolved        morgan: '^1.5.0',
-47 silly resolved        multiparty: '^4.1.0',
-47 silly resolved        replay: '^1.12.0',
-47 silly resolved        requirejs: '^2.1.15',
-47 silly resolved        traceur: '^0.0.79' },
-47 silly resolved     repository: { type: 'git', url: 'http://github.com/assaf/zombie' },
-47 silly resolved     bugs: { url: 'http://github.com/assaf/zombie/issues' },
+28 silly addNameRange number 2 { name: 'phantomjs', range: '*', hasData: true }
+29 silly addNameRange versions [ 'phantomjs',
+29 silly addNameRange   [ '0.0.1',
+29 silly addNameRange     '0.0.2',
+29 silly addNameRange     '0.0.3',
+29 silly addNameRange     '0.0.4',
+29 silly addNameRange     '0.0.5',
+29 silly addNameRange     '0.0.6',
+29 silly addNameRange     '0.0.7',
+29 silly addNameRange     '0.0.8',
+29 silly addNameRange     '0.0.9',
+29 silly addNameRange     '0.1.0',
+29 silly addNameRange     '0.1.1',
+29 silly addNameRange     '0.2.0',
+29 silly addNameRange     '0.2.1',
+29 silly addNameRange     '0.2.2',
+29 silly addNameRange     '0.2.3',
+29 silly addNameRange     '0.2.4',
+29 silly addNameRange     '0.2.5',
+29 silly addNameRange     '0.2.6',
+29 silly addNameRange     '1.8.0-1',
+29 silly addNameRange     '1.8.1-1',
+29 silly addNameRange     '1.8.1-2',
+29 silly addNameRange     '1.8.1-3',
+29 silly addNameRange     '1.8.2-0',
+29 silly addNameRange     '1.8.2-1',
+29 silly addNameRange     '1.8.2-2',
+29 silly addNameRange     '1.9.0-0',
+29 silly addNameRange     '1.9.0-1',
+29 silly addNameRange     '1.9.0-2',
+29 silly addNameRange     '1.9.0-3',
+29 silly addNameRange     '1.9.0-4',
+29 silly addNameRange     '1.9.0-5',
+29 silly addNameRange     '1.9.0-6',
+29 silly addNameRange     '1.9.1-0',
+29 silly addNameRange     '1.9.1-2',
+29 silly addNameRange     '1.9.1-3',
+29 silly addNameRange     '1.9.1-4',
+29 silly addNameRange     '1.9.1-5',
+29 silly addNameRange     '1.9.1-6',
+29 silly addNameRange     '1.9.1-7',
+29 silly addNameRange     '1.9.1-8',
+29 silly addNameRange     '1.9.1-9',
+29 silly addNameRange     '1.9.2-0',
+29 silly addNameRange     '1.9.2-1',
+29 silly addNameRange     '1.9.2-2',
+29 silly addNameRange     '1.9.2-3',
+29 silly addNameRange     '1.9.2-4',
+29 silly addNameRange     '1.9.2-5',
+29 silly addNameRange     '1.9.2-6',
+29 silly addNameRange     '1.9.6-0',
+29 silly addNameRange     '1.9.7-1',
+29 silly addNameRange     '1.9.7-3',
+29 silly addNameRange     '1.9.7-4',
+29 silly addNameRange     '1.9.7-5',
+29 silly addNameRange     '1.9.7-6',
+29 silly addNameRange     '1.9.7-7',
+29 silly addNameRange     '1.9.7-8',
+29 silly addNameRange     '1.9.7-9',
+29 silly addNameRange     '1.9.7-10',
+29 silly addNameRange     '1.9.7-11',
+29 silly addNameRange     '1.9.7-12',
+29 silly addNameRange     '1.9.7-13',
+29 silly addNameRange     '1.9.7-14',
+29 silly addNameRange     '1.9.7-15',
+29 silly addNameRange     '1.8.2-3',
+29 silly addNameRange     '1.9.8',
+29 silly addNameRange     '1.9.9',
+29 silly addNameRange     '1.9.10',
+29 silly addNameRange     '1.9.11',
+29 silly addNameRange     '1.9.12',
+29 silly addNameRange     '1.9.13' ] ]
+30 verbose addNamed [ 'phantomjs', '1.9.13' ]
+31 verbose addNamed [ '1.9.13', '1.9.13' ]
+32 silly lockFile b0139109-phantomjs-1-9-13 phantomjs@1.9.13
+33 verbose lock phantomjs@1.9.13 /home/niwo/.npm/b0139109-phantomjs-1-9-13.lock
+34 silly lockFile 53cfdd45-g-phantomjs-phantomjs-1-9-13-tgz https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+35 verbose lock https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz /home/niwo/.npm/53cfdd45-g-phantomjs-phantomjs-1-9-13-tgz.lock
+36 verbose addRemoteTarball [ 'https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz',
+36 verbose addRemoteTarball   '2f9afca241eaf17cad5a137bf9eade948a4d7ef5' ]
+37 info retry fetch attempt 1 at 18:02:55
+38 verbose fetch to= /tmp/npm-8081-T2Wt92h9/registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+39 http GET https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+40 http 200 https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+41 silly lockFile 53cfdd45-g-phantomjs-phantomjs-1-9-13-tgz https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+42 silly lockFile 53cfdd45-g-phantomjs-phantomjs-1-9-13-tgz https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz
+43 silly lockFile b0139109-phantomjs-1-9-13 phantomjs@1.9.13
+44 silly lockFile b0139109-phantomjs-1-9-13 phantomjs@1.9.13
+45 silly lockFile 29cf7fd6-phantomjs phantomjs@
+46 silly lockFile 29cf7fd6-phantomjs phantomjs@
+47 silly resolved [ { name: 'phantomjs',
+47 silly resolved     version: '1.9.13',
+47 silly resolved     keywords: [ 'phantomjs', 'headless', 'webkit' ],
+47 silly resolved     description: 'Headless WebKit with JS API',
+47 silly resolved     homepage: 'https://github.com/Obvious/phantomjs',
+47 silly resolved     repository: { type: 'git', url: 'git://github.com/Obvious/phantomjs.git' },
 47 silly resolved     licenses: [ [Object] ],
-47 silly resolved     gitHead: '8a2a040eee938c589194f497723eae9ecb5a0e5b',
-47 silly resolved     _id: 'zombie@2.5.1',
-47 silly resolved     _shasum: '67e87555f02ec56527a3ba2f1461896c83cdad02',
-47 silly resolved     _from: 'zombie@',
-47 silly resolved     _npmVersion: '2.1.11',
-47 silly resolved     _nodeVersion: '0.10.33',
-47 silly resolved     _npmUser: { name: 'assaf', email: 'assaf@labnotes.org' },
-47 silly resolved     maintainers: [ [Object] ],
+47 silly resolved     author:
+47 silly resolved      { name: 'Dan Pupius',
+47 silly resolved        email: 'dan@obvious.com',
+47 silly resolved        url: 'http://pupius.co.uk' },
+47 silly resolved     maintainers: [ [Object], [Object], [Object] ],
+47 silly resolved     main: 'lib/phantomjs',
+47 silly resolved     bin: { phantomjs: './bin/phantomjs' },
+47 silly resolved     scripts:
+47 silly resolved      { install: 'node install.js',
+47 silly resolved        test: 'nodeunit --reporter=minimal test/tests.js' },
+47 silly resolved     dependencies:
+47 silly resolved      { 'adm-zip': '0.4.4',
+47 silly resolved        kew: '0.4.0',
+47 silly resolved        ncp: '~1.0.1',
+47 silly resolved        npmconf: '2.0.9',
+47 silly resolved        mkdirp: '0.5.0',
+47 silly resolved        progress: '1.1.8',
+47 silly resolved        request: '2.42.0',
+47 silly resolved        'request-progress': '0.3.1',
+47 silly resolved        rimraf: '~2.2.8',
+47 silly resolved        which: '~1.0.5' },
+47 silly resolved     devDependencies: { nodeunit: '0.9.0' },
+47 silly resolved     gitHead: 'e4bb0d659dfe7e91a9658d5d28e4d5350099629d',
+47 silly resolved     bugs: { url: 'https://github.com/Obvious/phantomjs/issues' },
+47 silly resolved     _id: 'phantomjs@1.9.13',
+47 silly resolved     _shasum: '2f9afca241eaf17cad5a137bf9eade948a4d7ef5',
+47 silly resolved     _from: 'phantomjs@',
+47 silly resolved     _npmVersion: '1.4.28',
+47 silly resolved     _npmUser: { name: 'nicks', email: 'nicholas.j.santos@gmail.com' },
 47 silly resolved     dist:
-47 silly resolved      { shasum: '67e87555f02ec56527a3ba2f1461896c83cdad02',
-47 silly resolved        tarball: 'http://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz' },
+47 silly resolved      { shasum: '2f9afca241eaf17cad5a137bf9eade948a4d7ef5',
+47 silly resolved        tarball: 'http://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz' },
 47 silly resolved     directories: {},
-47 silly resolved     _resolved: 'https://registry.npmjs.org/zombie/-/zombie-2.5.1.tgz' } ]
-48 info install zombie@2.5.1 into /usr/lib
-49 info installOne zombie@2.5.1
-50 verbose lib/node_modules/zombie unbuild
-51 verbose tar unpack /home/niwo/.npm/zombie/2.5.1/package.tgz
-52 silly lockFile fc62e60f-tar-usr-lib-node-modules-zombie tar:///usr/lib/node_modules/zombie
-53 verbose lock tar:///usr/lib/node_modules/zombie /home/niwo/.npm/fc62e60f-tar-usr-lib-node-modules-zombie.lock
-54 silly lockFile c7974ed3-iwo-npm-zombie-2-5-1-package-tgz tar:///home/niwo/.npm/zombie/2.5.1/package.tgz
-55 verbose lock tar:///home/niwo/.npm/zombie/2.5.1/package.tgz /home/niwo/.npm/c7974ed3-iwo-npm-zombie-2-5-1-package-tgz.lock
+47 silly resolved     _resolved: 'https://registry.npmjs.org/phantomjs/-/phantomjs-1.9.13.tgz' } ]
+48 info install phantomjs@1.9.13 into /usr/lib
+49 info installOne phantomjs@1.9.13
+50 verbose lib/node_modules/phantomjs unbuild
+51 verbose tar unpack /home/niwo/.npm/phantomjs/1.9.13/package.tgz
+52 silly lockFile ce07c23f-r-usr-lib-node-modules-phantomjs tar:///usr/lib/node_modules/phantomjs
+53 verbose lock tar:///usr/lib/node_modules/phantomjs /home/niwo/.npm/ce07c23f-r-usr-lib-node-modules-phantomjs.lock
+54 silly lockFile 2e8d2e85-npm-phantomjs-1-9-13-package-tgz tar:///home/niwo/.npm/phantomjs/1.9.13/package.tgz
+55 verbose lock tar:///home/niwo/.npm/phantomjs/1.9.13/package.tgz /home/niwo/.npm/2e8d2e85-npm-phantomjs-1-9-13-package-tgz.lock
 56 silly gunzTarPerm modes [ '775', '664' ]
-57 error Error: EACCES, mkdir '/usr/lib/node_modules/zombie'
-57 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/zombie']
+57 error Error: EACCES, mkdir '/usr/lib/node_modules/phantomjs'
+57 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/phantomjs']
 57 error   errno: 3,
 57 error   code: 'EACCES',
-57 error   path: '/usr/lib/node_modules/zombie',
+57 error   path: '/usr/lib/node_modules/phantomjs',
 57 error   fstream_type: 'Directory',
-57 error   fstream_path: '/usr/lib/node_modules/zombie',
+57 error   fstream_path: '/usr/lib/node_modules/phantomjs',
 57 error   fstream_class: 'DirWriter',
 57 error   fstream_stack:
 57 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
@@ -269,17 +207,17 @@
 57 error      'Object.oncomplete (fs.js:107:15)' ] }
 58 error Please try running this command again as root/Administrator.
 59 error System Linux 3.13.0-43-generic
-60 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "zombie"
+60 error command "/usr/bin/node" "/usr/bin/npm" "-g" "install" "phantomjs"
 61 error cwd /home/niwo/iwm
 62 error node -v v0.10.33
 63 error npm -v 1.4.28
-64 error path /usr/lib/node_modules/zombie
-65 error fstream_path /usr/lib/node_modules/zombie
+64 error path /usr/lib/node_modules/phantomjs
+65 error fstream_path /usr/lib/node_modules/phantomjs
 66 error fstream_type Directory
 67 error fstream_class DirWriter
 68 error code EACCES
 69 error errno 3
-70 error stack Error: EACCES, mkdir '/usr/lib/node_modules/zombie'
+70 error stack Error: EACCES, mkdir '/usr/lib/node_modules/phantomjs'
 71 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
 71 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
 71 error fstream_stack Object.oncomplete (fs.js:107:15)

@@ -41,6 +41,14 @@ var getURLHash = function (parameterName) {
     return false;
 };
 
+iwmViewPage.directive("contentList", function() {
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/content-list.html'
+	};
+});
+
+// This filter replaces \n with <br>-elements.
 iwmViewPage.filter("newline", function() {
 	"use strict";
 
@@ -63,7 +71,7 @@ iwmViewPage.controller("iwmViewPageCtrl", function ($scope) {
         $scope.page = JSON.parse(decodeURIComponent(pageURIString));
     } else {
         $scope.page = {
-		component: {
+		content: {
 			"0": "This page is empty"
 		}
         };

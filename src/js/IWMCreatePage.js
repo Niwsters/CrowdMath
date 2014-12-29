@@ -38,7 +38,7 @@ iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	
 	// Adds content inputs when the add content button is pressed.
 	$scope.addContent = function() {
-		var content = angular.element('<textarea ng-model="page.content[' + $scope.contentCount + ']"></textarea><br\>');
+		var content = angular.element('<textarea class="iwm-text-content" ng-model="page.content[' + $scope.contentCount + ']"></textarea><br\>');
 		content = $compile(content)($scope);
 
 		angular.element(document.querySelector('#create-content-container')).append(content);

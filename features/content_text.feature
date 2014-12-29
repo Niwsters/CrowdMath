@@ -5,12 +5,12 @@ Feature: Text content
 
 	Scenario: Add a text component
 		Given I am on the IWMPageCreator page
-		When I press "Add component"
+		When I press "Add content"
 		Then I should see a new textarea appear
 	
 	Scenario: Save a page with text component
 		Given I am on the IWMPageCreator page
-		When I press "Add component"
+		When I press "Add content"
 		And I write text into the textarea that appears
 		And I press "Create link"
 		And I press the link that is created
