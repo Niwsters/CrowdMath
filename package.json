@@ -1,7 +1,0 @@
-{
-	"devDependencies": {
-		"cucumber": "git://github.com/cucumber/cucumber-js.git#master",
-		"grunt": "*",
-		"grunt-cucumber": "*"
-	}
-}
