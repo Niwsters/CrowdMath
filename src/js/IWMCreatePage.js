@@ -7,6 +7,8 @@ iwmCreatePage.filter("uriencode", function() {
 });
 
 iwmCreatePage.directive('addContentButton', function() {
+	"use strict";
+
 	return {
 		restrict: 'E',
 		templateUrl: 'directives/add-content-button.html'
@@ -14,6 +16,8 @@ iwmCreatePage.directive('addContentButton', function() {
 });
 
 iwmCreatePage.directive('createLinkButton', function() {
+	"use strict";
+
 	return {
 		restrict: 'E',
 		templateUrl: 'directives/create-link-button.html'
@@ -21,11 +25,23 @@ iwmCreatePage.directive('createLinkButton', function() {
 });
 
 iwmCreatePage.directive('linkToPage', function() {
+	"use strict";
+
 	return {
 		restrict: 'E',
 		templateUrl: 'directives/link-to-page.html'
-	}
+	};
 });
+
+
+iwmCreatePage.directive('contentInput', function() {
+	"use strict";
+
+	return {
+		restrict: 'E',
+		templateUrl: 'directives/content-input.html'
+	};
+})
 
 iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	"use strict";
@@ -38,7 +54,7 @@ iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	
 	// Adds content inputs when the add content button is pressed.
 	$scope.addContent = function() {
-		var content = angular.element('<textarea class="iwm-text-content" ng-model="page.content[' + $scope.contentCount + ']"></textarea><br\>');
+		var content = angular.element('<content-input></content-input>');
 		content = $compile(content)($scope);
 
 		angular.element(document.querySelector('#create-content-container')).append(content);

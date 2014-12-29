@@ -1,17 +1,16 @@
 Feature: Text content
 	As a content creator
 	I want to create text on a page about mathematics
-	So that I can share my mathematical knowledge
+	So that I can describe my mathematical knowledge
 
-	Scenario: Add a text component
+	Scenario: Add text content
 		Given I am on the IWMPageCreator page
-		When I press "Add content"
-		Then I should see a new textarea appear
+		When I add text content
+		Then a new textarea for text appears
 	
-	Scenario: Save a page with text component
+	Scenario: Save a page with text content
 		Given I am on the IWMPageCreator page
-		When I press "Add content"
-		And I write text into the textarea that appears
-		And I press "Create link"
-		And I press the link that is created
-		Then I should see the text I wrote in the page that appears
+		When I add text content
+		And I write some text content
+		And I go to the page with the text content
+		Then I should see the text I wrote

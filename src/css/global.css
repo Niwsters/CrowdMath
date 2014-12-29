@@ -9,7 +9,7 @@ body {
     font-family: sans-serif;
     text-align: center;
     
-    max-width: 720px;
+    max-width: 35rem;
 }
 
 label, button, p, a {
@@ -23,8 +23,8 @@ label {
 button {
     /* Placing */
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 40px auto 0 auto;
+    clear: both;
     
     /* Design */
     color: white;
@@ -64,7 +64,31 @@ button:active {
 }
 
 textarea {
-    width: 20em;
+    width: 100%;
+	margin: 0 auto 20px auto;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+ul.choose-content-type {
+	width: 100%;
+	list-style-type: none;	
+	margin: 0 auto;
+	padding: 0;
+	text-align: center;
+}
+
+.choose-content-type li {
+	float: left;
+	color: #FFF;
+	background: #FF4747;
+	margin: 0 2px;
+	padding: 5px 10px;
+	border-radius: 3px 3px 0 0;
+}
+
+.choose-content-type li:hover {
+	background: #DE3E3E;
 }
 
 a:link    { color: #06c }  /* unvisited links */
