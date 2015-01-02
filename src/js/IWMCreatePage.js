@@ -34,14 +34,26 @@ iwmCreatePage.directive('linkToPage', function() {
 });
 
 
-iwmCreatePage.directive('contentInput', function() {
+iwmCreatePage.directive('contentInput', function($compile) {
 	"use strict";
 
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/content-input.html'
+		templateUrl: 'directives/content-input.html',
 	};
-})
+});
+
+iwmCreatePage.directive('contentTextarea', function($compile) {
+	"use strict";
+
+	return {
+		link: function(scope, elem) {
+			var textarea = angular.element('<textarea ng-model="page.content['+scope.contentCount+']"></textarea>');
+			textarea = $compile(textarea)(scope);
+			elem.append(textarea);
+		}
+	};
+});
 
 iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	"use strict";
