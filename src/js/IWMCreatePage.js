@@ -39,21 +39,45 @@ iwmCreatePage.directive('contentInput', function($compile) {
 
 	return {
 		restrict: 'E',
+		scope: {
+			content: '=',
+			contentId: '@'
+		},
 		templateUrl: 'directives/content-input.html',
-	};
-});
+		link: function(scope) {
+			scope.contentSelected = {
+				text: true,
+				math: false
+			}
 
-iwmCreatePage.directive('contentTextarea', function($compile) {
-	"use strict";
+			scope.selectContent = function(type) {
+				scope.contentSelected[type] = true;
 
-	return {
-		link: function(scope, elem) {
-			var textarea = angular.element('<textarea ng-model="page.content['+scope.contentCount+']"></textarea>');
-			textarea = $compile(textarea)(scope);
-			elem.append(textarea);
+				for(var key in scope.contentSelected) {
+					if(key !== type) {
+						scope.contentSelected[key] = false;
+					}
+				}
+			}
 		}
 	};
 });
+
+iwmCreatePage.directive('contentTextInput', function() {
+	"use strict";
+
+	return {
+		template: '<textarea ng-model="content[contentId]"></textarea>'
+	};
+});
+
+iwmCreatePage.directive('contentMathInput', function() {
+	"use strict";
+
+	return {
+		template: '<textarea ng-model="content[contentId]"></textarea>'
+	};
+})
 
 iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	"use strict";
@@ -66,7 +90,7 @@ iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	
 	// Adds content inputs when the add content button is pressed.
 	$scope.addContent = function() {
-		var content = angular.element('<content-input></content-input>');
+		var content = angular.element('<content-input content-id="'+$scope.contentCount+'" content="page.content"></content-input>');
 		content = $compile(content)($scope);
 
 		angular.element(document.querySelector('#create-content-container')).append(content);

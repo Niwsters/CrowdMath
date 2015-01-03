@@ -1,10 +1,11 @@
 <div class="content-creation-container">
 
 <ul class="choose-content-type">
-	<li class="active" >Text</li>
-	<li>Math</li>
+	<li ng-class="{active: contentSelected.text}" ng-click="selectContent('text')">Text</li>
+	<li ng-class="{active: contentSelected.math}" ng-click="selectContent('math')">Math</li>
 </ul>
 
-<content-textarea></content-textarea>
+<content-text-input ng-show="contentSelected.text"></content-text-input>
+<content-math-input ng-show="contentSelected.math"></content-math-input>
 
 </div>

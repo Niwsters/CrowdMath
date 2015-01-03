@@ -104,6 +104,11 @@ ul.choose-content-type {
 	border-radius: 3px 3px 0 0;
 	border-bottom: 1px solid #FF6666;
 	margin-bottom: -2px;
+	cursor: pointer;
+}
+
+.choose-content-type li:hover {
+	background: #FF4747;
 }
 
 .choose-content-type li.active {
@@ -111,10 +116,6 @@ ul.choose-content-type {
 	color: #000;
 	border: 1px solid #FF4747;
 	border-bottom: 1px solid #FFF;
-}
-
-.choose-content-type li:hover {
-	background: #FF4747;
 }
 
 a:link    { color: #06c }  /* unvisited links */
