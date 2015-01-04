@@ -71,9 +71,9 @@ iwmViewPage.controller("iwmViewPageCtrl", function ($scope) {
         $scope.page = JSON.parse(decodeURIComponent(pageURIString));
     } else {
         $scope.page = {
-		content: {
-			"0": "This page is empty"
-		}
+			content: {
+				"0": "This page is empty"
+			}
         };
     }
 });

@@ -48,10 +48,16 @@ iwmCreatePage.directive('contentInput', function($compile) {
 			scope.contentSelected = {
 				text: true,
 				math: false
-			}
+			};
+
+			scope.tempContent = {
+				text: '',
+				math: ''
+			};
 
 			scope.selectContent = function(type) {
 				scope.contentSelected[type] = true;
+				scope.content[scope.contentId].type = type;
 
 				for(var key in scope.contentSelected) {
 					if(key !== type) {
@@ -59,6 +65,16 @@ iwmCreatePage.directive('contentInput', function($compile) {
 					}
 				}
 			}
+
+			scope.$watch(function() {
+				for(var key in scope.contentSelected) {
+					if(scope.contentSelected[key] == true) {
+						return scope.tempContent[key];
+					}
+				}
+			}, function(newValue) {
+				scope.content[scope.contentId].content = newValue;
+			});
 		}
 	};
 });
@@ -67,23 +83,59 @@ iwmCreatePage.directive('contentTextInput', function() {
 	"use strict";
 
 	return {
-		template: '<textarea ng-model="content[contentId]"></textarea>'
+		template: '<textarea ng-model="tempContent.text"></textarea>'
 	};
 });
 
-iwmCreatePage.directive('contentMathInput', function() {
+iwmCreatePage.directive('contentMathInput', function($compile) {
 	"use strict";
 
 	return {
-		template: '<textarea ng-model="content[contentId]"></textarea>'
+		link: function(scope, elem) {
+			// Add a mathquill-input (for TeX-like maths)
+
+			var mathquillInput = angular.element('<mathquill-input ng-model="tempContent.math"></mathquill-input>');
+			mathquillInput = $compile(mathquillInput)(scope);
+			elem.append(mathquillInput);
+		}
 	};
-})
+});
+
+// Angular directive for a mathquill "textarea"
+// Credit: github.com/peardeck/mathquill-directive
+iwmCreatePage.directive('mathquillInput', function($interval) {
+	"use strict";
+	
+	return {
+		restrict: 'E',
+		template: '<span></span>',
+		replace: true,
+		require: 'ngModel',
+		link: function(scope, elem, attrs, ngModel) {
+			var mathquill = $(elem).mathquill('editable');
+
+			var latexWatcher = $interval(function() {
+				ngModel.$setViewValue(mathquill.mathquill('latex'));
+			}, 500);
+
+			scope.$on('$destroy', function() {
+				$interval.cancel(latexWatcher);
+			});
+
+			ngModel.$render = function() {
+				mathquill.mathquill('latex', ngModel.$viewValue || '');
+			};
+		}
+	}
+});
 
 iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 	"use strict";
 	
 	// The page object stores the content that the user creates.
-	$scope.page = {};
+	$scope.page = {
+		content: []
+	};
 
 	// contentCount is an index for every added content.
 	$scope.contentCount = 0;
@@ -94,6 +146,7 @@ iwmCreatePage.controller("iwmCreatePageCtrl", function($scope, $compile) {
 		content = $compile(content)($scope);
 
 		angular.element(document.querySelector('#create-content-container')).append(content);
+		$scope.page.content[$scope.contentCount] = {};
 		$scope.contentCount++;
 	};
 	
