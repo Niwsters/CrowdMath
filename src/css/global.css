@@ -83,10 +83,13 @@ textarea, span.mathquill-editable {
 	max-width: 100%;
 	min-height: 1em;
 	margin: 20px auto 20px auto;
-	font-family: inherit;
-	font-size: inherit;
 	border: solid 1px #C9C9C9;
 	box-shadow: none;
+}
+
+textarea {
+	font-family: inherit;
+	font-size: inherit;
 }
 
 ul.choose-content-type {

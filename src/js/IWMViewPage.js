@@ -44,8 +44,24 @@ var getURLHash = function (parameterName) {
 iwmViewPage.directive("contentList", function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'directives/content-list.html'
+		templateUrl: 'directives/content-list.html',
 	};
+});
+
+iwmViewPage.directive("contentView", function() {
+	return {
+		restrict: 'E',
+		replace: true,
+		template: '<span class="iwm-content" ng-bind-html="content.content | newline"></span>',
+		link: function(scope, elem) {
+			if(scope.content.type == 'math') {
+				var newElem = $('<span>'+scope.content.content+'</span>').
+					addClass('iwm-content');
+				$(elem).replaceWith(newElem);
+				newElem.mathquill();
+			}
+		}
+	}
 });
 
 // This filter replaces \n with <br>-elements.
