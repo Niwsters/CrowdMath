@@ -55,9 +55,12 @@ iwmViewPage.directive("contentView", function() {
 		template: '<span class="iwm-content" ng-bind-html="content.content | newline"></span>',
 		link: function(scope, elem) {
 			if(scope.content.type == 'math') {
-				var newElem = $('<span>'+scope.content.content+'</span>').
-					addClass('iwm-content');
+				var newElem = $('<span></span>').
+					addClass('iwm-content').
+					html(scope.content.content);
+
 				$(elem).replaceWith(newElem);
+
 				newElem.mathquill();
 			}
 		}
