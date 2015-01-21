@@ -1,6 +1,9 @@
-node_modules
-archive
-
 *.log
-
 *.swp
+logs/*
+!.gitkeep
+node_modules/
+bower_components/
+tmp
+.DS_Store
+.idea

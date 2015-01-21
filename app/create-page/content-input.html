@@ -1,0 +1,8 @@
+<ul class="choose-content-type">
+  <li ng-class="{active: content.type=='text'}" choose-content type="text">Text</li>
+  <li ng-class="{active: content.type=='math'}" choose-content type="math">Math</li>
+</ul>
+
+<textarea ng-model="textContent" ng-show="content.type=='text'"></textarea>
+<mathquill-element ng-model="mathContent" ng-show="content.type=='math'"></mathquill-element>
+<p>{{content.content}}</p>
