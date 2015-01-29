@@ -1,15 +1,20 @@
 'use strict';
 
-describe('myApp.view2 module', function() {
+describe('iwm.viewPage module', function() {
 
-  beforeEach(module('myApp.view2'));
+  beforeEach(module('iwm.viewPage'));
 
-  describe('view2 controller', function(){
-
+  describe('view-page controller', function(){
+    var scope, ctrl;
+    
+    beforeEach(inject(function($controller) {
+      scope = {},
+      ctrl = $controller('ViewPageCtrl', {$scope:scope});
+    }));
+    
     it('should ....', inject(function($controller) {
       //spec body
-      var view2Ctrl = $controller('View2Ctrl');
-      expect(view2Ctrl).toBeDefined();
+      expect(ctrl).toBeDefined();
     }));
 
   });

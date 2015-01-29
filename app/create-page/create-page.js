@@ -2,6 +2,7 @@
 
 angular.module('iwm.createPage', ['ngRoute'])
 
+// Sets the route to the create page
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/create-page', {
     templateUrl: 'create-page/create-page.html',
@@ -10,20 +11,25 @@ angular.module('iwm.createPage', ['ngRoute'])
 }])
 
 .controller('CreatePageCtrl', ['$scope', function($scope) {
+  
+  // Prepare empty page object to fill with content
   $scope.page = {
     contents: []
   }
+  
 }])
 
+// Filter that converts a string to a link-friendly string
 .filter("uriencode", function () {
-	"use strict";
-
 	return encodeURIComponent;
 })
 
+// Button directive that adds content to the page
 .directive('addContentButton', [function() {
   return {
     link: function(scope, elem, attrs) {
+      
+      // Add new content to page object on click event
       elem.bind('click', function() {
         scope.page.contents.push({
           type: "text",
@@ -32,18 +38,24 @@ angular.module('iwm.createPage', ['ngRoute'])
         
         scope.$apply();
       });
+      
     }
   };
 }])
 
+// Directive that contains all the inputs (text, math, etc) for each content
 .directive('contentInput', [function() {
   return {
+    restrict: 'E',
     templateUrl: 'create-page/content-input.html',
     link: function(scope, elem, attrs) {
+      
+      // If textContent changes, content.content = textContent
       scope.$watch('textContent', function(newValue, oldValue) {
         scope.content.content = newValue;
       });
       
+      // If mathContent changes, content.content = mathContent
       scope.$watch('mathContent', function(newValue, oldValue) {
         scope.content.content = newValue;
       });
@@ -51,7 +63,8 @@ angular.module('iwm.createPage', ['ngRoute'])
   };
 }])
 
-.directive('mathquillElement', ['$interval', function($interval) {
+// Directive for a mathquill-ified input (WYSIWYG LaTeX math input, basically)
+.directive('mathquillInput', ['$interval', function($interval) {
   return {
     restrict: 'E',
     template: '<span></span>',
@@ -61,8 +74,11 @@ angular.module('iwm.createPage', ['ngRoute'])
       var mathquill,
           latexWatcher;
       
+      // Mathquill-ify the element
       mathquill = $(elem).mathquill('editable');
       
+      // Make sure the model (set with ng-model attribute) is updated,
+      // since mathquill doesn't use a traditional input.
       latexWatcher = $interval(function () {
         ngModel.$setViewValue(mathquill.mathquill('latex'));
       }, 500);

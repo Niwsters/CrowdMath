@@ -6,15 +6,15 @@ describe('my app', function() {
 
   browser.get('index.html');
 
-  it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
-    expect(browser.getLocationAbsUrl()).toMatch("/view1");
+  it('should automatically redirect to /create-page when location hash/fragment is empty', function() {
+    expect(browser.getLocationAbsUrl()).toMatch("/create-page");
   });
 
 
-  describe('view1', function() {
+  describe('create-page', function() {
 
     beforeEach(function() {
-      browser.get('index.html#/view1');
+      browser.get('index.html#/create-page');
     });
 
 
@@ -26,10 +26,10 @@ describe('my app', function() {
   });
 
 
-  describe('view2', function() {
+  describe('view-page', function() {
 
     beforeEach(function() {
-      browser.get('index.html#/view2');
+      browser.get('index.html#/view-page');
     });
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 describe('iwm.version module', function() {
-  beforeEach(module('myApp.version'));
+  beforeEach(module('iwm.version'));
 
   describe('app-version directive', function() {
     it('should print current version', function() {

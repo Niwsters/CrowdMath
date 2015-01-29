@@ -10,7 +10,10 @@ angular.module('iwm.viewPage', ['ngRoute'])
 }])
 
 .controller('ViewPageCtrl', ['$scope', '$routeParams', function($scope, $routeParams) {
-  $scope.page = JSON.parse(decodeURIComponent($routeParams.page));
+  var pageURI = decodeURIComponent($routeParams.page);
+  if(pageURI !== undefined) {
+    $scope.page = JSON.parse(decodeURIComponent($routeParams.page));
+  }
 }])
 
 .directive('contentView', [function() {
