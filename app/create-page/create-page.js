@@ -49,16 +49,34 @@ angular.module('iwm.createPage', ['ngRoute'])
     restrict: 'E',
     templateUrl: 'create-page/content-input.html',
     link: function(scope, elem, attrs) {
+
+			scope.$watch('inputContent', function(newValue, oldValue) {
+				scope.content.content = scope.inputContent[scope.content.type];
+			});
       
       // If textContent changes, content.content = textContent
       scope.$watch('textContent', function(newValue, oldValue) {
-        scope.content.content = newValue;
+				if(scope.content.type === "text") {
+					scope.content.content = newValue;
+				}
       });
       
       // If mathContent changes, content.content = mathContent
       scope.$watch('mathContent', function(newValue, oldValue) {
-        scope.content.content = newValue;
+				if(scope.content.type === "math") {
+					scope.content.content = newValue;
+				}
       });
+
+			scope.$watch('content.type', function(newValue, oldValue) {
+				if(newValue !== oldValue) {
+					if(newValue === "text") {
+						scope.content.content = scope.textContent;
+					} else if(newValue === "math") {
+						scope.content.content = scope.mathContent;
+					}
+				}
+			});
     }
   };
 }])
@@ -79,6 +97,7 @@ angular.module('iwm.createPage', ['ngRoute'])
       
       // Make sure the model (set with ng-model attribute) is updated,
       // since mathquill doesn't use a traditional input.
+			// TODO: TEST THE NG-MODEL
       latexWatcher = $interval(function () {
         ngModel.$setViewValue(mathquill.mathquill('latex'));
       }, 500);
@@ -97,6 +116,8 @@ angular.module('iwm.createPage', ['ngRoute'])
 .directive('chooseContent', [function() {
   return {
     link: function(scope, elem, attrs) {
+			// When element is clicked, set the content 
+			// type to the element's "type" attribute.
       elem.bind('click', function() {
         scope.content.type = attrs.type;
         scope.$digest();

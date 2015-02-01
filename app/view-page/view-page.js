@@ -10,9 +10,13 @@ angular.module('iwm.viewPage', ['ngRoute'])
 }])
 
 .controller('ViewPageCtrl', ['$scope', '$routeParams', function($scope, $routeParams) {
-  var pageURI = decodeURIComponent($routeParams.page);
-  if(pageURI !== undefined) {
-    $scope.page = JSON.parse(decodeURIComponent($routeParams.page));
+	// If the route parameter 'page' is defined, 
+	// decode and parse it into a page object.
+  if($routeParams.page !== undefined) {
+		var pageURI = decodeURIComponent($routeParams.page);
+		if(pageURI !== undefined) {
+			$scope.page = JSON.parse(pageURI);
+		}
   }
 }])
 
