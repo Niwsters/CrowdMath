@@ -40,68 +40,30 @@ describe('iwm.createPage', function() {
 				expect($rootScope.content.content).toBe($rootScope.inputContent.type1);
 
 				$rootScope.inputContent.type2 = 'Honk';
+				$rootScope.content.type = 'type2';
 				$rootScope.$digest();
 				expect($rootScope.content.content).toBe($rootScope.inputContent.type2);
 			});
-
-      it('should set content.content = textContent on textContent change', function() {
-        $rootScope.content = {type: "text", content: ''};
-        $rootScope.textContent = '';
-        $rootScope.mathContent = '';
-        
-        var elem = $compile('<content-input></content-input>')($rootScope);
-        $rootScope.$digest();
-        
-        expect($rootScope.content.content).toEqual('');
-        
-        $rootScope.textContent = 'lol';
-        $rootScope.$apply();
-        
-        expect($rootScope.content.content).toEqual($rootScope.textContent);
-      });
-
-			it("shouldn't set content.content = textContent if content.type isn't 'text'", function() {
+	
+			it('should set content.content = inputContent.<type> on content type change', function() {
 				var elem;
-				$rootScope.content = {type: 'math', content: 'x^2'};
-				elem = $compile('<content-input></content-input>');
-				$rootScope.$digest();
 
-				$rootScope.textContent = 'blargh';
-				$rootScope.$digest();
-
-				expect($rootScope.content.content).toEqual('x^2');
-			});
-      
-      it('should set content.content = mathContent on mathContent change', function() {
-        $rootScope.content = {type: 'math', content: ''};
-        $rootScope.mathContent = '';
-        
-        var elem = $compile('<content-input></content-input>')($rootScope);
-        $rootScope.$digest();
-        
-        expect($rootScope.content.content).toEqual('');
-        
-        $rootScope.mathContent = 'lol';
-        $rootScope.$apply();
-        
-        expect($rootScope.content.content).toEqual($rootScope.mathContent);
-      });
-
-			it('should set content.content = <type>Content on content type change', function() {
-				var elem;
+				$rootScope.inputContent = {
+					type1: 'x^2',
+					type2: 'Blargh'
+				}
 				
-				$rootScope.mathContent = 'x^2';
-				$rootScope.textContent = 'Blargh';
-				$rootScope.content = {type: 'text', content: 'Blargh'};
+				$rootScope.content = {type: 'type1', content: $rootScope.inputContent.type1};
 
 				elem = $compile('<content-input></content-input>')($rootScope);
 				$rootScope.$digest();
 
-				expect($rootScope.content.content).toBe($rootScope.textContent);
+				expect($rootScope.content.content).toBe($rootScope.inputContent.type1);
 
-				$rootScope.content.type = 'math';
+				$rootScope.content.type = 'type2';
 				$rootScope.$digest();
-				expect($rootScope.content.content).toBe($rootScope.mathContent);
+
+				expect($rootScope.content.content).toBe($rootScope.inputContent.type2);
 			})
     });
     

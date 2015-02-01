@@ -52,31 +52,14 @@ angular.module('iwm.createPage', ['ngRoute'])
 
 			scope.$watch('inputContent', function(newValue, oldValue) {
 				scope.content.content = scope.inputContent[scope.content.type];
-			});
-      
-      // If textContent changes, content.content = textContent
-      scope.$watch('textContent', function(newValue, oldValue) {
-				if(scope.content.type === "text") {
-					scope.content.content = newValue;
-				}
-      });
-      
-      // If mathContent changes, content.content = mathContent
-      scope.$watch('mathContent', function(newValue, oldValue) {
-				if(scope.content.type === "math") {
-					scope.content.content = newValue;
-				}
-      });
+			}, true);
 
 			scope.$watch('content.type', function(newValue, oldValue) {
-				if(newValue !== oldValue) {
-					if(newValue === "text") {
-						scope.content.content = scope.textContent;
-					} else if(newValue === "math") {
-						scope.content.content = scope.mathContent;
-					}
+					if(newValue !== oldValue) {
+						scope.content.content = scope.inputContent[scope.content.type];
 				}
 			});
+
     }
   };
 }])
