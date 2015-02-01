@@ -3,5 +3,5 @@
   <li ng-class="{active: content.type=='math'}" choose-content type="math">Math</li>
 </ul>
 
-<textarea ng-model="textContent" ng-show="content.type=='text'"></textarea>
-<mathquill-input ng-model="mathContent" ng-show="content.type=='math'"></mathquill-element>
+<textarea ng-model="inputContent.text" ng-show="content.type=='text'"></textarea>
+<mathquill-input ng-model="inputContent.math" ng-show="content.type=='math'"></mathquill-element>

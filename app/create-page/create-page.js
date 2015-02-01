@@ -50,13 +50,16 @@ angular.module('iwm.createPage', ['ngRoute'])
     templateUrl: 'create-page/content-input.html',
     link: function(scope, elem, attrs) {
 
+			scope.inputContent = {};
+
 			scope.$watch('inputContent', function(newValue, oldValue) {
 				scope.content.content = scope.inputContent[scope.content.type];
+				console.log(newValue);
 			}, true);
 
 			scope.$watch('content.type', function(newValue, oldValue) {
-					if(newValue !== oldValue) {
-						scope.content.content = scope.inputContent[scope.content.type];
+				if(newValue !== oldValue) {
+					scope.content.content = scope.inputContent[scope.content.type];
 				}
 			});
 
