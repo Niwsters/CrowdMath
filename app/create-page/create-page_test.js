@@ -72,22 +72,21 @@ describe('iwm.createPage', function() {
         var elem = $compile('<mathquill-input ng-model="test"></mathquill-input>')($rootScope);
         
         expect($(elem).mathquill('latex')).toBeDefined();
-
       });
     });
 
-		describe('chooseContent', function() {
-			it('should set content.type to type attribute when clicked', function() {
-				$rootScope.content = {type: "type1"};
-				var elem = $compile('<button choose-content type="type2"></button>')($rootScope);
-				$rootScope.$digest();
+    describe('chooseContent', function() {
+      it('should set content.type to type attribute when clicked', function() {
+        $rootScope.content = {type: "type1"};
+        var elem = $compile('<button choose-content type="type2"></button>')($rootScope);
+        $rootScope.$digest();
 				
-				expect($rootScope.content.type).toEqual("type1");
-				elem.triggerHandler('click');
-				$rootScope.$digest();
-				expect($rootScope.content.type).toEqual("type2");
-			})
-		})
+        expect($rootScope.content.type).toEqual("type1");
+        elem.triggerHandler('click');
+        $rootScope.$digest();
+        expect($rootScope.content.type).toEqual("type2");
+      })
+    })
   });
   
   describe('controller', function() {

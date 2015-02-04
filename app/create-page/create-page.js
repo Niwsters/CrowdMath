@@ -50,17 +50,17 @@ angular.module('iwm.createPage', ['ngRoute'])
     templateUrl: 'create-page/content-input.html',
     link: function(scope, elem, attrs) {
 
-			scope.inputContent = {};
+      scope.inputContent = {};
 
-			scope.$watch('inputContent', function(newValue, oldValue) {
-				scope.content.content = scope.inputContent[scope.content.type];
-			}, true);
+      scope.$watch('inputContent', function(newValue, oldValue) {
+        scope.content.content = scope.inputContent[scope.content.type];
+      }, true);
 
-			scope.$watch('content.type', function(newValue, oldValue) {
-				if(newValue !== oldValue) {
-					scope.content.content = scope.inputContent[scope.content.type];
-				}
-			});
+      scope.$watch('content.type', function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+          scope.content.content = scope.inputContent[scope.content.type];
+        }
+      });
 
     }
   };
