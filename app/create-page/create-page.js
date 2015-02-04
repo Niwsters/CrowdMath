@@ -54,7 +54,6 @@ angular.module('iwm.createPage', ['ngRoute'])
 
 			scope.$watch('inputContent', function(newValue, oldValue) {
 				scope.content.content = scope.inputContent[scope.content.type];
-				console.log(newValue);
 			}, true);
 
 			scope.$watch('content.type', function(newValue, oldValue) {

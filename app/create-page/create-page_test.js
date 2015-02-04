@@ -99,7 +99,6 @@ describe('iwm.createPage', function() {
     }));
     
     it('should create an empty page object', inject(function($controller) {
-      //spec body
       expect(scope.page).toEqual({contents: []});
     }));
     
