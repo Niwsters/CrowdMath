@@ -77,7 +77,7 @@ describe('iwm.createPage', function() {
 
     describe('chooseContent', function() {
       it('should set content.type to type attribute when clicked', function() {
-        $rootScope.content = {type: "type1"};
+        $rootScope.content = {type: 'type1'};
         var elem = $compile('<button choose-content type="type2"></button>')($rootScope);
         $rootScope.$digest();
 				
@@ -85,8 +85,17 @@ describe('iwm.createPage', function() {
         elem.triggerHandler('click');
         $rootScope.$digest();
         expect($rootScope.content.type).toEqual("type2");
-      })
-    })
+      });
+    });
+    
+    describe('questionInput', function() {
+      it('should initialize model object', function() {
+        var elem = $compile('<question-input ng-model="model"></question-input>')($rootScope);
+        $rootScope.$digest();
+        
+        expect($rootScope.model).toEqual({question: '', answer: ''});
+      });
+    });
   });
   
   describe('controller', function() {

@@ -4,7 +4,7 @@ angular.module('iwm.createPage', ['ngRoute'])
 
 // Sets the route to the create page
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/create-page', {
+  $routeProvider.when('/create-page/', {
     templateUrl: 'create-page/create-page.html',
     controller: 'CreatePageCtrl'
   });
@@ -94,6 +94,32 @@ angular.module('iwm.createPage', ['ngRoute'])
       ngModel.$render = function () {
         mathquill.mathquill('latex', ngModel.$viewValue || '');
       };
+    }
+  };
+}])
+
+.directive('questionInput', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'create-page/question-input.html',
+    require: 'ngModel',
+    link: function(scope, elem, attrs, ngModel) {
+      scope.model = {
+        question: '',
+        answer: ''
+      };
+      
+      scope.$watch('model.question', function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+          ngModel.$setViewValue(scope.model);
+        }
+      });
+      
+      scope.$watch('model.answer', function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+          ngModel.$setViewValue(scope.model);
+        }
+      });
     }
   };
 }])

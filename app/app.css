@@ -31,6 +31,16 @@ textarea, span.mathquill-editable, span.mathquill-editable.hasCursor {
   width: 100%;
 }
 
+input {
+  border: 1px solid #c9c9c9;
+  box-shadow: none;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
 button {
   background: #FF4747;
   border: none;
@@ -47,7 +57,7 @@ button:hover {
   background: #DE3E3E;
 }
 
-div.choose-content-type {
+div.content-container {
   border: 1px solid #ff4747;
   border-radius: 3px;
   padding: 0 20px 20px;
@@ -85,4 +95,18 @@ ul.choose-content-type li.active {
   border-color: #ff4747 #ff4747 #fff;
   border-style: solid;
   border-width: 1px;
+}
+
+.feedback {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.75em;
+}
+
+.correct {
+  color: #0B0;
+}
+
+.incorrect {
+  color: #F00;
 }

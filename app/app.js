@@ -8,5 +8,5 @@ angular.module('iwm', [
 ]).
 
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/create-page'}); // The app's default page
+  $routeProvider.otherwise({redirectTo: '/create-page/'}); // The app's default page
 }]);

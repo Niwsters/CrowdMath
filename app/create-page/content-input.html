@@ -1,7 +1,9 @@
 <ul class="choose-content-type">
   <li ng-class="{active: content.type=='text'}" choose-content type="text">Text</li>
   <li ng-class="{active: content.type=='math'}" choose-content type="math">Math</li>
+  <li ng-class="{active: content.type=='question'}" choose-content type="question">Question</li>
 </ul>
 
 <textarea ng-model="inputContent.text" ng-show="content.type=='text'"></textarea>
-<mathquill-input ng-model="inputContent.math" ng-show="content.type=='math'"></mathquill-element>
+<mathquill-input ng-model="inputContent.math" ng-show="content.type=='math'"></mathquill-input>
+<question-input ng-model="inputContent.question" ng-show="content.type=='question'"></question-input>
