@@ -38,3 +38,5 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 // launch
 app.listen(port);
 console.log('The magic happens on port ' + port);
+
+module.exports = app;

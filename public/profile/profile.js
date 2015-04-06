@@ -17,5 +17,13 @@ profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User'
         $location.path("profile/" + $scope.user.username + "/book/" + book.title);
       });
     }
+
+		$scope.deleteBook = function(book) {
+			console.log($scope.user.books);
+			Book.get({username: $scope.user.username, bookTitle: book.title}, function(b) {
+				console.log(b);
+				b.$delete({book: b});
+			});
+		}
   }
 ]);

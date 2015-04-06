@@ -46,7 +46,11 @@ module.exports = function(app, passport) {
       var user = User.findOne({username: req.query.username}, function(err, user) {
         res.json(user);
       });
-    } else {
+		} if(req.query.email) {
+			var user = User.findOne({email: req.query.email}, function(err, user) {
+				res.json(user);
+			})
+		} else {
       res.json(req.user);
     }
   });
@@ -79,6 +83,21 @@ module.exports = function(app, passport) {
       }
     });
   });
+	app.delete('/user/book', isLoggedIn, function(req, res) {
+		indexToRemove = req.user.books.indexOf(req.query.book);
+		if(indexToRemove > -1) {
+			req.user.books.splice(indexToRemove, 1);
+			req.user.save(function(err) {
+				if(err) {
+					res.send(err);
+				} else {
+					res.send("Book successfully deleted!");
+				}
+			});
+		} else {
+			res.send("Book not found");
+		}
+	});
 }
 
 var isLoggedIn = function(req, res, next) {

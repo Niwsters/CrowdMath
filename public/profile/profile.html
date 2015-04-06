@@ -1,6 +1,9 @@
 <h1>{{user.username}}</h1>
 <h2>Books</h2>
 <ul>
-  <li ng-repeat="book in user.books"><a href="#/profile/{{user.username}}/book/{{book.title}}">{{book.title}}</a></li>
+  <li ng-repeat="book in user.books">
+	<button ng-click="deleteBook(book)">X</button>
+		<a href="#/profile/{{user.username}}/book/{{book.title}}">{{book.title}}</a>
+	</li>
 </ul>
 <button ng-click="createBook()">Create new book</button>
