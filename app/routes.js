@@ -1,4 +1,5 @@
 var User = require('../app/models/user');
+var Book = require('../app/models/book');
 
 module.exports = function(app, passport) {
   app.get('/', function(req, res) {
@@ -41,7 +42,7 @@ module.exports = function(app, passport) {
   }));
   
   // retrieve user
-  app.get('/user', isLoggedIn, function(req, res) {
+  app.get('/user', function(req, res) {
     if(req.query.username) {
       var user = User.findOne({username: req.query.username}, function(err, user) {
         res.json(user);
@@ -54,50 +55,63 @@ module.exports = function(app, passport) {
       res.json(req.user);
     }
   });
-  
-  // retrieve user's book
-  app.get('/user/book', isLoggedIn, function(req, res) {
-    
-    User.findOne({username: req.query.username}, function(err, user) {
-      var book = user.books.filter(function(book) {
-        return book.title === req.query.bookTitle;
-      }).pop();
-      
-      res.json(book);
-    })
-    
-  });
-  
-  app.post('/user/book', isLoggedIn, function(req, res) {
-    
-    var newBook = {
-      title: req.body.title
-    }
-    
-    req.user.books.push(newBook);
-    req.user.save(function(err) {
-      if(err) {
-        res.send(err);
-      } else {
-        res.json(newBook);
-      }
-    });
-  });
-	app.delete('/user/book', isLoggedIn, function(req, res) {
-		indexToRemove = req.user.books.indexOf(req.query.book);
-		if(indexToRemove > -1) {
-			req.user.books.splice(indexToRemove, 1);
-			req.user.save(function(err) {
-				if(err) {
-					res.send(err);
+
+	app.get('/book', function(req, res) {
+		if(req.query.title) {
+			Book.findOne({title: req.query.title}, function(err, b) {
+				res.json(book);
+			});
+		}
+	});
+
+	app.post('/book', isLoggedIn, function(req, res) {
+		if(req.body.author && req.body.title) {
+			Book.findOne({title: req.body.title}, function(err, oldBook) {
+				if(oldBook) {
+					res.send("Error creating book: Book already exists with title: " + req.query.title);
 				} else {
-					res.send("Book successfully deleted!");
+					var newBook = new Book();
+
+					newBook.title = req.body.title;
+					newBook.authors = [req.body.author];
+					newBook.content = '';
+					newBook.save(function(err) {
+						if(err) {
+							res.send("Error saving book: " + err);
+						} else {
+							res.json(newBook);
+						}
+					});
 				}
 			});
 		} else {
-			res.send("Book not found");
+			res.send("Error creating book: Need both author ID and book title");
 		}
 	});
+
+	app.put('/book', isLoggedIn, function(req, res) {
+		if(req.body.oldBook && req.body.newBook) {
+			Book.findOne({title: req.body.oldBook.title}, function(err, book) {
+				if(err) {
+					res.send("Error updating book: " + err);
+				} else {
+					if(book.authors.indexOf(req.user.username) > -1) {
+						for(var attr in req.body.newBook) {
+							if(book.hasOwnProperty(attr)) {
+								book[attr] = newBook[attr];
+							}
+						}
+
+						res.send("Success updating book");
+					} else {
+						res.send("Error updating book: User " + req.user.username + " is not author of book");
+					}
+				}
+			});	
+		} else {
+			res.send("Error updating book: Need both book to update and updated book attributes");
+		}
+	})
 }
 
 var isLoggedIn = function(req, res, next) {

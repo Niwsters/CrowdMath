@@ -1,15 +1,11 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
-var bookSchema = mongoose.Schema({
-  title: String
-});
-
 var userSchema = mongoose.Schema({
   username: { type: String, unique: true },
   email: { type: String, unique: true },
   password: String,
-  books: [bookSchema]
+	books: []
 });
 
 // METHODS =============
