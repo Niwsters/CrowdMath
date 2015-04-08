@@ -7,79 +7,89 @@ var db = require('../config/database');
 var bcrypt = require('bcrypt-nodejs');
 var User = require('../app/models/user.js');
 var Book = require('../app/models/book.js');
+var factory = require('./factory');
 
 describe('Routing', function() {
 	var url = "localhost:8080",
-			generatePwd = function(password) {return bcrypt.hashSync(password, bcrypt.genSaltSync(8))},
-			user = {username: 'Tester', email: 'tester@test.com', password: 'lolpan'},
-			testBook = {title: 'Test book'},
+			password = 'lolpan',
 			agent,
-			initUser,
+			loginAgent,
 			initAgent,
-			initBook,
-			stringContains;
+			stringContains,
+			emptyDatabase;
 	
-	initUser = function(done) {
-		var newUser = new User();
-
-		newUser.email = user.email;
-		newUser.username = user.username;
-		newUser.password = newUser.generateHash(user.password);
-		newUser.save(function(err) {
+	emptyDatabase = function(done) {
+		User.remove({email: {$ne: "agent@test.com"}}, function(err) {
 			should.not.exist(err);
+			Book.remove({}, function(err) {
+				should.not.exist(err);
+				done();
+			});
 		});
-	}
+	};
 
-	initAgent = function(done) {
-		agent = request.agent(app);
-					
+	loginAgent = function(done) {
 		agent
 		.post('/login')
-		.send({email: user.email, password: user.password})
+		.send({email: agent.user.email, password: password})
 		.end(function(err, res) {
 			should.not.exist(err);
 			should.exist(res.headers['set-cookie']);
 			done();
+		})
+	}
+
+	initAgent = function(done) {
+		agent = request.agent(app);
+
+		User.findOne({email: "agent@test.com"}, function(err, user) {
+
+			if(!user) {
+				user = new User();
+				user.username = "Agent";
+				user.email = "agent@test.com";
+				user.password = user.generateHash(password);
+				user.save(function(err) {
+					should.not.exist(err);
+
+					agent.user = user;
+					loginAgent(done);
+				});
+			} else {
+				agent.user = user;
+				loginAgent(done);
+			}
 		});
-	}
+	};
 
-	initBook = function(done) {
-		book = {};
-		book.authors = [user.username];
-		book.title = 'Test book';
-		book.content = '';
-		Book.update({title: testBook.title}, book, {upsert: true}, function(err) {
-			should.not.exist(err);
-			done();
-		})
-	}
-
-	stringContains = function(string1, string2) {
-		return string1.indexOf(string2) > -1;
-	}
-	
 	before(function(done) {
-		User.remove({}, function(err) {
-			should.not.exist(err);
-			Book.remove({}, function(err) {
-				should.not.exist(err);
-				initUser(initBook(done));
-			})
-		})
+		emptyDatabase(done);
+	});
+
+	afterEach(function(done) {
+		emptyDatabase(done);
 	});
 
 	describe('/login', function() {
 		
 		describe('POST', function() {
+
 			it('should redirect to /app if authentication succeeds', function(done) {
-				request(app)
-				.post('/login')
-				.send({email: user.email, password: user.password})
-				.end(function(err, res) {
+				var user = factory.User({password: password});
+
+				user.save(function(err) {
 					should.not.exist(err);
-					res.header.location.should.equal('/app');
-					done();
+
+					request(app)
+					.post('/login')
+					.send({email: user.email, password: password})
+					.end(function(err, res) {
+						should.not.exist(err);
+						res.header.location.should.equal('/app');
+						done();
+					})
 				});
+
 			});
 
 			it('should redirect to /login if authentication fails', function(done) {
@@ -90,150 +100,242 @@ describe('Routing', function() {
 					should.not.exist(err);
 					res.header.location.should.equal('/login');
 					done();
-				})
-			})
-		})
-	});
-
-	describe('/user', function() {
-
-		describe('GET', function() {
-			it('should return user with given email', function(done) {
-				request(app)
-				.get('/user')
-				.query({email: user.email})
-				.end(function(err, res) {
-					should.not.exist(err);
-					res.body.email.should.equal(user.email);
-					done();
 				});
 			});
 
-			describe('logged in', function() {
+		});
+	});
+
+	describe('restricted', function() {
+		var restrictedRoutes = {
+			get: [
+				
+			],
+			post: [
+				'/book'
+			],
+			put: [
+				'/book'
+			],
+			delete: [
+				'/book'
+			]
+		},
+		method, routes, route,
+		redirectTest = function(route, method) {
+			it(route + ' ' + method + ' should redirect to / if not logged in', function(done) {
+				request(app)
+				[method](route)
+				.end(function(err, res) {
+					should.not.exist(err);
+					res.header.location.should.equal('/');
+					done();
+				});
+			});
+		};
+
+		for(method in restrictedRoutes) {
+			routes = restrictedRoutes[method];
+			for(route in routes) {
+				redirectTest(routes[route], method);
+			}
+		}
+		
+	});
+
+	describe('public', function() {
+		describe('/user', function() {
+			describe('GET', function() {
+				var user;
 
 				before(function(done) {
-					initAgent(done);
-				});
-
-				it('should return the logged in user if no query username is given', function(done) {
-					agent
-					.get('/user')
-					.end(function(err, res) {
+					user = factory.User();
+					user.save(function(err) {
 						should.not.exist(err);
+						done();
+					})
+				})
+
+				it('should return user with given ID', function(done) {
+					request(app)
+					.get('/user')
+					.query({id: user.id})
+					.end(function(err, res) {
 						res.body.email.should.equal(user.email);
 						done();
 					});
 				});
 			});
 		});
-	});
 
-	describe('/book', function() {
-		before(function(done) {
-			done();
-		})
-		describe('GET', function() {
-			it('should return the book with given title', function(done) {
-				request(app)
-				.get('/book')
-				.query({title: testBook.title})
-				.end(function(err, res) {
-					should.not.exist(err);
-					res.body.title.should.equal(testBook.title);
-					done();
-				})
-			})
-		});
+		describe('/book', function() {
+			describe('GET', function() {
+				var book;
 
-		describe('POST', function() {
-			
-			it('should redirect to / if not logged in', function(done) {
-				request(app)
-				.post('/book')
-				.end(function(err, res) {
-					res.header.location.should.equal('/');
-					done();
-				})
-			})
-
-			describe('logged in', function() {
 				before(function(done) {
-					initAgent(done);
+					var user = factory.User();
+					user.save(function(err) {
+						should.not.exist(err);
+						book = factory.Book(user.id);
+						book.save(function(err) {
+							should.not.exist(err);
+							done();
+						});
+					});
 				});
 
-				it('should create new book with given author and title', function(done) {
-					var bookTitle = 'A book';
-					Book.findOne({title: bookTitle}, function(err, b) {
-						should.not.exist(err);
-						if(b) {
-							b.remove();
-						}
-					});
-
-					agent
-					.post('/book')
-					.send({author: user.username, title: bookTitle})
+				it('should return the book with given ID', function(done) {
+					request(app)
+					.get('/book')
+					.query({id: book.id})
 					.end(function(err, res) {
-						should.not.exist(err);
-						res.body.title.should.equal(bookTitle);
-						res.body.authors[0].should.equal(user.username);
+						res.body.title.should.equal(book.title);
 						done();
 					});
 				});
 
-				it('should return error message when author or title is not given', function(done) {
+			});
+		});
+	});
+
+	describe('logged in', function() {
+
+		before(function(done) {
+			initAgent(done);
+		});
+		
+		describe('/user', function() {
+			describe('GET', function() {
+
+				it('should return the logged in user if no query is given', function(done) {
+					agent
+					.get('/user')
+					.end(function(err, res) {
+						should.not.exist(err);
+						res.body.email.should.equal(agent.user.email);
+						done();
+					});
+				});
+
+			});
+		});
+
+		describe('/book', function() {
+			var user;
+
+			before(function(done) {
+				user = factory.User();
+				user.save(function(err) {
+					should.not.exist(err);
+					done();
+				});
+			});
+
+			describe('POST', function() {
+
+				it('should create a new book with given authorID and title', function(done) {
+					var authorID = user.id,
+							title = "Bookie";
+
 					agent
 					.post('/book')
+					.send({authorID: authorID, title: title})
 					.end(function(err, res) {
-						// Asserts true if res.text contains "Error"
-						stringContains(res.text, "Error").should.be.ok;
+						should.not.exist(err);
+						res.body.authors[0].should.equal(authorID);
 						done();
 					});
 				});
 			});
 
 			describe('PUT', function() {
-				describe('logged in', function() {
-					before(function(done) {
-						initAgent(done);
-					});
+				var book, user2;
 
-					it('should update book when given old book and new book', function(done) {
-						var oldBook = {title: testBook.title},
-								newBook = {title: 'New title', content: 'Blargh'};
-						
+				beforeEach(function(done) {
+					book = factory.Book(agent.user.id);
+					book.save(function(err) {
+						should.not.exist(err);
+
+						user2 = factory.User({username: "Tester 2", email: "tester2@test.com"});
+						user2.save(function(err) {
+							should.not.exist(err);
+							done()
+						})
+					});
+				});
+
+				it('should update book when given ID and new book attributes', function(done) {
+					var newTitle = "New title",
+							newContent = "New content",
+							newAuthors = [book.authors[0], user2.id];
+
+					agent
+					.put('/book')
+					.send({id: book.id, newAttrs: {title: newTitle, content: newContent, authors: newAuthors}})
+					.end(function(err, res) {
+						should.not.exist(err);
+
+						res.body.title.should.equal(newTitle);
+						res.body.content.should.equal(newContent);
+						res.body.authors.length.should.equal(2);
+
+						done();
+					});
+				});
+
+				it('should not update book if logged in user is not author of the book', function(done) {
+					book.authors = [user2.id];
+					book.save(function(err) {
+						var newTitle = "A different title";
+
+						should.not.exist(err);
+
 						agent
 						.put('/book')
-						.send({oldBook: oldBook, newBook: newBook})
+						.send({id: book.id, newAttrs: {title: newTitle}})
 						.end(function(err, res) {
 							should.not.exist(err);
-							stringContains(res.text, "Success").should.be.ok
+
+							Book.findById(book.id, function(err, b) {
+								should.not.exist(err);
+
+								b.title.should.not.equal(newTitle);
+							});
+
+							res.text.should.equal("Error updating book: User not author");
+
 							done();
 						});
 					});
+				});
 
-					it('should not update book if the logged in user is not author of the book', function(done) {
-						var b = new Book(),
-								newTitle = "Book with this author";
-						b.title = "Book with other author";
-						b.content = '';
-						b.authors = ['otherauthor'];
-						b.save(function(err) {
-							should.not.exist(err);
-						});
+			});
 
-						agent
-						.put('/book')
-						.send({oldBook: {title: b.title}, newBook: {title: newTitle}})
-						.end(function(err, res) {
-							should.not.exist(err);
-							Book.findOne({title: newTitle}, function(err, book) {
-								should.not.exist(book);
-								done();
-							});
+			describe('DELETE', function() {
+				var book;
+
+				beforeEach(function(done) {
+					book = factory.Book(agent.user.id);
+					book.save(function(err) {
+						should.not.exist(err);
+						done();
+					});
+				});
+
+				it('should delete book with given ID', function(done) {
+					agent
+					.delete('/book')
+					.send({id: book.id})
+					.end(function(err, res) {
+						res.text.should.equal("Successfully removed book");
+
+						Book.findById(book.id, function(err, b) {
+							should.not.exist(b);
+							done();
 						});
 					});
 				});
+
 			});
 		});
 	});
