@@ -1,0 +1,40 @@
+body {
+	font-family: Arial;
+}
+
+h1 {
+	text-align: center;
+}
+
+button {
+	color: #FFF;
+	background: #FF7700;
+	border: none;
+	border-radius: 3px;
+	border-bottom: 2px solid #DD6600;
+	border-right: 1px solid #DD6600;
+	padding: 10px;
+}
+
+button:hover {
+	background: #FF9933;
+}
+
+input {
+	border: 1px solid #AAA;
+	padding: 10px;
+}
+
+.page-wrapper {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+ul {
+	list-style-type: none;
+}
+
+div.error {
+	font-size: 12px;
+	color: red;
+}

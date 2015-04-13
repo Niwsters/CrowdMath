@@ -170,10 +170,10 @@ describe('Routing', function() {
 
 		describe('/book', function() {
 			describe('GET', function() {
-				var book;
+				var book, user;
 
-				before(function(done) {
-					var user = factory.User();
+				beforeEach(function(done) {
+					user = factory.User();
 					user.save(function(err) {
 						should.not.exist(err);
 						book = factory.Book(user.id);
@@ -193,6 +193,25 @@ describe('Routing', function() {
 						done();
 					});
 				});
+
+				it('should return books with given author ID', function(done) {
+					request(app)
+					.get('/book')
+					.query({authorID: user.id})
+					.end(function(err, res) {
+						res.body[0].title.should.equal(book.title);
+						done();
+					});
+				});
+
+				it('should return all books if ID or author ID not given', function(done) {
+					request(app)
+					.get('/book')
+					.end(function(err, res) {
+						res.body[0].title.should.equal(book.title);
+						done();
+					});
+				})
 
 			});
 		});
@@ -233,19 +252,48 @@ describe('Routing', function() {
 
 			describe('POST', function() {
 
-				it('should create a new book with given authorID and title', function(done) {
-					var authorID = user.id,
-							title = "Bookie";
+				it('should create a new book with given title', function(done) {
+					var title = "Bookie";
 
 					agent
 					.post('/book')
-					.send({authorID: authorID, title: title})
+					.send({title: title})
 					.end(function(err, res) {
 						should.not.exist(err);
-						res.body.authors[0].should.equal(authorID);
+						res.body.title.should.equal(title);
 						done();
 					});
 				});
+
+				it('should throw 500 error when not given title', function(done) {
+
+					agent
+					.post('/book')
+					.end(function(err, res) {
+						should.not.exist(err);
+						res.error.text.should.equal("Error creating book: No title given");
+						res.error.status.should.equal(500);
+						done();
+					});
+				});
+
+				it('should throw 500 error when book title is already taken', function(done) {
+					var book = factory.Book(user.id);
+					book.save(function(err) {
+						should.not.exist(err);
+
+						agent
+						.post('/book')
+						.send({title: book.title})
+						.end(function(err, res) {
+							should.not.exist(err);
+							res.error.text.should.equal("Error creating book: Title already taken");
+							res.error.status.should.equal(500);
+							done();
+						});
+					});
+					
+				})
 			});
 
 			describe('PUT', function() {
@@ -325,8 +373,9 @@ describe('Routing', function() {
 				it('should delete book with given ID', function(done) {
 					agent
 					.delete('/book')
-					.send({id: book.id})
+					.query({id: book.id})
 					.end(function(err, res) {
+						should.not.exist(err);
 						res.text.should.equal("Successfully removed book");
 
 						Book.findById(book.id, function(err, b) {
@@ -335,6 +384,18 @@ describe('Routing', function() {
 						});
 					});
 				});
+
+				it('should throw 500 error when not given ID', function(done) {
+					agent
+					.delete('/book')
+					.end(function(err, res) {
+						should.not.exist(err);
+
+						res.error.text.should.equal("Error deleting book: No book ID given");
+						res.error.status.should.equal(500);
+						done();
+					})
+				})
 
 			});
 		});

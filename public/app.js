@@ -2,10 +2,10 @@
 
 var app = angular.module('crowdmath', [
   'ngRoute',
-  'crowdmath.frontpage',
   'crowdmath.profile',
   'crowdmath.book',
-  'crowdmath.user'
+	'crowdmath.bookService',
+	'crowdmath.userService'
 ]);
 
 app.config(['$routeProvider',

@@ -69,24 +69,40 @@ module.exports = function(app, passport) {
 				if(err) throw err;
 				res.json(book);
 			});
+		} else if(req.query.authorID) {
+			Book.find({authors: req.query.authorID}, function(err, books) {
+				if(err) throw err;
+				res.json(books);
+			});
+		} else {
+			Book.find({}, function(err, books) {
+				if(err) throw err;
+				res.json(books);
+			})
 		}
 	});
 
 	app.post('/book', isLoggedIn, function(req, res) {
-		if(req.body.authorID) {
-			if(req.body.title) {
-				var book = new Book();
+		if(req.body.title) {
+			Book.findOne({title: req.body.title}, function(err, book) {
+				if(book) {
+					res.status(500).send("Error creating book: Title already taken");
+				} else {
+					book = new Book();
 
-				book.title = req.body.title;
-				book.authors = [req.body.authorID];
-				book.content = '';
+					book.title = req.body.title;
+					book.authors = [req.user.id];
+					book.content = '';
 
-				book.save(function(err) {
-					if(err) throw err;
+					book.save(function(err) {
+						if(err) throw err;
 
-					res.json(book);
-				});
-			}
+						res.json(book);
+					});
+				}
+			});
+		} else {
+			throw "Error creating book: No title given";
 		}
 	});
 
@@ -119,11 +135,14 @@ module.exports = function(app, passport) {
 	});
 
 	app.delete('/book', isLoggedIn, function(req, res) {
-		Book.remove({_id: req.body.id}, function(err) {
-			if(err) throw err;
-
-			res.send("Successfully removed book");
-		});
+		if(req.query.id) {
+			Book.remove({_id: req.query.id}, function(err) {
+				if(err) throw err;
+				res.send("Successfully removed book");
+			});
+		} else {
+			throw "Error deleting book: No book ID given";
+		}
 	});
 }
 

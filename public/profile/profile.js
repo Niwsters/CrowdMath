@@ -4,26 +4,34 @@ var profile = angular.module('crowdmath.profile', []);
 
 profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User', 'Book',
   function($scope, $routeParams, $location, User, Book) {
+		var getProfileBooks = function() {
+				$scope.books = Book.query({id: $scope.user.id});
+		};
+
     if($routeParams.username) {
       $scope.user = User.get({username: $routeParams.username});
     } else {
       $scope.user = User.get();
     }
+
+		getProfileBooks();
     
     $scope.createBook = function() {
       var newBook = new Book();
-      newBook.title = "New book";
+      newBook.title = $scope.newBookTitle;
       newBook.$save(function(book) {
-        $location.path("profile/" + $scope.user.username + "/book/" + book.title);
-      });
-    }
+				getProfileBooks();
+				$scope.createNewBookError = '';
+			}, function(res) {
+				$scope.createNewBookError = res.data;
+			});
+    };
 
 		$scope.deleteBook = function(book) {
-			console.log($scope.user.books);
-			Book.get({username: $scope.user.username, bookTitle: book.title}, function(b) {
-				console.log(b);
-				b.$delete({book: b});
+			book.$delete({id: book._id}, function() {
+				getProfileBooks();
+				$scope.createNewBookError = '';
 			});
-		}
+		};
   }
 ]);
