@@ -38,3 +38,8 @@ div.error {
 	font-size: 12px;
 	color: red;
 }
+
+div.success {
+  font-size: 12px;
+  color: green;
+}

@@ -1,13 +1,14 @@
 <div class="page-wrapper">
-	<h1>{{user.username}}</h1>
-	<h2>Books</h2>
-	<ul>
-		<li ng-repeat="book in books">
-			<button ng-click="deleteBook(book)">X</button>
-			<a href="#/profile/{{user.username}}/book/{{book.title}}">{{book.title}}</a>
-		</li>
-	</ul>
-	<div class="error">{{createNewBookError}}</div>
-	<input type="text" ng-model="newBookTitle" placeholder="Name of new book">
-	<button ng-click="createBook()">Create new book</button>
+  <h1>{{user.username}}</h1>
+  <h2>Books</h2>
+  <ul>
+    <li ng-repeat="book in books">
+      <button ng-click="deleteBook(book)">X</button>
+      <a href="#/book/{{book.title}}">{{book.title}}</a>
+      <a href="#/book/{{book.title}}/edit">edit</a>
+    </li>
+  </ul>
+  <div class="error">{{createNewBookError}}</div>
+  <input type="text" ng-model="newBookTitle" placeholder="Name of new book">
+  <button ng-click="createBook()">Create new book</button>
 </div>

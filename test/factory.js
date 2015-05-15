@@ -27,7 +27,11 @@ var factory = {
 		book.title = attrs.title || "Book with no name";
 		book.content = attrs.content || '';
 		book.authors = [authorID];
-
+        book.pages = [
+          '<h1>Blarghity HTML content!</h1>',
+          '<p>lol read this bitchyz</p>'
+        ];
+        
 		return book;
 	}
 };
