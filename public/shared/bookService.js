@@ -9,3 +9,11 @@ bookService.factory('Book', ['$resource',
         });
 	}
 ]);
+
+bookService.factory('Page', ['$resource',
+    function($resource) {
+      return $resource('book/page', {}, {
+        'update' : { method: 'PUT' }
+      });
+    }
+]);

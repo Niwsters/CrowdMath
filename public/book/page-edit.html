@@ -1,0 +1,23 @@
+<h1>{{bookTitle}}</h1>
+<div class="page-wrapper">
+  <div>
+    <a ng-show="pageNumber > 0" href="{{prevPageLink}}">Previous page</a>
+    Page: {{pageNumber}}
+    <a href="{{viewPageLink}}">View page</a>
+    <a ng-show="pageNumber < pageCount - 1" href="{{nextPageLink}}">Next page</a>
+  </div>
+
+  <div>
+    <br>
+    <textarea class="edit-page-textarea" ng-model="page"></textarea><br>
+    <button ng-click="savePage()">Save</button>
+    <br>
+  </div>
+
+  <div>
+    <a ng-show="pageNumber > 0" href="{{prevPageLink}}">Previous page</a>
+    Page: {{pageNumber}}
+    <a href="{{viewPageLink}}">View page</a>
+    <a ng-show="pageNumber < pageCount - 1" href="{{nextPageLink}}">Next page</a>
+  </div>
+</div>

@@ -1,17 +1,23 @@
-<div>
-  <button>Previous page</button>
-  Page: 3
-  <button>Next page</button>
-</div>
+<div class="page-wrapper">
+  <a href="#/profile">Back to profile</a>
+  <h1>{{bookTitle}}</h1>
+  <div>
+    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">Previous page</a>
+    Page: {{pageNumber}}
+    <a href="{{editPageLink}}">Edit page</a>
+    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">Next page</a>
+  </div>
 
-<div>
-  <br>
-  HTML content goes here!
-  <br><br>
-</div>
+  <div>
+    <br>
+    <div compile="page"></div>
+    <br>
+  </div>
 
-<div>
-  <button>Previous page</button>
-  Page: 3
-  <button>Next page</button>
+  <div>
+    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">Previous page</a>
+    Page: {{pageNumber}}
+    <a href="{{editPageLink}}">Edit page</a>
+    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">Next page</a>
+  </div>
 </div>

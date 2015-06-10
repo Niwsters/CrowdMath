@@ -11,13 +11,15 @@ module.exports = function (app, passport) {
       message: req.flash('loginMessage')
     });
   });
-
+  
   app.get('/signup', function (req, res) {
-    res.render('signup.ejs', {
+    res.render('signup-disabled.ejs');
+    
+    /* res.render('signup.ejs', {
       message: req.flash('signupMessage')
-    });
+    }); */
   });
-
+  
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
   app.get('/app', isLoggedIn, function (req, res) {
@@ -111,7 +113,7 @@ module.exports = function (app, passport) {
 
           book.title = req.body.title;
           book.authors = [req.user.id];
-          book.content = '';
+          book.pages = ['<p>Yay, you created a new book!</p>'];
 
           book.save(function (err) {
             if (err) throw err;
@@ -175,7 +177,59 @@ module.exports = function (app, passport) {
   
   app.get('/book/page', function (req, res) {
     Book.findOne({title: req.query.bookTitle}, function (err, book) {
-      res.json(book.pages[req.query.pageNumber]);
+      var response = {};
+      
+      response.page = book.pages[req.query.pageNumber - 1];
+      response.pageCount = book.pages.length;
+      
+      res.json(response);
+    });
+  });
+  
+  app.post('/book/page', isLoggedIn, function(req, res) {
+    Book.findOne({title: req.body.bookTitle}, function (err, book) {
+      
+      if(book.authors.indexOf(req.user.id) > -1) {
+        book.pages.push("");
+        book.save(function(err, book) {
+          if(!err) {
+            res.json(book);
+          } else {
+            res.send("Error creating page: " + err);
+          }
+        });
+      } else {
+        res.send("Error creating page: User not author of book");
+      }
+      
+    });
+  });
+  
+  app.delete('/book/page', isLoggedIn, function(req, res) {
+    Book.findOne({title: req.query.bookTitle}, function (err, book) {
+      
+      if(book.authors.indexOf(req.user.id) > -1) {
+        book.pages.splice(req.query.pageNumber - 1, 1);
+        book.save(function(err, book) {
+          res.json(book);
+        });
+      } else {
+        res.send("Error deleting page: User not author of book");
+      }
+      
+    })
+  })
+  
+  app.put('/book/page', isLoggedIn, function(req, res) {
+    Book.findOne({title: req.body.bookTitle}, function (err, book) {
+      if(book.authors.indexOf(req.user.id) > -1) {
+        book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
+        book.save(function (err, book) {
+          res.json(book);
+        });
+      } else {
+        res.send("Error updating page: User not author of book");
+      }
     });
   });
 }

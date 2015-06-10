@@ -1,1 +1,12 @@
-<h1>{{book.title}}</h1>
+<div class="page-wrapper">
+  <a href="#/profile">Back to profile</a>
+  <h1>{{book.title}}</h1>
+  
+  <h2>Page list</h2>
+  <ul>
+    <li ng-repeat="page in book.pages track by $index">
+      <button ng-click="deletePage($index + 1)">X</button><a href="#/book/{{book.title}}/page/{{$index + 1}}">Page {{$index+1}}</a>
+    </li>
+  </ul>
+  <button ng-click="createPage()">Create page</button>
+</div>

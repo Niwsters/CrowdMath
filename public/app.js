@@ -2,10 +2,13 @@
 
 var app = angular.module('crowdmath', [
   'ngRoute',
+  'ngSanitize',
   'crowdmath.profile',
   'crowdmath.book',
- 'crowdmath.bookService',
- 'crowdmath.userService'
+  'crowdmath.bookService',
+  'crowdmath.userService',
+  'crowdmath.mathjax',
+  'crowdmath.directives'
 ]);
 
 app.config(['$routeProvider',
@@ -29,6 +32,17 @@ app.config(['$routeProvider',
       .when('/book/:bookTitle/edit', {
         templateUrl: 'book/book-edit.html',
         controller: 'BookEditCtrl'
+      })
+      .when('/book/:bookTitle/page/:pageNumber', {
+        templateUrl: 'book/page-view.html',
+        controller: 'PageViewCtrl'
+      })
+      .when('/book/:bookTitle/page/:pageNumber/edit', {
+        templateUrl: 'book/page-edit.html',
+        controller: 'PageEditCtrl'
+      })
+      .otherwise({
+        redirectTo: '/profile'
       });
   }
 ]);
