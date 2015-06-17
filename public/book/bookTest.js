@@ -1,4 +1,4 @@
-describe('BookCtrl', function() {
+describe('BookViewCtrl', function() {
 	var scope, ctrl, testBook, Book;
 
 	beforeEach(module('crowdmath'));
@@ -12,10 +12,14 @@ describe('BookCtrl', function() {
 				return testBook;
 			}
 		};
-		ctrl = $controller('BookCtrl', {$scope: scope, Book: Book});
+		ctrl = $controller('BookViewCtrl', {$scope: scope, Book: Book});
 	}));
 
 	it('creates a book variable in scope', function() {
 		expect(scope.book).toEqual(testBook);
-	})
+	});
+  
+    it('creates a createPage function', function() {
+      
+    });
 });

@@ -1,11 +1,7 @@
-<h1>{{bookTitle}}</h1>
 <div class="page-wrapper">
-  <div>
-    <a ng-show="pageNumber > 0" href="{{prevPageLink}}">Previous page</a>
-    Page: {{pageNumber}}
-    <a href="{{viewPageLink}}">View page</a>
-    <a ng-show="pageNumber < pageCount - 1" href="{{nextPageLink}}">Next page</a>
-  </div>
+  <a href="#/profile">Back to profile</a>
+  <h1>{{bookTitle}}</h1>
+  <page-navigation></page-navigation>
 
   <div>
     <br>
@@ -14,10 +10,5 @@
     <br>
   </div>
 
-  <div>
-    <a ng-show="pageNumber > 0" href="{{prevPageLink}}">Previous page</a>
-    Page: {{pageNumber}}
-    <a href="{{viewPageLink}}">View page</a>
-    <a ng-show="pageNumber < pageCount - 1" href="{{nextPageLink}}">Next page</a>
-  </div>
+  <page-navigation></page-navigation>
 </div>

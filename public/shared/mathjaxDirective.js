@@ -1,12 +1,3 @@
-MathJax.Hub.Config({
-    skipStartupTypeset: true,
-    messageStyle: "none",
-    "HTML-CSS": {
-        showMathMenu: false
-    }
-});
-MathJax.Hub.Configured();
-
 var mathjax = angular.module('crowdmath.mathjax', []);
 
 mathjax.directive("mathjaxBind", function() {

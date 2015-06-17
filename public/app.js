@@ -25,6 +25,10 @@ app.config(['$routeProvider',
         templateUrl: 'profile/profile.html',
         controller: 'ProfileCtrl'
       })
+      .when('/book', {
+        templateUrl: 'book/book-list.html',
+        controller: 'BookListCtrl'
+      })
       .when('/book/:bookTitle', {
         templateUrl: 'book/book-view.html',
         controller: 'BookViewCtrl'

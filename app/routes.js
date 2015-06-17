@@ -176,61 +176,92 @@ module.exports = function (app, passport) {
   });
   
   app.get('/book/page', function (req, res) {
-    Book.findOne({title: req.query.bookTitle}, function (err, book) {
-      var response = {};
-      
-      response.page = book.pages[req.query.pageNumber - 1];
-      response.pageCount = book.pages.length;
-      
-      res.json(response);
-    });
+    if(req.query.bookTitle) {
+      if(req.query.pageNumber) {
+        Book.findOne({title: req.query.bookTitle}, function (err, book) {
+          var response = {};
+
+          response.page = book.pages[req.query.pageNumber - 1];
+          response.pageCount = book.pages.length;
+
+          res.json(response);
+        });
+      } else {
+        res.send("Error retrieving page: Page number not given.");
+      }
+    } else {
+      res.send("Error retrieving page: Book title not given.");
+    }
   });
   
   app.post('/book/page', isLoggedIn, function(req, res) {
-    Book.findOne({title: req.body.bookTitle}, function (err, book) {
-      
-      if(book.authors.indexOf(req.user.id) > -1) {
-        book.pages.push("");
-        book.save(function(err, book) {
-          if(!err) {
-            res.json(book);
-          } else {
-            res.send("Error creating page: " + err);
-          }
-        });
-      } else {
-        res.send("Error creating page: User not author of book");
-      }
-      
-    });
+    
+    if(req.body.bookTitle) {
+      Book.findOne({title: req.body.bookTitle}, function (err, book) {
+
+        if(book.authors.indexOf(req.user.id) > -1) {
+          book.pages.push("");
+          book.save(function(err, book) {
+            if(!err) {
+              res.json(book);
+            } else {
+              res.send("Error creating page: " + err);
+            }
+          });
+        } else {
+          res.send("Error creating page: User not author of book");
+        }
+
+      });
+    } else {
+      res.send("Error creating page: Book title not given.");
+    }
+    
   });
   
   app.delete('/book/page', isLoggedIn, function(req, res) {
-    Book.findOne({title: req.query.bookTitle}, function (err, book) {
-      
-      if(book.authors.indexOf(req.user.id) > -1) {
-        book.pages.splice(req.query.pageNumber - 1, 1);
-        book.save(function(err, book) {
-          res.json(book);
+    if(req.query.bookTitle) {
+      if(req.query.pageNumber) {
+        Book.findOne({title: req.query.bookTitle}, function (err, book) {
+
+          if(book.authors.indexOf(req.user.id) > -1) {
+            book.pages.splice(req.query.pageNumber - 1, 1);
+            book.save(function(err, book) {
+              res.json(book);
+            });
+          } else {
+            res.send("Error deleting page: User not author of book.");
+          }
+
         });
       } else {
-        res.send("Error deleting page: User not author of book");
+        res.send("Error deleting page: Page number not given.");
       }
       
-    })
+    } else {
+      res.send("Error deleting page: Book title not given.");
+    }
   })
   
   app.put('/book/page', isLoggedIn, function(req, res) {
-    Book.findOne({title: req.body.bookTitle}, function (err, book) {
-      if(book.authors.indexOf(req.user.id) > -1) {
-        book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
-        book.save(function (err, book) {
-          res.json(book);
+    if(req.body.bookTitle) {
+      if(req.body.pageNumber) {
+        Book.findOne({title: req.body.bookTitle}, function (err, book) {
+          if(book.authors.indexOf(req.user.id) > -1) {
+            book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
+            book.save(function (err, book) {
+              res.json(book);
+            });
+          } else {
+            res.send("Error updating page: User not author of book.");
+          }
         });
       } else {
-        res.send("Error updating page: User not author of book");
+        res.send("Error updating page: Page number not given.");
       }
-    });
+    } else {
+      res.send("Error updating page: Book title not given.");
+    }
   });
 }
 

@@ -19,7 +19,8 @@ module.exports = function(config) {
 			'bower_components/**/*.min.js',
 			'bower_components/angular-mocks/angular-mocks.js',
       'public/**/*.js',
-			'tests/**/*.js'
+			'tests/**/*.js',
+            'bower_components/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
     ],
 
 

@@ -4,10 +4,13 @@ var book = angular.module('crowdmath.book', []);
 
 book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
   function ($scope, $routeParams, Book, Page) {
+    
+    // Retrieve book from database using the book title in the route
     $scope.book = Book.get({
       title: $routeParams.bookTitle
     });
-
+    
+    // Create a createPage function for creating a page in the view
     $scope.createPage = function () {
       var page = new Page();
       page.bookTitle = $scope.book.title;
@@ -19,7 +22,8 @@ book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
         });
       });
     };
-
+    
+    // Create a deletePage function for deleting a page in the view
     $scope.deletePage = function (pageNumber) {
       Page.delete({
         bookTitle: $scope.book.title,
@@ -29,7 +33,7 @@ book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
           title: $routeParams.bookTitle
         });
       });
-    }
+    };
   }
 ]);
 
@@ -57,7 +61,8 @@ book.controller('BookEditCtrl', ['$scope', '$routeParams', 'Book',
 book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
   function ($scope, $routeParams, Page) {
     var baseUrl;
-
+    
+    // Retrieve page using route parameters.
     Page.get({
       bookTitle: $routeParams.bookTitle,
       pageNumber: $routeParams.pageNumber
@@ -65,10 +70,12 @@ book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
       $scope.page = res.page;
       $scope.pageCount = res.pageCount;
     });
-
+    
+    // Set bookTitle and pageNumber scope variables using route parameters.
     $scope.bookTitle = $routeParams.bookTitle;
     $scope.pageNumber = $routeParams.pageNumber;
-
+    
+    // Create dynamic links to use in the view.
     baseUrl = "#/book/" + $routeParams.bookTitle + "/page/";
     $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1);
     $scope.editPageLink = baseUrl + parseInt($routeParams.pageNumber) + "/edit";
@@ -79,7 +86,8 @@ book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
 book.controller('PageEditCtrl', ['$scope', '$routeParams', 'Page',
   function ($scope, $routeParams, Page) {
     var baseUrl;
-
+    
+    // Retrieve page using route parameters.
     Page.get({
       bookTitle: $routeParams.bookTitle,
       pageNumber: $routeParams.pageNumber
@@ -87,15 +95,18 @@ book.controller('PageEditCtrl', ['$scope', '$routeParams', 'Page',
       $scope.page = res.page;
       $scope.pageCount = res.pageCount;
     });
-
+    
+    // Set bookTitle and pageNumber scope variables using route parameters.
     $scope.bookTitle = $routeParams.bookTitle;
     $scope.pageNumber = $routeParams.pageNumber;
-
+    
+    // Create dynamic links to use in the view.
     baseUrl = "#/book/" + $routeParams.bookTitle + "/page/";
-    $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1);
+    $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1) + "/edit";
     $scope.viewPageLink = baseUrl + parseInt($routeParams.pageNumber);
-    $scope.nextPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) + 1);
-
+    $scope.nextPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) + 1) + "/edit";
+    
+    // Create a savePage function for saving the edited content.
     $scope.savePage = function () {
       console.log($scope.page);
       console.log($scope.pageNumber);
@@ -105,9 +116,19 @@ book.controller('PageEditCtrl', ['$scope', '$routeParams', 'Page',
           content: $scope.page
         },
         function (res) {
-          console.log(res);
         });
     };
+  }
+]);
+
+book.controller('BookListCtrl', ['$scope', 'Book', 
+  function ($scope, Book) {
+    $scope.books = [];
+    
+    // Retrieve all books from database.
+    Book.query({}, function (res) {
+      $scope.books = res;
+    });
   }
 ]);
 
@@ -132,5 +153,13 @@ book.directive('compile', ['$compile', function ($compile) {
         MathJax.Hub.Typeset();
       }
     );
+  };
+}]);
+
+book.directive('pageNavigation', [function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'book/page-navigation.html'
   };
 }]);

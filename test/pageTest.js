@@ -38,6 +38,33 @@ describe('/book/page', function () {
           done();
         });
     });
+    
+    it('should return error when not given book title', function (done) {
+      var pageNumber = 1;
+      request(app)
+        .get('/book/page')
+        .query({
+          pageNumber: pageNumber
+        })
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.text.should.equal("Error retrieving page: Book title not given.");
+          done();
+        });
+    });
+    
+    it('should return error when not given page number', function (done) {
+      request(app)
+        .get('/book/page')
+        .query({
+          bookTitle: book.title
+        })
+        .end(function (err, res) {
+          should.not.exist(err);
+          res.text.should.equal("Error retrieving page: Page number not given.");
+          done();
+        });
+    });
 
   });
   
@@ -75,6 +102,24 @@ describe('/book/page', function () {
             });
           });
         });
+        
+        it('should return error if book title not given', function (done) {
+          var expectedPageCount = book.pages.length;
+          
+          agent
+          .post('/book/page')
+          .send({
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.text.should.equal("Error creating page: Book title not given.");
+            Book.findOne({title: book.title}, function (err, book) {
+              should.not.exist(err);
+              book.pages.length.should.equal(expectedPageCount);
+              done();
+            });
+          });
+        });
       });
       
       it('should not create new page if user is not author', function(done) {
@@ -92,8 +137,8 @@ describe('/book/page', function () {
             should.not.exist(err);
             book.pages.length.should.equal(expectedPageCount);
             done();
-          })
-        })
+          });
+        });
       });
     });
     
@@ -130,6 +175,46 @@ describe('/book/page', function () {
             });
           });
         });
+        
+        it('should return error if book title is not given', function (done) {
+          var expectedPageCount = book.pages.length;
+
+          agent
+          .delete('/book/page')
+          .query({
+            pageNumber: book.pages.length
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.text.should.equal("Error deleting page: Book title not given.");
+            
+            Book.findOne({title: book.title}, function (err, book) {
+              should.not.exist(err);
+              book.pages.length.should.equal(expectedPageCount);
+              done();
+            });
+          });
+        });
+        
+        it('should return error if page number is not given', function (done) {
+          var expectedPageCount = book.pages.length;
+          
+          agent
+          .delete('/book/page')
+          .query({
+            bookTitle: book.title
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.text.should.equal("Error deleting page: Page number not given.");
+            
+            Book.findOne({title: book.title}, function (err, book) {
+              should.not.exist(err);
+              book.pages.length.should.equal(expectedPageCount);
+              done();
+            })
+          });
+        });
       });
       
       it('should not delete page if user is not author', function (done) {
@@ -146,7 +231,7 @@ describe('/book/page', function () {
           })
           .end(function (err, res) {
             should.not.exist(err);
-            res.text.should.equal("Error deleting page: User not author of book");
+            res.text.should.equal("Error deleting page: User not author of book.");
             Book.findOne({title: book.title}, function (err, book) {
               should.not.exist(err);
               book.pages.length.should.equal(expectedPageCount);
@@ -155,6 +240,7 @@ describe('/book/page', function () {
           });
         });
       });
+      
     });
     
     describe('PUT', function() {
@@ -187,6 +273,39 @@ describe('/book/page', function () {
             });
           });
         });
+        
+        it('should return error if book title not given', function (done) {
+          var pageNumber = book.pages.length,
+              content = 'New content';
+          
+          agent
+          .put('/book/page')
+          .send({
+            pageNumber: pageNumber,
+            content: content
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.text.should.equal("Error updating page: Book title not given.");
+            done();
+          });
+        });
+        
+        it('should return error if page number not given', function (done) {
+          var content = 'New content';
+          
+          agent
+          .put('/book/page')
+          .send({
+            bookTitle: book.title,
+            content: content
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.text.should.equal("Error updating page: Page number not given.");
+            done();
+          });
+        });
       });
       
       it('should not update page if user is not author', function (done) {
@@ -203,7 +322,7 @@ describe('/book/page', function () {
         })
         .end(function (err, res) {
           should.not.exist(err);
-          res.text.should.equal("Error updating page: User not author of book");
+          res.text.should.equal("Error updating page: User not author of book.");
           Book.findOne({title: book.title}, function (err, book) {
             book.pages[pageNumber - 1].should.equal(originalContent);
             done();

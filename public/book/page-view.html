@@ -1,23 +1,19 @@
-<div class="page-wrapper">
-  <a href="#/profile">Back to profile</a>
-  <h1>{{bookTitle}}</h1>
-  <div>
-    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">Previous page</a>
-    Page: {{pageNumber}}
-    <a href="{{editPageLink}}">Edit page</a>
-    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">Next page</a>
-  </div>
+<div class="page-view-column-center">
+  
+  <div class="page-wrapper">
+    <a href="#/profile">Back to profile</a>
+    <h1>{{bookTitle}}</h1>
 
-  <div>
-    <br>
-    <div compile="page"></div>
-    <br>
-  </div>
+    <page-navigation></page-navigation>
+    
+      <br>
+      <div compile="page"></div>
+      <br>
+    
+    <page-navigation></page-navigation>
 
-  <div>
-    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">Previous page</a>
-    Page: {{pageNumber}}
-    <a href="{{editPageLink}}">Edit page</a>
-    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">Next page</a>
   </div>
+  
 </div>
+
+<button class="page-edit" ng-click="editPage()">Edit page</button>

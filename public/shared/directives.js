@@ -1,14 +1,5 @@
 var directives = angular.module('crowdmath.directives', []);
 
-MathJax.Hub.Config({
-    skipStartupTypeset: true,
-    messageStyle: "none",
-    "HTML-CSS": {
-        showMathMenu: false
-    }
-});
-MathJax.Hub.Configured();
-
 directives.directive("mathjaxBind", function() {
     return {
         restrict: "A",

@@ -20,7 +20,7 @@ var should = require('should'),
 emptyDatabase = function (done) {
   User.remove({
     email: {
-      $ne: "agent@test.com"
+      $nin: ["agent@test.com", "sebastian.vasser@gmail.com"]
     }
   }, function (err) {
     should.not.exist(err);
