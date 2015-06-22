@@ -1,8 +1,6 @@
 <div class="page-wrapper">
-  <a href="/logout">Log out</a>
-  <a href="#/book">List of books</a>
   <h1>{{user.username}}</h1>
-  <h2>Books</h2>
+  <h2>Your books</h2>
   <ul>
     <li ng-repeat="book in books">
       <button ng-click="deleteBook(book)">X</button>

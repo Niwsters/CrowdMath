@@ -28,12 +28,42 @@ var factory = {
 		book.content = attrs.content || '';
 		book.authors = [authorID];
         book.pages = [
-          '<h1>Blarghity HTML content!</h1>',
-          '<p>lol read this bitchyz</p>'
+          [
+            {
+              type: 'text',
+              content: '<h1>Blarghity HTML content!</h1>'
+            },
+            {
+              type: 'math',
+              content: 'x^2'
+            }
+          ],
+          [
+            {
+              type: 'math',
+              content: 'x^2'
+            },
+            {
+              type: 'text',
+              content: '<h2>Honkity honk me heartsies!</h2>'
+            }
+          ]
         ];
         
 		return book;
-	}
+	},
+    Content: function() {
+      return [
+        {
+          type: 'text',
+          content: '<p>New content!</p>'
+        },
+        {
+          type: 'math',
+          content: '\intxdx'
+        }
+      ];
+    }
 };
 
 

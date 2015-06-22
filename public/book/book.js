@@ -78,38 +78,12 @@ book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
     // Create dynamic links to use in the view.
     baseUrl = "#/book/" + $routeParams.bookTitle + "/page/";
     $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1);
-    $scope.editPageLink = baseUrl + parseInt($routeParams.pageNumber) + "/edit";
     $scope.nextPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) + 1);
-  }
-]);
-
-book.controller('PageEditCtrl', ['$scope', '$routeParams', 'Page',
-  function ($scope, $routeParams, Page) {
-    var baseUrl;
     
-    // Retrieve page using route parameters.
-    Page.get({
-      bookTitle: $routeParams.bookTitle,
-      pageNumber: $routeParams.pageNumber
-    }, function (res) {
-      $scope.page = res.page;
-      $scope.pageCount = res.pageCount;
-    });
-    
-    // Set bookTitle and pageNumber scope variables using route parameters.
-    $scope.bookTitle = $routeParams.bookTitle;
-    $scope.pageNumber = $routeParams.pageNumber;
-    
-    // Create dynamic links to use in the view.
-    baseUrl = "#/book/" + $routeParams.bookTitle + "/page/";
-    $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1) + "/edit";
-    $scope.viewPageLink = baseUrl + parseInt($routeParams.pageNumber);
-    $scope.nextPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) + 1) + "/edit";
+    $scope.editPageMode = false;
     
     // Create a savePage function for saving the edited content.
     $scope.savePage = function () {
-      console.log($scope.page);
-      console.log($scope.pageNumber);
       Page.update(null, {
           bookTitle: $scope.bookTitle,
           pageNumber: $scope.pageNumber,
@@ -117,6 +91,20 @@ book.controller('PageEditCtrl', ['$scope', '$routeParams', 'Page',
         },
         function (res) {
         });
+    };
+    
+    $scope.addMath = function () {
+      $scope.page.push({
+        type: 'math',
+        content: 'New math'
+      });
+    };
+    
+    $scope.addText = function () {
+      $scope.page.push({
+        type: 'text',
+        content: 'New text'
+      });
     };
   }
 ]);
@@ -132,25 +120,19 @@ book.controller('BookListCtrl', ['$scope', 'Book',
   }
 ]);
 
-book.directive('compile', ['$compile', function ($compile) {
+book.directive('compileMath', ['$compile', function ($compile) {
   return function (scope, element, attrs) {
     scope.$watch(
       function (scope) {
-        // watch the 'compile' expression for changes
-        return scope.$eval(attrs.compile);
+        // watch the 'compileMath' expression for changes
+        return scope.$eval(attrs.compileMath);
       },
       function (value) {
         // when the 'compile' expression changes
         // assign it into the current DOM
-        element.html(value);
-
-        // compile the new DOM and link it to the current
-        // scope.
-        // NOTE: we only compile .childNodes so that
-        // we don't get into infinite loop compiling ourselves
-        $compile(element.contents())(scope);
+        element.html('$$' + value + '$$');
         
-        MathJax.Hub.Typeset();
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
       }
     );
   };
@@ -163,3 +145,89 @@ book.directive('pageNavigation', [function() {
     templateUrl: 'book/page-navigation.html'
   };
 }]);
+
+// Adds a toolbar (with position: fixed) for editing a book's page
+book.directive('pageEditToolbar', [function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'book/page-edit-toolbar.html',
+    link: function (scope, elem, attrs) {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  };
+}]);
+
+book.directive('pageComponent', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/page-component.html',
+    link: function (scope, elem, attrs) {
+      scope.editComponentMode = false;
+      
+      scope.toggleEditComponentMode = function () {
+        if(scope.editPageMode) {
+          scope.editComponentMode = !scope.editComponentMode;
+        }
+      };
+      
+      scope.$watch('editPageMode', function (newValue) {
+        if(!newValue) {
+          scope.editComponentMode = false;
+        }
+      });
+      
+      scope.saveComponent = function () {
+        scope.editComponentMode = false;
+        
+        scope.savePage();
+      };
+      
+      scope.removeComponent = function () {
+        scope.page.splice(scope.page.indexOf(scope.component), 1);
+        
+        scope.savePage();
+      };
+      
+      scope.moveComponentUp = function () {
+        scope.page.moveUp(scope.component);
+        
+        scope.savePage();
+      };
+      
+      scope.moveComponentDown = function () {
+        scope.page.moveDown(scope.component);
+        
+        scope.savePage();
+      };
+    }
+  };
+}]);
+
+Array.prototype.moveUp = function(value, by) {
+    var index = this.indexOf(value),     
+        newPos = index - (by || 1);
+    
+    if(index === -1) 
+        throw new Error("Element not found in array");
+    
+    if(newPos < 0) 
+        newPos = 0;
+        
+    this.splice(index,1);
+    this.splice(newPos,0,value);
+};
+
+Array.prototype.moveDown = function(value, by) {
+    var index = this.indexOf(value),     
+        newPos = index + (by || 1);
+    
+    if(index === -1) 
+        throw new Error("Element not found in array");
+    
+    if(newPos >= this.length) 
+        newPos = this.length;
+    
+    this.splice(index, 1);
+    this.splice(newPos,0,value);
+};

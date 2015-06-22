@@ -6,9 +6,9 @@
 
     <page-navigation></page-navigation>
     
-      <br>
-      <div compile="page"></div>
-      <br>
+    <div ng-repeat="component in page">
+      <page-component></page-component>
+    </div>
     
     <page-navigation></page-navigation>
 
@@ -16,4 +16,4 @@
   
 </div>
 
-<button class="page-edit" ng-click="editPage()">Edit page</button>
+<page-edit-toolbar></page-edit-toolbar>

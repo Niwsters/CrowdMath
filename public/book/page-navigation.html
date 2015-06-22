@@ -1,11 +1,11 @@
 <div class="page-navigation">
-  <a ng-show="pageNumber > 1" href="{{prevPageLink}}">Previous page</a>
-  Page: {{pageNumber}}
+  <div class="previous">
+    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">< previous</a>&nbsp
+  </div>
   
-  <!-- Show a view page or edit page link depending on which link is
-       given by the controller. -->
-  <a href="{{viewPageLink}}" ng-show="viewPageLink">View page</a>
-  <a href="{{editPageLink}}" ng-show="editPageLink">Edit page</a>
+  <div class="page-counter">Page: {{pageNumber}}</div>
   
-  <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">Next page</a>
+  <div class="next">
+    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">next ></a>
+  </div>
 </div>

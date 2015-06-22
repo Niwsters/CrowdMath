@@ -1,0 +1,11 @@
+<div>
+  <button ng-hide="editPageMode" class="page-edit" ng-click="editPageMode = true">Edit page</button>
+  
+  <div ng-show="editPageMode" class="page-edit-toolbar">
+    <button ng-click="editPageMode = false">X</button><br><br>
+    
+    &nbsp&nbsp<button ng-click="addMath()">$$\sum$$Add math</button><br><br>
+    &nbsp&nbsp<button ng-click="addText()"><h2>F</h2>Add text</button>
+  </div>
+  
+</div>

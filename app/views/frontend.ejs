@@ -16,12 +16,33 @@
     <script src="/shared/directives.js"></script>
     <script src="/book/book.js"></script>
     
+    <script type="text/javascript">
+      MathJax.Hub.Config({
+        "HTML-CSS": {
+        }
+      });
+    </script>
+    
 	<link rel="stylesheet" type="text/css" href="/shared/master.css" media="screen" />
   </head>
   
   <body>
     
-    <div ng-view></div>
+    <div class="header">
+      <div class="top-navbar">
+        <div class="left">
+          <input type="text" placeholder="Search for books">
+          <a href="#/">Home</a>
+          <a href="#/book">Browse books</a>
+        </div>
+        <div class="right">
+          <a href="/logout">Log out</a>
+        </div>
+      </div>
+    </div>
+    
+    <div ng-view>
+    </div>
     
   </body>
   

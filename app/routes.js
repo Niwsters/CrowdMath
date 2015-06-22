@@ -1,5 +1,20 @@
-var User = require('../app/models/user');
-var Book = require('../app/models/book');
+var User = require('../app/models/user'),
+    Book = require('../app/models/book'),
+    isContentCorrectForm;
+
+isContentCorrectForm = function(components) {
+  for(var i=0; i<components.length; i++) {
+    if(typeof components[i].type !== 'string' ||
+       typeof components[i].content !== 'string' ||
+       Object.keys(components[i]).length !== 2) {
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+
 
 module.exports = function (app, passport) {
   app.get('/', function (req, res) {
@@ -113,7 +128,20 @@ module.exports = function (app, passport) {
 
           book.title = req.body.title;
           book.authors = [req.user.id];
-          book.pages = ['<p>Yay, you created a new book!</p>'];
+          
+          // Add default page for testing
+          book.pages = [
+            [
+              {
+                type: 'text',
+                content: 'Blargh'
+              },
+              {
+                type: 'math',
+                content: 'x^2'
+              }
+            ]
+          ];
 
           book.save(function (err) {
             if (err) throw err;
@@ -200,7 +228,7 @@ module.exports = function (app, passport) {
       Book.findOne({title: req.body.bookTitle}, function (err, book) {
 
         if(book.authors.indexOf(req.user.id) > -1) {
-          book.pages.push("");
+          book.pages.push([]);
           book.save(function(err, book) {
             if(!err) {
               res.json(book);
@@ -246,16 +274,26 @@ module.exports = function (app, passport) {
   app.put('/book/page', isLoggedIn, function(req, res) {
     if(req.body.bookTitle) {
       if(req.body.pageNumber) {
-        Book.findOne({title: req.body.bookTitle}, function (err, book) {
-          if(book.authors.indexOf(req.user.id) > -1) {
-            book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
-            book.save(function (err, book) {
-              res.json(book);
+        if(req.body.content instanceof Array) {
+          
+          if(isContentCorrectForm(req.body.content)) {
+            Book.findOne({title: req.body.bookTitle}, function (err, book) {
+              if(book.authors.indexOf(req.user.id) > -1) {
+                book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
+                book.save(function (err, book) {
+                  res.json(book);
+                });
+              } else {
+                res.send("Error updating page: User not author of book.");
+              }
             });
           } else {
-            res.send("Error updating page: User not author of book.");
+            res.send("Error updating page: Given content is not on the correct form.");
           }
-        });
+          
+        } else {
+          res.send("Error updating page: Given content is not an array.");
+        }
       } else {
         res.send("Error updating page: Page number not given.");
       }
