@@ -15,12 +15,13 @@ var should = require('should'),
   loginAgent,
   initAgent,
   stringContains,
-  emptyDatabase;
+  emptyDatabase,
+  isError;
 
 emptyDatabase = function (done) {
   User.remove({
     email: {
-      $nin: ["agent@test.com", "sebastian.vasser@gmail.com"]
+      $nin: ["agent@test.com", "sebastian.vasser@gmail.com", "guest@email.com"]
     }
   }, function (err) {
     should.not.exist(err);

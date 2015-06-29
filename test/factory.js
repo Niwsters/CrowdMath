@@ -1,69 +1,90 @@
 Book = require('../app/models/book.js');
 User = require('../app/models/user.js');
 
+var randomString = function (length) {
+  var length = length || 5,
+      text = "",
+      possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < length; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+  return text;
+}
+
 var factory = {
-	User: function(attrs) {
-		var user = new User();
-		
-		attrs = attrs || {};
+  User: function (attrs) {
+    var user = new User();
 
-		user.email = attrs.email || "tester@test.com";
-		user.username = attrs.username || "Tester";
-		user.password = user.generateHash(attrs.password || "lolpan");
+    attrs = attrs || {};
 
-		return user;
-	},
-	Book: function(authorID, attrs) {
-		var book;
+    user.email = attrs.email || randomString(6) + '@' + randomString(4) + '.com';
+    user.username = attrs.username || randomString(6);
+    user.password = user.generateHash(attrs.password || randomString(6));
 
-		attrs = attrs || {};
+    return user;
+  },
+  Book: function (authorID, attrs) {
+    var book;
 
-		if(!authorID) {
-			throw "Book factory needs an author ID";
-		}
-		
-		book = new Book();
+    attrs = attrs || {};
 
-		book.title = attrs.title || "Book with no name";
-		book.content = attrs.content || '';
-		book.authors = [authorID];
-        book.pages = [
+    if (!authorID) {
+      throw "Book factory needs an author ID";
+    }
+
+    book = new Book();
+
+    book.title = attrs.title || randomString(10);
+    book.authors = [authorID];
+    book.pages = [
           [
-            {
-              type: 'text',
-              content: '<h1>Blarghity HTML content!</h1>'
+        {
+          type: 'text',
+          content: '<h1>Blarghity HTML content!</h1>'
             },
-            {
-              type: 'math',
-              content: 'x^2'
+        {
+          type: 'math',
+          content: 'x^2'
             }
           ],
           [
-            {
-              type: 'math',
-              content: 'x^2'
+        {
+          type: 'math',
+          content: 'x^2'
             },
-            {
-              type: 'text',
-              content: '<h2>Honkity honk me heartsies!</h2>'
+        {
+          type: 'text',
+          content: '<h2>Honkity honk me heartsies!</h2>'
             }
           ]
         ];
-        
-		return book;
-	},
-    Content: function() {
-      return [
-        {
-          type: 'text',
-          content: '<p>New content!</p>'
+
+    return book;
+  },
+  Content: function () {
+    return [
+      {
+        type: 'text',
+        content: '<p>New content!</p>'
         },
-        {
-          type: 'math',
-          content: '\intxdx'
+      {
+        type: 'math',
+        content: '\intxdx'
         }
       ];
-    }
+  },
+  questionComponent: function () {
+    return [
+      {
+        type: 'question',
+        content: {
+          question: 'What is love?',
+          answer: "Baby don't hurt me"
+        }
+      }
+    ];
+  }
 };
 
 

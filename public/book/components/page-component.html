@@ -1,0 +1,26 @@
+<div class="page-component" ng-class="{'edit-mode': editPageMode}">
+
+  <div class="move-remove-page-component" ng-show="editPageMode">
+    <button ng-click="removeComponent()">Delete</button>
+    <button ng-click="moveComponentUp()">&#8593;</button>
+    <button ng-click="moveComponentDown()">&#8595;</button>
+  </div>
+  
+  <div class="view" ng-hide="editComponentMode" ng-click="toggleEditComponentMode()">
+    <text-component ng-if="component.type === 'text'"></text-component>
+    
+    <math-component ng-if="component.type === 'math'"></math-component>
+    
+    <question-component ng-if="component.type === 'question'"></question-component>
+  </div>
+  
+  <div class="edit" ng-show="editComponentMode">
+    
+    <textarea ng-if="component.type !== 'question'" ng-show="editComponentMode" ng-model="component.content"></textarea>
+    
+    <question-component-editor ng-if="component.type === 'question'"></question-component-editor>
+    
+    <button ng-show="editComponentMode" ng-click="saveComponent()">Done</button>
+  </div>
+  
+</div>

@@ -6,24 +6,23 @@ profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User'
   function ($scope, $routeParams, $location, User, Book) {
     var getProfileBooks = function () {
       $scope.books = Book.query({
-        id: $scope.user.id
+        authorID: $scope.user.id
       });
     };
 
     if ($routeParams.username) {
       $scope.user = User.get({
         username: $routeParams.username
+      }, function(user) {
+        getProfileBooks();
       });
     } else {
       $scope.user = User.get();
     }
 
-    getProfileBooks();
-
     $scope.createBook = function () {
       var newBook = new Book();
       newBook.title = $scope.newBookTitle;
-      newBook.pages = ['<p>Yay, you created a new book!</p>'];
       newBook.$save(function (book) {
         getProfileBooks();
         $scope.createNewBookError = '';

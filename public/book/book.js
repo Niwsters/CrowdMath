@@ -106,6 +106,16 @@ book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
         content: 'New text'
       });
     };
+    
+    $scope.addQuestion = function () {
+      $scope.page.push({
+        type: 'question',
+        content: {
+          question: 'question',
+          correctAnswer: 'answer'
+        }
+      });
+    };
   }
 ]);
 
@@ -161,7 +171,7 @@ book.directive('pageEditToolbar', [function() {
 book.directive('pageComponent', [function() {
   return {
     restrict: 'E',
-    templateUrl: 'book/page-component.html',
+    templateUrl: 'book/components/page-component.html',
     link: function (scope, elem, attrs) {
       scope.editComponentMode = false;
       
@@ -201,6 +211,44 @@ book.directive('pageComponent', [function() {
         scope.savePage();
       };
     }
+  };
+}]);
+
+book.directive('questionComponent', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/question-component.html',
+    link: function(scope, elem, attrs) {
+      scope.showAnswer = false;
+      scope.question = scope.component.content;
+      
+      scope.toggleShowAnswer = function () {
+        if(!scope.editPageMode) {
+          scope.showAnswer = !scope.showAnswer;
+        }
+      };
+    }
+  };
+}]);
+
+book.directive('textComponent', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/text-component.html'
+  };
+}])
+
+book.directive('mathComponent', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/math-component.html'
+  };
+}]);
+
+book.directive('questionComponentEditor', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/question-component-editor.html'
   };
 }]);
 

@@ -1,4 +1,5 @@
 var factory = require('./factory'),
+    helper = require('./helper'),
   initAgent = require('./initAgent'),
   should = require('should'),
   app = require('../server.js'),
@@ -269,6 +270,19 @@ describe('/book/page', function () {
           });
         });
         
+        afterEach(function (done) {
+          Book.findOne({
+            title: book.title
+          }, function (err, book) {
+            should.not.exist(err);
+            book.pages = [];
+            book.save(function (err, book) {
+              should.not.exist(err);
+              done();
+            })
+          })
+        });
+        
         it('should update page given book title, page number and content', function (done) {
           var pageNumber = book.pages.length,
             content = factory.Content();
@@ -290,6 +304,31 @@ describe('/book/page', function () {
               });
             });
         });
+        
+        it('should update page given question component', function (done) {
+          var pageNumber = book.pages.length,
+              component = factory.questionComponent();
+          
+          agent
+          .put('/book/page')
+          .send({
+            bookTitle: book.title,
+            pageNumber: pageNumber,
+            content: component
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            
+            res.text.substr(0,5).should.not.equal('Error');
+            
+            Book.findOne({
+              title: book.title
+            }, function (err, book) {
+              book.pages[pageNumber - 1].should.eql(component);
+              done();
+            });
+          });
+        });
 
         it('should return error if given content is not an array', function (done) {
           var pageNumber = book.pages.length,
@@ -305,29 +344,6 @@ describe('/book/page', function () {
           .end(function (err, res) {
             should.not.exist(err);
             res.text.should.equal("Error updating page: Given content is not an array.");
-            done();
-          });
-        });
-        
-        it('should return error if given content does not ONLY contain type and content', function (done) {
-          var pageNumber = book.pages.length,
-              content = [
-                {
-                  type: 'text',
-                  honk: 'Blargh'
-                }
-              ];
-          
-          agent
-          .put('/book/page')
-          .send({
-            bookTitle: book.title,
-            pageNumber: pageNumber,
-            content: content
-          })
-          .end(function (err, res) {
-            should.not.exist(err);
-            res.text.should.equal("Error updating page: Given content is not on the correct form.");
             done();
           });
         });

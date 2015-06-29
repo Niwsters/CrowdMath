@@ -10,16 +10,33 @@ describe('/book', function () {
   describe('public', function () {
 
     describe('GET', function () {
-      var book, user;
+      var book, book2, user, user2;
 
       beforeEach(function (done) {
         user = factory.User();
         user.save(function (err) {
           should.not.exist(err);
           book = factory.Book(user.id);
-          book.save(function (err) {
+          book.save(function (err, dbBook) {
             should.not.exist(err);
-            done();
+            
+            user2 = factory.User();
+            user2.save(function (err) {
+              should.not.exist(err);
+              
+              book2 = factory.Book(user2.id);
+              book2.save(function (err, dbBook) {
+                should.not.exist(err);
+                
+                // Fixes annoying issue with comparing the _id attribute
+                book = book.toObject();
+                book._id = book._id.toString();
+                book2 = book2.toObject();
+                book2._id = book2._id.toString();
+                
+                done();
+              });
+            });
           });
         });
       });
@@ -28,7 +45,7 @@ describe('/book', function () {
         request(app)
           .get('/book')
           .query({
-            id: book.id
+            id: book._id
           })
           .end(function (err, res) {
             res.body.title.should.equal(book.title);
@@ -43,7 +60,8 @@ describe('/book', function () {
             authorID: user.id
           })
           .end(function (err, res) {
-            res.body[0].title.should.equal(book.title);
+            res.body.should.containEql(book);
+            res.body.should.not.containEql(book2);
             done();
           });
       });
@@ -52,7 +70,10 @@ describe('/book', function () {
         request(app)
           .get('/book')
           .end(function (err, res) {
-            res.body[0].title.should.equal(book.title);
+            res.body.should.containEql(book);
+            
+            res.body.should.containEql(book2);
+            
             done();
           });
       });
@@ -72,11 +93,11 @@ describe('/book', function () {
   });
 
   describe('logged in', function () {
+    var user;
 
     before(function (done) {
       initAgent(done);
     });
-    var user;
 
     before(function (done) {
       user = factory.User();
@@ -264,13 +285,30 @@ describe('/book', function () {
           })
           .end(function (err, res) {
             should.not.exist(err);
-            res.text.should.equal("Successfully removed book");
+            res.text.should.equal("Successfully deleted book.");
 
             Book.findById(book.id, function (err, b) {
               should.not.exist(b);
               done();
             });
           });
+      });
+
+      it('should return error if user is not author of book', function (done) {
+        book.authors = [user.id];
+        book.save(function (err, book) {
+          should.not.exist(err);
+          agent
+            .delete('/book')
+            .query({
+              id: book.id
+            })
+            .end(function (err, res) {
+              should.not.exist(err);
+              res.text.should.equal("Error deleting book: User not author.");
+              done();
+            });
+        })
       });
 
       it('should throw 500 error when not given ID', function (done) {

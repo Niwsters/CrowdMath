@@ -32,8 +32,12 @@ input {
   margin: 0 auto;
 }
 
-.page-component.edit-mode {
+.page-component.edit-mode .view {
   min-height: 150px;
+}
+
+.page-component.edit-mode .view question-component {
+  padding-top: 25px;
 }
 
 .page-component textarea {
@@ -41,9 +45,20 @@ input {
   min-height: 150px;
 }
 
-.page-component.edit-mode p:hover {
+.page-component.edit-mode:hover {
   background: #EEE;
   cursor: pointer;
+}
+
+.page-component question-component {
+  display: block;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.page-component question-component .question,
+.page-component question-component button {
+  margin-bottom: 10px;
 }
 
 .page-navigation {

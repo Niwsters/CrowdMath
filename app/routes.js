@@ -2,25 +2,11 @@ var User = require('../app/models/user'),
     Book = require('../app/models/book'),
     isContentCorrectForm;
 
-isContentCorrectForm = function(components) {
-  for(var i=0; i<components.length; i++) {
-    if(typeof components[i].type !== 'string' ||
-       typeof components[i].content !== 'string' ||
-       Object.keys(components[i]).length !== 2) {
-      return false;
-    }
-  }
-  
-  return true;
-}
-
-
-
 module.exports = function (app, passport) {
   app.get('/', function (req, res) {
     res.render('index.ejs');
   });
-
+  
   app.get('/login', function (req, res) {
     res.render('login.ejs', {
       message: req.flash('loginMessage')
@@ -28,11 +14,13 @@ module.exports = function (app, passport) {
   });
   
   app.get('/signup', function (req, res) {
-    res.render('signup-disabled.ejs');
+    //res.render('signup-disabled.ejs');
     
-    /* res.render('signup.ejs', {
+    
+    res.render('signup.ejs', {
       message: req.flash('signupMessage')
-    }); */
+    });
+    
   });
   
   // we will want this protected so you have to be logged in to visit
@@ -130,18 +118,7 @@ module.exports = function (app, passport) {
           book.authors = [req.user.id];
           
           // Add default page for testing
-          book.pages = [
-            [
-              {
-                type: 'text',
-                content: 'Blargh'
-              },
-              {
-                type: 'math',
-                content: 'x^2'
-              }
-            ]
-          ];
+          book.pages = [];
 
           book.save(function (err) {
             if (err) throw err;
@@ -192,11 +169,19 @@ module.exports = function (app, passport) {
 
   app.delete('/book', isLoggedIn, function (req, res) {
     if (req.query.id) {
-      Book.remove({
-        _id: req.query.id
-      }, function (err) {
-        if (err) throw err;
-        res.send("Successfully removed book");
+      
+      Book.findOne({_id: req.query.id}, function (err, book) {
+        if(book.authors.indexOf(req.user.id) > -1) {
+          book.remove(function(err) {
+            if(!err) {
+              res.send("Successfully deleted book.");
+            } else {
+              res.send("Error deleting book: " + err);
+            }
+          });
+        } else {
+          res.send("Error deleting book: User not author.");
+        }
       });
     } else {
       throw "Error deleting book: No book ID given";
@@ -276,20 +261,16 @@ module.exports = function (app, passport) {
       if(req.body.pageNumber) {
         if(req.body.content instanceof Array) {
           
-          if(isContentCorrectForm(req.body.content)) {
-            Book.findOne({title: req.body.bookTitle}, function (err, book) {
-              if(book.authors.indexOf(req.user.id) > -1) {
-                book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
-                book.save(function (err, book) {
-                  res.json(book);
-                });
-              } else {
-                res.send("Error updating page: User not author of book.");
-              }
-            });
-          } else {
-            res.send("Error updating page: Given content is not on the correct form.");
-          }
+          Book.findOne({title: req.body.bookTitle}, function (err, book) {
+            if(book.authors.indexOf(req.user.id) > -1) {
+              book.pages.splice(req.body.pageNumber - 1, 1, req.body.content);
+              book.save(function (err, book) {
+                res.json(book);
+              });
+            } else {
+              res.send("Error updating page: User not author of book.");
+            }
+          });
           
         } else {
           res.send("Error updating page: Given content is not an array.");
