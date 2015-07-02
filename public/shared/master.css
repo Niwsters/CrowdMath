@@ -32,7 +32,7 @@ input {
   margin: 0 auto;
 }
 
-.page-component.edit-mode .view {
+.page-component.edit-mode {
   min-height: 150px;
 }
 
@@ -96,6 +96,12 @@ input {
   border-top: none;
   border-right: none;
   border-bottom-left-radius: 7px;
+  padding: 10px;
+}
+
+.page-edit-toolbar button {
+  display: block;
+  margin: 10px;
 }
 
 button.page-edit {

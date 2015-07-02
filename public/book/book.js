@@ -116,6 +116,13 @@ book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
         }
       });
     };
+    
+    $scope.addYouTube = function () {
+      $scope.page.push({
+        type: 'youtube',
+        content: ''
+      });
+    };
   }
 ]);
 
@@ -245,12 +252,50 @@ book.directive('mathComponent', [function() {
   };
 }]);
 
+book.directive('youtubeComponent', ['$sce', function($sce) {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/youtube-component.html',
+    link: function(scope, elem, attrs) {
+      scope.$watch('component.content', function(newValue, oldValue) {
+        if(newValue) {
+          scope.videoID = newValue.match(/https:\/\/(?:www.youtube.com|youtu.be)\/(?:watch\?v=|embed\/|)([\w\-]*)/)[1];
+          console.log(scope.videoID);
+        }
+      });
+    }
+  };
+}]);
+
 book.directive('questionComponentEditor', [function() {
   return {
     restrict: 'E',
     templateUrl: 'book/components/question-component-editor.html'
   };
 }]);
+
+book.directive('youtubeComponentEditor', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'book/components/youtube-component-editor.html'
+  };
+}]);
+
+book.directive('youtube', function($sce) {
+  return {
+    restrict: 'EA',
+    scope: { code:'=' },
+    replace: true,
+    template: '<div style="height:400px;"><iframe style="overflow:hidden;height:100%;width:100%" width="100%" height="100%" src="{{url}}" frameborder="0" allowfullscreen></iframe></div>',
+    link: function (scope) {
+        scope.$watch('code', function (newVal) {
+           if (newVal) {
+               scope.url = $sce.trustAsResourceUrl("http://www.youtube.com/embed/" + newVal);
+           }
+        });
+    }
+  };
+});
 
 Array.prototype.moveUp = function(value, by) {
     var index = this.indexOf(value),     
