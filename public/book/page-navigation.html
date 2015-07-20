@@ -1,11 +1,11 @@
 <div class="page-navigation">
   <div class="previous">
-    <a ng-show="pageNumber > 1" href="{{prevPageLink}}">< previous</a>&nbsp
+    <a ng-if="pageNumber > 1" ui-sref="page({bookTitle: bookTitle, pageNumber: pageNumber - 1})">previous</a>&nbsp
   </div>
   
   <div class="page-counter">Page: {{pageNumber}}</div>
   
   <div class="next">
-    <a ng-show="pageNumber < pageCount" href="{{nextPageLink}}">next ></a>
+    <a ng-if="pageNumber < pageCount" ui-sref="page({bookTitle: bookTitle, pageNumber: pageNumber + 1})">next</a>
   </div>
 </div>

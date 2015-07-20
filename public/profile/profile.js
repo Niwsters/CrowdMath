@@ -2,22 +2,26 @@
 
 var profile = angular.module('crowdmath.profile', []);
 
-profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User', 'Book',
-  function ($scope, $routeParams, $location, User, Book) {
+profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$location', 'User', 'Book',
+  function ($scope, $state, $stateParams, $location, User, Book) {
     var getProfileBooks = function () {
       $scope.books = Book.query({
         authorID: $scope.user._id
       });
     };
 
-    if ($routeParams.username) {
+    if ($stateParams.username) {
       $scope.user = User.get({
-        username: $routeParams.username
-      }, function(user) {
-        getProfileBooks();
+        username: $stateParams.username
+      }, function(res) {
+        if(res._id) {
+          getProfileBooks();
+        } else {
+          $state.transitionTo('404notfound');
+        }
       });
     } else {
-      $scope.user = User.get({}, function(user) {
+      $scope.user = User.get({}, function(res) {
         getProfileBooks();
       });
     }

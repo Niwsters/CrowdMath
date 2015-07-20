@@ -2,12 +2,19 @@
 
 var book = angular.module('crowdmath.book', []);
 
-book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
-  function ($scope, $routeParams, Book, Page) {
+book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Book', 'Page',
+  function ($scope, $state, $stateParams, $window, Book, Page) {
+    var bookTitle;
+    
+    if($stateParams.bookTitle) {
+      bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
+    } else {
+      $state.transitionTo('404notfound');
+    }
     
     // Retrieve book from database using the book title in the route
     $scope.book = Book.get({
-      title: $routeParams.bookTitle
+      title: bookTitle
     });
     
     // Create a createPage function for creating a page in the view
@@ -18,7 +25,7 @@ book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
         bookTitle: $scope.book.title
       }, function (page) {
         $scope.book = Book.get({
-          title: $routeParams.bookTitle
+          title: bookTitle
         });
       });
     };
@@ -30,17 +37,17 @@ book.controller('BookViewCtrl', ['$scope', '$routeParams', 'Book', 'Page',
         pageNumber: pageNumber
       }, function (res) {
         $scope.book = Book.get({
-          title: $routeParams.bookTitle
+          title: bookTitle
         });
       });
     };
   }
 ]);
 
-book.controller('BookEditCtrl', ['$scope', '$routeParams', 'Book',
-  function ($scope, $routeParams, Book) {
+book.controller('BookEditCtrl', ['$scope', '$stateParams', 'Book',
+  function ($scope, $stateParams, Book) {
     $scope.book = Book.get({
-      title: $routeParams.bookTitle
+      title: $stateParams.bookTitle
     });
 
     $scope.saveEdit = function () {
@@ -58,27 +65,30 @@ book.controller('BookEditCtrl', ['$scope', '$routeParams', 'Book',
   }
 ]);
 
-book.controller('PageViewCtrl', ['$scope', '$routeParams', 'Page',
-  function ($scope, $routeParams, Page) {
-    var baseUrl;
+book.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Page',
+  function ($scope, $state, $stateParams, $window, Page) {
+    var baseUrl,
+        bookTitle,
+        pageNumber = parseInt($stateParams.pageNumber);
+    
+    if($stateParams.bookTitle) {
+      bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
+    } else {
+      $state.transitionTo('404notfound');
+    }
     
     // Retrieve page using route parameters.
     Page.get({
-      bookTitle: $routeParams.bookTitle,
-      pageNumber: $routeParams.pageNumber
+      bookTitle: bookTitle,
+      pageNumber: pageNumber
     }, function (res) {
       $scope.page = res.page;
-      $scope.pageCount = res.pageCount;
+      $scope.pageCount = parseInt(res.pageCount);
     });
     
     // Set bookTitle and pageNumber scope variables using route parameters.
-    $scope.bookTitle = $routeParams.bookTitle;
-    $scope.pageNumber = $routeParams.pageNumber;
-    
-    // Create dynamic links to use in the view.
-    baseUrl = "#/book/" + $routeParams.bookTitle + "/page/";
-    $scope.prevPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) - 1);
-    $scope.nextPageLink = baseUrl + parseInt(parseInt($routeParams.pageNumber) + 1);
+    $scope.bookTitle = bookTitle;
+    $scope.pageNumber = parseInt($stateParams.pageNumber);
     
     $scope.editPageMode = false;
     

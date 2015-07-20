@@ -5,7 +5,7 @@
   <h2>Page list</h2>
   <ul>
     <li ng-repeat="page in book.pages track by $index">
-      <button ng-click="deletePage($index + 1)">X</button><a href="#/book/{{book.title}}/page/{{$index + 1}}">Page {{$index+1}}</a>
+      <button ng-click="deletePage($index + 1)">X</button><a ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})">Page {{$index+1}}</a>
     </li>
   </ul>
   <button ng-click="createPage()">Create page</button>
