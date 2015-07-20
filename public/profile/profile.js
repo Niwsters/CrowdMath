@@ -6,7 +6,7 @@ profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User'
   function ($scope, $routeParams, $location, User, Book) {
     var getProfileBooks = function () {
       $scope.books = Book.query({
-        authorID: $scope.user.id
+        authorID: $scope.user._id
       });
     };
 
@@ -17,7 +17,9 @@ profile.controller('ProfileCtrl', ['$scope', '$routeParams', '$location', 'User'
         getProfileBooks();
       });
     } else {
-      $scope.user = User.get();
+      $scope.user = User.get({}, function(user) {
+        getProfileBooks();
+      });
     }
 
     $scope.createBook = function () {

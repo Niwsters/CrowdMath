@@ -14,13 +14,13 @@ module.exports = function (app, passport) {
   });
   
   app.get('/signup', function (req, res) {
-    //res.render('signup-disabled.ejs');
+    res.render('signup-disabled.ejs');
     
-    
+    /*
     res.render('signup.ejs', {
       message: req.flash('signupMessage')
     });
-    
+    */
   });
   
   // we will want this protected so you have to be logged in to visit
