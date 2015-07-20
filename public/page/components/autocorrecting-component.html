@@ -1,0 +1,7 @@
+<div>{{component.content.question}}</div>
+<input ng-model="givenAnswer">
+
+<span ng-if="givenAnswer">
+  <span style="color: green" class="feedback-correct" ng-show="givenAnswer === component.content.correctAnswer">&#10003;</span>
+  <span style="color: red;"ng-show="givenAnswer !== component.content.correctAnswer">&#10007;</span>
+</span>

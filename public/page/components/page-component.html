@@ -14,6 +14,8 @@
     <question-component ng-if="component.type === 'question'"></question-component>
     
     <youtube-component ng-if="component.type === 'youtube'"></youtube-component>
+    
+    <autocorrecting-component ng-if="component.type === 'autocorrecting'"></autocorrecting-component>
   </div>
   
   <div class="edit" ng-show="editComponentMode">
@@ -23,6 +25,8 @@
     <question-component-editor ng-if="component.type === 'question'"></question-component-editor>
     
     <youtube-component-editor ng-if="component.type === 'youtube'"></youtube-component-editor>
+    
+    <autocorrecting-component-editor ng-if="component.type === 'autocorrecting'"></autocorrecting-component-editor>
     
     <button ng-show="editComponentMode" ng-click="saveComponent()">Done</button>
   </div>

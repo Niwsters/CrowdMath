@@ -22,7 +22,11 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
       });
     } else {
       $scope.user = User.get({}, function(res) {
-        getProfileBooks();
+        if(res._id) {
+          getProfileBooks();
+        } else {
+          $state.transitionTo('404notfound');
+        }
       });
     }
 

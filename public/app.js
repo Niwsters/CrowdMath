@@ -6,6 +6,7 @@ var app = angular.module('crowdmath', [
   'crowdmath.profile',
   'crowdmath.book',
   'crowdmath.bookService',
+  'crowdmath.page',
   'crowdmath.userService',
   'crowdmath.mathjax',
   'crowdmath.directives',
@@ -28,9 +29,15 @@ app.config(['$stateProvider', '$urlRouterProvider',
       controller: 'BookViewCtrl'
     })
     
+    .state('books', {
+      url: '/books',
+      templateUrl: 'book/book-list.html',
+      controller: 'BookListCtrl'
+    })
+    
     .state('page', {
       url: '/book/:bookTitle/page/:pageNumber',
-      templateUrl: '/book/page-view.html',
+      templateUrl: '/page/page.html',
       controller: 'PageViewCtrl'
     })
     
