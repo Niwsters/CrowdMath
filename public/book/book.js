@@ -6,6 +6,7 @@ book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
   function ($scope, $state, $stateParams, $window, Book, Page) {
     var bookTitle;
     
+    // If no book title is given, send the user to a 404 error page.
     if($stateParams.bookTitle) {
       bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
     } else {
@@ -13,8 +14,17 @@ book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
     }
     
     // Retrieve book from database using the book title in the route
-    $scope.book = Book.get({
+    Book.get({
       title: bookTitle
+    }, function(book) {
+      
+      // If no book was retrieved, send the user to a 404 error page.
+      if(book._id) {
+        $scope.book = book;
+      } else {
+        $state.transitionTo('404notfound');
+      }
+      
     });
     
     // Create a createPage function for creating a page in the view

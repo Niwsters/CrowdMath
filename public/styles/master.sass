@@ -1,5 +1,6 @@
 $mainWidth: 500px
 $pageWidth: 800px
+$editComponentMinHeight: 50px
 
 body 
   font-family: Arial
@@ -12,6 +13,8 @@ body
 h1 
   text-align: center
 
+ul
+  padding-left: 0
 
 button 
   color: #FFF
@@ -38,34 +41,24 @@ input
   margin: 0 auto
   padding: 1em
 
-
-.page-component.edit-mode 
-  min-height: 150px
-
-
-.page-component.edit-mode .view question-component 
-  padding-top: 25px
-
-
-.page-component textarea 
-  width: 100%
-  min-height: 150px
-
-
-.page-component.edit-mode:hover 
-  background: #EEE
-  cursor: pointer
-
-
-.page-component question-component 
-  display: block
-  margin: 20px 0
-  text-align: center
-
-
-.page-component question-component .question,
-.page-component question-component button 
-  margin-bottom: 10px
+  
+.page-component
+  &.edit-mode
+    min-height: $editComponentMinHeight
+    &:hover
+      background: #EEE
+      cursor: pointer
+    
+  textarea
+    width: 100%
+    min-height: 150px
+    
+  question-component
+    display: block
+    padding: 20px 0
+    text-align: center
+    .question, button
+      margin-bottom: 10px
 
 
 .page-navigation 
@@ -112,11 +105,6 @@ input
     text-align: center
     button
       display: inline-block
-
-
-
-
-
 
 
 button.page-edit 
@@ -194,3 +182,19 @@ textarea.edit-page-textarea
 
 .top-navbar .right 
   float: right
+
+ul[dnd-list]
+  position: relative
+  min-height: $editComponentMinHeight
+  padding-left: 0px
+  li
+    background-color: #fff
+    border: 1px solid #ddd
+    display: block
+    position: relative
+  .dndDraggingSource
+    display: none
+  .dndPlaceholder
+    display: block
+    background-color: #ddd
+    min-height: $editComponentMinHeight

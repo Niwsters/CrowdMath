@@ -3,6 +3,7 @@
 var app = angular.module('crowdmath', [
   'ui.router',
   'ngSanitize',
+  'dndLists',
   'crowdmath.profile',
   'crowdmath.book',
   'crowdmath.bookService',

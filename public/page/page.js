@@ -1,6 +1,6 @@
 page = angular.module('crowdmath.page', []);
 
-book.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Page', function ($scope, $state, $stateParams, $window, Page) {
+page.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Page', function ($scope, $state, $stateParams, $window, Page) {
   var baseUrl,
     bookTitle,
     pageNumber = parseInt($stateParams.pageNumber);
@@ -34,6 +34,11 @@ book.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
         content: $scope.page
       },
       function (res) {});
+  };
+  
+  $scope.moveComponent = function (pos) {
+    $scope.page.splice(pos, 1);
+    $scope.savePage();
   };
 
   $scope.addMath = function () {

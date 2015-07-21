@@ -8,6 +8,9 @@ body {
 h1 {
   text-align: center; }
 
+ul {
+  padding-left: 0; }
+
 button {
   color: #FFF;
   background: #FF7700;
@@ -31,27 +34,19 @@ input {
   padding: 1em; }
 
 .page-component.edit-mode {
-  min-height: 150px; }
-
-.page-component.edit-mode .view question-component {
-  padding-top: 25px; }
-
+  min-height: 50px; }
+  .page-component.edit-mode:hover {
+    background: #EEE;
+    cursor: pointer; }
 .page-component textarea {
   width: 100%;
   min-height: 150px; }
-
-.page-component.edit-mode:hover {
-  background: #EEE;
-  cursor: pointer; }
-
 .page-component question-component {
   display: block;
-  margin: 20px 0;
+  padding: 20px 0;
   text-align: center; }
-
-.page-component question-component .question,
-.page-component question-component button {
-  margin-bottom: 10px; }
+  .page-component question-component .question, .page-component question-component button {
+    margin-bottom: 10px; }
 
 .page-navigation {
   background: #EEE;
@@ -158,3 +153,21 @@ textarea.edit-page-textarea {
 
 .top-navbar .right {
   float: right; }
+
+ul[dnd-list] {
+  position: relative;
+  min-height: 50px;
+  padding-left: 0px; }
+  ul[dnd-list] li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    position: relative; }
+  ul[dnd-list] .dndDraggingSource {
+    display: none; }
+  ul[dnd-list] .dndPlaceholder {
+    display: block;
+    background-color: #ddd;
+    min-height: 50px; }
+
+/*# sourceMappingURL=master.css.map */

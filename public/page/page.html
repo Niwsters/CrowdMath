@@ -6,9 +6,16 @@
 
     <page-navigation></page-navigation>
     
-    <div ng-repeat="component in page">
-      <page-component></page-component>
-    </div>
+    <ul ng-if="editPageMode" dnd-list="page">
+      <li ng-repeat="component in page"
+          dnd-draggable="component"
+          dnd-moved="moveComponent($index)"
+          >
+        <page-component></page-component>
+      </li>
+    </ul>
+    
+    <page-component ng-if="!editPageMode" ng-repeat="component in page"></page-component>
     
     <page-navigation></page-navigation>
 
