@@ -1,13 +1,13 @@
 <a ui-sref="book({bookTitle: bookTitle})">Back to book</a>
 
-<div class="page-view-column-center text-center">
+<div class="page-view-column-center text-center row">
   
   <div class="col-xs-12">
     <h1>{{bookTitle}}</h1>
 
     <page-navigation></page-navigation>
     
-    <ul ng-if="editPageMode" dnd-list="page">
+    <ul ng-if="page.editMode" dnd-list="page">
       <li ng-repeat="component in page"
           dnd-draggable="component"
           dnd-moved="moveComponent($index)"
@@ -16,12 +16,12 @@
       </li>
     </ul>
     
-    <page-component ng-if="!editPageMode" ng-repeat="component in page"></page-component>
+    <page-component ng-if="!page.editMode" ng-repeat="component in page"></page-component>
     
     <page-navigation></page-navigation>
+    
+    <page-edit-toolbar class="col-xs-12" ng-if="isUserAuthor"></page-edit-toolbar>
 
   </div>
   
 </div>
-
-<page-edit-toolbar></page-edit-toolbar>

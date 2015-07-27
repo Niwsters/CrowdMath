@@ -2,8 +2,8 @@
 
 var book = angular.module('crowdmath.book', []);
 
-book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Book', 'Page',
-  function ($scope, $state, $stateParams, $window, Book, Page) {
+book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page',
+  function ($scope, $state, $stateParams, $window, User, Book, Page) {
     var bookTitle;
 
     // If no book title is given, send the user to a 404 error page.
@@ -20,11 +20,18 @@ book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
 
       // If no book was retrieved, send the user to a 404 error page.
       if (book._id) {
+        
         $scope.book = book;
+        
+        // Check if user is author of book
+        User.get({}, function (user) {
+          if(user._id) {
+            $scope.isUserAuthor = book.authors.indexOf(user._id) > -1
+          }
+        });
       } else {
         $state.transitionTo('404notfound');
       }
-
     });
 
     // Create a createPage function for creating a page in the view

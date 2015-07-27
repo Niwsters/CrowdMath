@@ -1,22 +1,26 @@
-$mainWidth: 500px
-$pageWidth: 800px
 $editComponentMinHeight: 50px
 
 .header
   background: #EEE
+
+.page-edit-toolbar
+  background: rgba(133, 133, 133, 0.5)
+  position: fixed
+  padding: 1em
+  bottom: 0px
+  left: 0px
+  margin-top: 300px
 
 ul[dnd-list]
   position: relative
   min-height: $editComponentMinHeight
   padding-left: 0px
   li
-    background-color: #fff
-    border: 1px solid #ddd
     display: block
     position: relative
   .dndDraggingSource
     display: none
   .dndPlaceholder
     display: block
-    background-color: #ddd
+    background: #DDD
     min-height: $editComponentMinHeight

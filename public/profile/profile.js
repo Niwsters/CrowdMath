@@ -4,9 +4,9 @@ var profile = angular.module('crowdmath.profile', []);
 
 profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$location', 'User', 'Book',
   function ($scope, $state, $stateParams, $location, User, Book) {
-    var getProfileBooks = function () {
+    var getProfileBooks = function (userID) {
       $scope.books = Book.query({
-        authorID: $scope.user._id
+        authorID: userID
       });
     };
 
@@ -15,7 +15,7 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
         username: $stateParams.username
       }, function(res) {
         if(res._id) {
-          getProfileBooks();
+          getProfileBooks(res._id);
         } else {
           $state.transitionTo('404notfound');
         }
@@ -23,7 +23,7 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
     } else {
       $scope.user = User.get({}, function(res) {
         if(res._id) {
-          getProfileBooks();
+          getProfileBooks(res._id);
         } else {
           $state.transitionTo('404notfound');
         }

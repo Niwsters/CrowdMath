@@ -1,20 +1,26 @@
 .header {
   background: #EEE; }
 
+.page-edit-toolbar {
+  background: rgba(133, 133, 133, 0.5);
+  position: fixed;
+  padding: 1em;
+  bottom: 0px;
+  left: 0px;
+  margin-top: 300px; }
+
 ul[dnd-list] {
   position: relative;
   min-height: 50px;
   padding-left: 0px; }
   ul[dnd-list] li {
-    background-color: #fff;
-    border: 1px solid #ddd;
     display: block;
     position: relative; }
   ul[dnd-list] .dndDraggingSource {
     display: none; }
   ul[dnd-list] .dndPlaceholder {
     display: block;
-    background-color: #ddd;
+    background: #DDD;
     min-height: 50px; }
 
 /*# sourceMappingURL=master.css.map */

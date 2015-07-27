@@ -1,6 +1,6 @@
 page = angular.module('crowdmath.page', []);
 
-page.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'Page', function ($scope, $state, $stateParams, $window, Page) {
+page.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
   var baseUrl,
     bookTitle,
     pageNumber = parseInt($stateParams.pageNumber);
@@ -17,14 +17,19 @@ page.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
     pageNumber: pageNumber
   }, function (res) {
     $scope.page = res.page;
+    $scope.page.editMode = false;
     $scope.pageCount = parseInt(res.pageCount);
+    
+    User.get({}, function(user) {
+      Book.get({title: bookTitle}, function(book) {
+        $scope.isUserAuthor = book.authors.indexOf(user._id) > -1;
+      });
+    });
   });
 
   // Set bookTitle and pageNumber scope variables using route parameters.
   $scope.bookTitle = bookTitle;
   $scope.pageNumber = parseInt($stateParams.pageNumber);
-
-  $scope.editPageMode = false;
 
   // Create a savePage function for saving the edited content.
   $scope.savePage = function () {
@@ -124,13 +129,12 @@ page.directive('pageEditToolbar', [function () {
 page.directive('pageComponent', [function () {
   return {
     restrict: 'E',
-    replace: true,
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
       scope.editComponentMode = false;
 
       scope.toggleEditComponentMode = function () {
-        if (scope.editPageMode) {
+        if (scope.page.editMode) {
           scope.editComponentMode = !scope.editComponentMode;
         }
       };
@@ -152,18 +156,6 @@ page.directive('pageComponent', [function () {
 
         scope.savePage();
       };
-
-      scope.moveComponentUp = function () {
-        scope.page.moveUp(scope.component);
-
-        scope.savePage();
-      };
-
-      scope.moveComponentDown = function () {
-        scope.page.moveDown(scope.component);
-
-        scope.savePage();
-      };
     }
   };
 }]);
@@ -177,7 +169,7 @@ page.directive('questionComponent', [function () {
       scope.question = scope.component.content;
 
       scope.toggleShowAnswer = function () {
-        if (!scope.editPageMode) {
+        if (!scope.page.editMode) {
           scope.showAnswer = !scope.showAnswer;
         }
       };
@@ -260,31 +252,3 @@ page.directive('youtube', function ($sce) {
     }
   };
 });
-
-Array.prototype.moveUp = function (value, by) {
-  var index = this.indexOf(value),
-    newPos = index - (by || 1);
-
-  if (index === -1)
-    throw new Error("Element not found in array");
-
-  if (newPos < 0)
-    newPos = 0;
-
-  this.splice(index, 1);
-  this.splice(newPos, 0, value);
-};
-
-Array.prototype.moveDown = function (value, by) {
-  var index = this.indexOf(value),
-    newPos = index + (by || 1);
-
-  if (index === -1)
-    throw new Error("Element not found in array");
-
-  if (newPos >= this.length)
-    newPos = this.length;
-
-  this.splice(index, 1);
-  this.splice(newPos, 0, value);
-};

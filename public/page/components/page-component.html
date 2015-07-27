@@ -1,7 +1,7 @@
-<div>
+<div ng-class="{'panel panel-default': page.editMode}">
 
-  <div ng-show="editPageMode">
-    <button ng-click="removeComponent()">Delete</button>
+  <div class="text-right" ng-show="page.editMode">
+    <button class="btn btn-danger" ng-click="removeComponent()">X</button>
   </div>
   
   <div ng-hide="editComponentMode" ng-click="toggleEditComponentMode()">

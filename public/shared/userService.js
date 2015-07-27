@@ -4,6 +4,8 @@ var userService = angular.module('crowdmath.userService', ['ngResource']);
 
 userService.factory('User', ['$resource', 
   function($resource) {
-    return $resource('user', {}, {});
+    var User = $resource('user', {}, {});
+    
+    return User;
   }
 ]);
