@@ -40,14 +40,5 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
         $scope.createNewBookError = res.data;
       });
     };
-
-    $scope.deleteBook = function (book) {
-      book.$delete({
-        id: book._id
-      }, function () {
-        getProfileBooks();
-        $scope.createNewBookError = '';
-      });
-    };
   }
 ]);

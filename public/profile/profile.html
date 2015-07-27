@@ -1,13 +1,19 @@
-<div class="page-wrapper">
-  <h1>{{user.username}}</h1>
-  <h2>Your books</h2>
-  <ul>
-    <li ng-repeat="book in books">
-      <button ng-click="deleteBook(book)">X</button>
-      <a ui-sref="book({bookTitle: book.title})">{{book.title}}</a>
-    </li>
-  </ul>
-  <div class="error">{{createNewBookError}}</div>
-  <input type="text" ng-model="newBookTitle" placeholder="Name of new book">
-  <button ng-click="createBook()">Create new book</button>
+<h1 class="text-center">{{user.username}}</h1>
+<div>
+  <h2 class="col-xs-12">Books</h2>
+  <div class="col-xs-12">
+    <ul class="list-group">
+      <li class="list-group-item col-xs-12" ng-repeat="book in books">
+        <a ui-sref="book({bookTitle: book.title})">{{book.title}}</a>
+      </li>
+    </ul>
+  </div>
+  <div>{{createNewBookError}}</div>
 </div>
+
+<form class="input-group col-xs-10 col-lg-8">
+  <input class="form-control" type="text" ng-model="newBookTitle" placeholder="Name of new book">
+  <div class="input-group-btn">
+    <button class="btn btn-primary" ng-click="createBook()">Create new book</button>
+  </div>
+</form>

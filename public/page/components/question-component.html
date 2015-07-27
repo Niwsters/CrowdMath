@@ -1,4 +1,4 @@
-<div class="question">{{question.question}}</div>
-<button ng-click="toggleShowAnswer()" ng-hide="showAnswer">Show answer</button>
-<button ng-click="toggleShowAnswer()" ng-show="showAnswer">Hide answer</button>
-<div ng-show="showAnswer">Correct answer: {{component.content.correctAnswer}}</div>
+<div>{{question.question}}</div>
+<button class="btn btn-default" ng-click="toggleShowAnswer()" ng-hide="showAnswer">Show answer</button>
+<button class="btn btn-default" ng-click="toggleShowAnswer()" ng-show="showAnswer">Hide answer</button>
+<div ng-show="showAnswer">{{component.content.correctAnswer}}</div>

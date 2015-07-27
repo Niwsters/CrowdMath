@@ -124,6 +124,7 @@ page.directive('pageEditToolbar', [function () {
 page.directive('pageComponent', [function () {
   return {
     restrict: 'E',
+    replace: true,
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
       scope.editComponentMode = false;

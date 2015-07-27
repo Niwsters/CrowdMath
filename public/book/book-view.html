@@ -1,12 +1,28 @@
-<div class="page-wrapper">
-  <a href="#/profile">Back to profile</a>
-  <h1>{{book.title}}</h1>
+<a href="#/profile">Back to profile</a>
+<h1 class="text-center">{{book.title}}</h1>
+<button class="text-center center-block btn btn-link" ng-click="deleteBook()">Delete book</button>
+
+<div class="col-xs-12">
+
+<h2>Page list</h2>
+
+<ul class="list-group">
+  <a class="list-group-item"
+     ng-repeat="page in book.pages track by $index" 
+     ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})"
+     >
+    Page {{$index+1}}
+
+    <span class="pull-right">
+      <button class="btn btn-xs btn-warning" ng-click="deletePage($index + 1)">
+        <span class="glyphicon glyphicon-trash"></span>
+      </button>
+    </span>
+  </a>
+</ul>
   
-  <h2>Page list</h2>
-  <ul>
-    <li ng-repeat="page in book.pages track by $index">
-      <button ng-click="deletePage($index + 1)">X</button><a ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})">Page {{$index+1}}</a>
-    </li>
-  </ul>
-  <button ng-click="createPage()">Create page</button>
+</div>
+
+<div class="col-xs-12">
+  <button class="btn btn-primary" ng-click="createPage()">Create page</button>
 </div>

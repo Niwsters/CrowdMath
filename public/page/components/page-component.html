@@ -1,10 +1,10 @@
-<div class="page-component" ng-class="{'edit-mode': editPageMode}">
+<div>
 
-  <div class="move-remove-page-component" ng-show="editPageMode">
+  <div ng-show="editPageMode">
     <button ng-click="removeComponent()">Delete</button>
   </div>
   
-  <div class="view" ng-hide="editComponentMode" ng-click="toggleEditComponentMode()">
+  <div ng-hide="editComponentMode" ng-click="toggleEditComponentMode()">
     <text-component ng-if="component.type === 'text'"></text-component>
     
     <math-component ng-if="component.type === 'math'"></math-component>
@@ -16,7 +16,7 @@
     <autocorrecting-component ng-if="component.type === 'autocorrecting'"></autocorrecting-component>
   </div>
   
-  <div class="edit" ng-show="editComponentMode">
+  <div ng-show="editComponentMode">
     
     <textarea ng-if="component.type === 'text' || component.type === 'math'" ng-show="editComponentMode" ng-model="component.content"></textarea>
     

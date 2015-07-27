@@ -1,52 +1,59 @@
 <!doctype html>
 <html lang="en" ng-app="crowdmath">
-  
-  <head>
-    <script src="/bower_components/angular/angular.min.js"></script>
-    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="/bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/bower_components/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script src="/bower_components/dndLists/angular-drag-and-drop-lists.min.js"></script>
-    
-    <script src="/app.js"></script>
-    <script src="/profile/profile.js"></script>
-    <script src="/shared/userService.js"></script>
-    <script src="/shared/bookService.js"></script>
-    <script src="/shared/mathjaxDirective.js"></script>
-    <script src="/shared/directives.js"></script>
-    <script src="/shared/filters.js"></script>
-    <script src="/book/book.js"></script>
-    <script src="/page/page.js"></script>
-    
-    <script type="text/javascript">
-      MathJax.Hub.Config({
-        "HTML-CSS": {
-        }
-      });
-    </script>
-    
-	<link rel="stylesheet" type="text/css" href="/styles/master.css" media="screen" />
-  </head>
-  
-  <body>
-    
-    <div class="header">
-      <div class="top-navbar">
-        <div class="left">
-          <input type="text" placeholder="Search for books">
-          <a ui-sref="profile">Home</a>
-          <a ui-sref="books">Browse books</a>
-        </div>
-        <div class="right">
-          <a href="/logout">Log out</a>
-        </div>
-      </div>
+
+<head>
+
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="/bower_components/angular-resource/angular-resource.min.js"></script>
+  <script src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="/bower_components/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="/bower_components/dndLists/angular-drag-and-drop-lists.min.js"></script>
+
+  <script src="/app.js"></script>
+  <script src="/profile/profile.js"></script>
+  <script src="/shared/userService.js"></script>
+  <script src="/shared/bookService.js"></script>
+  <script src="/shared/mathjaxDirective.js"></script>
+  <script src="/shared/directives.js"></script>
+  <script src="/shared/filters.js"></script>
+  <script src="/book/book.js"></script>
+  <script src="/page/page.js"></script>
+
+  <script type="text/javascript">
+    MathJax.Hub.Config({
+      "HTML-CSS": {}
+    });
+
+  </script>
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/styles/master.css" />
+
+</head>
+
+<body>
+
+  <div class="header container-fluid">
+    <div class="container navbar">
+      
+      <form class="navbar-form navbar-left">
+        <input class="form-control" type="text" placeholder="Search for books">
+      </form>
+      
+      <ul class="nav navbar-nav">
+        <li ng-class="{active: $state.includes('profile')}"><a ui-sref="profile">Home</a></li>
+        <li><a ui-sref="books">Browse books</a></li>
+        <li><a href="/logout">Log out</a></li>
+      </ul>
+      
     </div>
-    
-    <div ui-view>
-    </div>
-    
-  </body>
+  </div>
   
+  <div class="container">
+    <div ui-view class="col-xs-12 col-md-6 col-md-offset-3"></div>
+  </div>
+
+</body>
+
 </html>
