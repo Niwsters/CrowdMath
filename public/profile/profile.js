@@ -34,7 +34,7 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
       var newBook = new Book();
       newBook.title = $scope.newBookTitle;
       newBook.$save(function (book) {
-        getProfileBooks();
+        $scope.books.push(book);
         $scope.createNewBookError = '';
       }, function (res) {
         $scope.createNewBookError = res.data;

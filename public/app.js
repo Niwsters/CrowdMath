@@ -26,8 +26,8 @@ app.config(['$stateProvider', '$urlRouterProvider',
     
     .state('book', {
       url: '/book/:bookTitle',
-      templateUrl: 'book/book-view.html',
-      controller: 'BookViewCtrl'
+      templateUrl: 'book/book.html',
+      controller: 'BookCtrl'
     })
     
     .state('books', {
@@ -39,7 +39,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
     .state('page', {
       url: '/book/:bookTitle/page/:pageNumber',
       templateUrl: '/page/page.html',
-      controller: 'PageViewCtrl'
+      controller: 'PageCtrl'
     })
     
     .state('404notfound', {

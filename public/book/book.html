@@ -7,18 +7,16 @@
   <h2>Page list</h2>
 
   <ul class="list-group">
-    <a class="list-group-item"
-       ng-repeat="page in book.pages track by $index" 
-       ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})"
-       >
-      Page {{$index+1}}
-
+    <li class="list-group-item" ng-repeat="page in book.pages track by $index">
+      <a ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})">
+        Page {{$index+1}}
+      </a>
       <span ng-if="isUserAuthor" class="pull-right">
         <button class="btn btn-xs btn-warning" ng-click="deletePage($index + 1)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </span>
-    </a>
+    </li>
   </ul>
   
 </div>

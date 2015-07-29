@@ -1,6 +1,6 @@
 page = angular.module('crowdmath.page', []);
 
-page.controller('PageViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
+page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
   var baseUrl,
     bookTitle,
     pageNumber = parseInt($stateParams.pageNumber);

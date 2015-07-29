@@ -2,7 +2,7 @@
 
 var book = angular.module('crowdmath.book', []);
 
-book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page',
+book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page',
   function ($scope, $state, $stateParams, $window, User, Book, Page) {
     var bookTitle;
 
@@ -41,9 +41,7 @@ book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
       page.$save({
         bookTitle: $scope.book.title
       }, function (page) {
-        $scope.book = Book.get({
-          title: bookTitle
-        });
+        $scope.book.pages.push(page);
       });
     };
 
@@ -53,9 +51,7 @@ book.controller('BookViewCtrl', ['$scope', '$state', '$stateParams', '$window', 
         bookTitle: $scope.book.title,
         pageNumber: pageNumber
       }, function (res) {
-        $scope.book = Book.get({
-          title: bookTitle
-        });
+        $scope.book.pages.splice(pageNumber - 1, 1)
       });
     };
     
