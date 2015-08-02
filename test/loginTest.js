@@ -26,7 +26,7 @@ describe('/login', function () {
           })
           .end(function (err, res) {
             should.not.exist(err);
-            res.header.location.should.equal('/app');
+            res.header.location.should.equal('/app#/');
             done();
           });
       });

@@ -1,6 +1,6 @@
-<a href="#/profile">Back to profile</a>
+<a ng-if="isLoggedIn" href="#/profile">Back to profile</a>
 <h1 class="text-center">{{book.title}}</h1>
-<button ng-if="isUserAuthor" class="text-center center-block btn btn-link" ng-click="deleteBook()">Delete book</button>
+<button ng-if="book.isUserAuthor" class="text-center center-block btn btn-link" ng-click="deleteBook()">Delete book</button>
 
 <div ng-if="book.pages.length > 0" class="col-xs-12">
 
@@ -11,7 +11,7 @@
       <a ui-sref="page({bookTitle: book.title, pageNumber: $index + 1})">
         Page {{$index+1}}
       </a>
-      <span ng-if="isUserAuthor" class="pull-right">
+      <span ng-if="book.isUserAuthor" class="pull-right">
         <button class="btn btn-xs btn-warning" ng-click="deletePage($index + 1)">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
@@ -26,5 +26,5 @@
 </div>
 
 <div class="col-xs-12">
-  <button ng-if="isUserAuthor" class="btn btn-primary" ng-click="createPage()">Create page</button>
+  <button ng-if="book.isUserAuthor" class="btn btn-primary" ng-click="createPage()">Create page</button>
 </div>

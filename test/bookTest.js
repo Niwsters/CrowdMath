@@ -19,21 +19,21 @@ describe('/book', function () {
           book = factory.Book(user.id);
           book.save(function (err, dbBook) {
             should.not.exist(err);
-            
+
             user2 = factory.User();
             user2.save(function (err) {
               should.not.exist(err);
-              
+
               book2 = factory.Book(user2.id);
               book2.save(function (err, dbBook) {
                 should.not.exist(err);
-                
+
                 // Fixes annoying issue with comparing the _id attribute
                 book = book.toObject();
                 book._id = book._id.toString();
                 book2 = book2.toObject();
                 book2._id = book2._id.toString();
-                
+
                 done();
               });
             });
@@ -53,31 +53,6 @@ describe('/book', function () {
           });
       });
 
-      it('should return books with given author ID', function (done) {
-        request(app)
-          .get('/book')
-          .query({
-            authorID: user.id
-          })
-          .end(function (err, res) {
-            res.body.should.containEql(book);
-            res.body.should.not.containEql(book2);
-            done();
-          });
-      });
-
-      it('should return all books if ID or author ID not given', function (done) {
-        request(app)
-          .get('/book')
-          .end(function (err, res) {
-            res.body.should.containEql(book);
-            
-            res.body.should.containEql(book2);
-            
-            done();
-          });
-      });
-
       it('should return the book with given title', function (done) {
         request(app)
           .get('/book')
@@ -86,6 +61,33 @@ describe('/book', function () {
           })
           .end(function (err, res) {
             res.body.title.should.equal(book.title);
+            done();
+          });
+      });
+
+      it('should have isUserAuthor attribute that returns false when not logged in', function (done) {
+        request(app)
+          .get('/book')
+          .query({
+            id: book.id
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.body.isUserAuthor.should.equal(false);
+            done();
+          });
+      });
+
+      it('should return error if book not found', function (done) {
+        request(app)
+          .get('/book')
+          .query({
+            title: 'Title that does not exist'
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.status.should.equal(500);
+            res.text.should.equal('Error retrieving book: Book not found.');
             done();
           });
       });
@@ -104,6 +106,48 @@ describe('/book', function () {
       user.save(function (err) {
         should.not.exist(err);
         done();
+      });
+    });
+
+    describe('GET', function () {
+
+      it('should have isUserAuthor attribute that is true if logged in user is author', function (done) {
+        var book = factory.Book(agent.user._id);
+
+        book.save(function (err) {
+          should.not.exist(err);
+
+          agent
+            .get('/book')
+            .query({
+              id: book.id
+            })
+            .end(function (err, res) {
+              should.not.exist(err);
+              res.body.isUserAuthor.should.equal(true);
+              done();
+            });
+        });
+
+      });
+
+      it('should have isUserAuthor attribute that is false if logged in user is not author', function (done) {
+        var book = factory.Book(user._id);
+
+        book.save(function (err) {
+          should.not.exist(err);
+
+          agent
+            .get('/book')
+            .query({
+              id: book.id
+            })
+            .end(function (err, res) {
+              should.not.exist(err);
+              res.body.isUserAuthor.should.equal(false);
+              done();
+            });
+        });
       });
     });
 
@@ -130,7 +174,7 @@ describe('/book', function () {
           .post('/book')
           .end(function (err, res) {
             should.not.exist(err);
-            res.error.text.should.equal("Error creating book: No title given");
+            res.error.text.should.equal("Error creating book: No title given.");
             res.error.status.should.equal(500);
             done();
           });
@@ -147,9 +191,7 @@ describe('/book', function () {
               title: book.title
             })
             .end(function (err, res) {
-              should.not.exist(err);
-              res.error.text.should.equal("Error creating book: Title already taken");
-              res.error.status.should.equal(500);
+              res.status.should.equal(500);
               done();
             });
         });
@@ -200,7 +242,7 @@ describe('/book', function () {
           });
       });
 
-      it('should not update book if logged in user is not author of the book', function (done) {
+      it('should throw error if logged in user is not author of the book', function (done) {
         book.authors = [user2.id];
         book.save(function (err) {
           var newTitle = "A different title";
@@ -217,12 +259,12 @@ describe('/book', function () {
             })
             .end(function (err, res) {
               should.not.exist(err);
+              res.status.should.equal(500);
 
               Book.findById(book.id, function (err, b) {
                 should.not.exist(err);
 
                 b.title.should.not.equal(newTitle);
-                res.text.should.equal("Error updating book: User not author");
 
                 done();
               });
@@ -241,8 +283,7 @@ describe('/book', function () {
           .end(function (err, res) {
             should.not.exist(err);
 
-            res.error.status.should.equal(500);
-            res.error.text.should.equal("Error updating book: ID not given");
+            res.status.should.equal(500);
 
             done();
           });
@@ -257,8 +298,7 @@ describe('/book', function () {
           .end(function (err, res) {
             should.not.exist(err);
 
-            res.error.status.should.equal(500);
-            res.error.text.should.equal("Error updating book: newAttrs not given");
+            res.status.should.equal(500);
 
             done();
           })
@@ -317,7 +357,7 @@ describe('/book', function () {
           .end(function (err, res) {
             should.not.exist(err);
 
-            res.error.text.should.equal("Error deleting book: No book ID given");
+            res.error.text.should.equal("Error deleting book: No book ID given.");
             res.error.status.should.equal(500);
             done();
           })

@@ -4,6 +4,7 @@ var app = angular.module('crowdmath', [
   'ui.router',
   'ngSanitize',
   'dndLists',
+  'ngCookies',
   'crowdmath.profile',
   'crowdmath.book',
   'crowdmath.bookService',
@@ -53,4 +54,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
     
     .when('/profile', '/profile/');
   }
-]);
+])
+
+.controller('CrowdmathCtrl', ['$scope', 'User', function ($scope, User) {
+  User.get({}, function (user) {
+    $scope.isLoggedIn = user._id ? true : false;
+  });
+}]);

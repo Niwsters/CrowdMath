@@ -66,6 +66,21 @@ describe('/book/page', function () {
           done();
         });
     });
+    
+    it('should return error when book not found', function (done) {
+      request(app)
+      .get('/book/page')
+      .query({
+        bookTitle: 'nonexistant book title',
+        pageNumber: 1
+      })
+      .end(function (err, res) {
+        should.not.exist(err);
+        res.status.should.equal(500);
+        res.text.should.equal("Error retrieving page: Book not found.");
+        done();
+      });
+    });
 
   });
 

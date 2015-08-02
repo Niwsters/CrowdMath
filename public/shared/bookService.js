@@ -9,15 +9,11 @@ bookService.factory('Book', ['$resource', 'User', function ($resource, User) {
     }
   });
   
-  Book.prototype.isUserAuthor = function(userID) {
-    if (Book.prototype.authors.indexOf(userID) > -1) {
-      return true;
-    }
-
-    return false;
-  };
-  
   return Book;
+}]);
+
+bookService.factory('Books', ['$resource', function($resource) {
+  return $resource('books', {});
 }]);
 
 bookService.factory('Page', ['$resource',function ($resource) {

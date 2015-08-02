@@ -6,4 +6,21 @@ var bookSchema = mongoose.Schema({
 	pages: []
 });
 
+// Create a local isUserAuthor variable that is not saved in the database
+bookSchema.virtual('isUserAuthor')
+.get(function () {
+  return this._isUserAuthor;
+})
+.set(function (isUserAuthor) {
+  return this._isUserAuthor = isUserAuthor;
+});
+
+bookSchema.set('toObject', {
+  getters: true
+});
+
+bookSchema.set('toJSON', {
+  virtuals: true
+});
+
 module.exports = mongoose.model('Book', bookSchema);

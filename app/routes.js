@@ -52,146 +52,127 @@ module.exports = function (app, passport) {
 
   // retrieve user
   app.get('/user', function (req, res) {
-    if (req.query.username) {
-      User.findOne({
-        username: req.query.username
-      }, function (err, user) {
-        if (err) res.text(err);
-        res.json(user);
-      });
-    } else if (req.query.email) {
-      User.findOne({
-        email: req.query.email
-      }, function (err, user) {
-        if (err) throw err;
-        res.json(user);
-      });
-    } else if (req.query.id) {
+    
+    if (req.query.id) { 
       User.findById(req.query.id, function (err, user) {
         if (err) throw err;
+        
         res.json(user);
       });
     } else {
       res.json(req.user);
     }
+    
   });
 
-  app.get('/book', function (req, res) {
-    if (req.query.id) {
-      Book.findById(req.query.id, function (err, book) {
-        if (err) throw err;
-        res.json(book);
-      });
-    } else if (req.query.authorID) {
-      Book.find({
-        authors: req.query.authorID
-      }, function (err, books) {
-        if (err) throw err;
-        res.json(books);
-      });
-    } else if (req.query.title) {
-      Book.findOne({
-        title: req.query.title
-      }, function (err, book) {
-        if (err) throw err;
-        res.json(book);
-      })
-    } else {
-      Book.find({}, function (err, books) {
-        if (err) throw err;
-        res.json(books);
-      })
-    }
+  app.get('/book', function (req, res, next) {
+    var q = {};
+    
+    if (req.query.id) q._id = req.query.id;
+    if (req.query.title) q.title = req.query.title;
+    
+    Book.findOne(q, function (err, book) {
+      if (err) return next(err);
+      
+      // Return error if book not found
+      if(!book) return next("Error retrieving book: Book not found.");
+      
+      // Set isUserAuthor to true if logged in user is author of the book
+      book.isUserAuthor = false;
+      if (req.user && book.authors.indexOf(req.user.id) > -1) {
+        book.isUserAuthor = true;
+      }
+      
+      res.json(book);
+    })
   });
 
-  app.post('/book', isLoggedIn, function (req, res) {
-    if (req.body.title) {
-      Book.findOne({
-        title: req.body.title
-      }, function (err, book) {
-        if (book) {
-          res.status(500).send("Error creating book: Title already taken");
-        } else {
-          book = new Book();
-
-          book.title = req.body.title;
-          book.authors = [req.user.id];
-          
-          // Add default page for testing
-          book.pages = [];
-
-          book.save(function (err) {
-            if (err) throw err;
-
-            res.json(book);
-          });
-        }
-      });
-    } else {
-      throw "Error creating book: No title given";
-    }
+  app.post('/book', isLoggedIn, function (req, res, next) {
+    var book = new Book();
+    
+    if (!req.body.title) throw "Error creating book: No title given.";
+    
+    book.title = req.body.title;
+    book.authors = [req.user.id];
+    book.pages = [];
+    
+    book.save(function (err) {
+      if (err) return next(err);
+      
+      res.json(book);
+    })
   });
 
-  app.put('/book', isLoggedIn, function (req, res) {
+  app.put('/book', isLoggedIn, function (req, res, next) {
     var id = req.body.id,
         newAttrs = req.body.newAttrs;
     
-    if (id) {
-      if (newAttrs) {
-        Book.findById(id, function (err, book) {
-          if (book.authors.indexOf(req.user.id) > -1) {
-            var attr;
-
-            if (err) throw err;
-
-            for (attr in newAttrs) {
-              if (newAttrs.hasOwnProperty(attr)) {
-                book[attr] = newAttrs[attr];
-              }
-            }
-
-            book.save(function (err, book) {
-              if (err) throw err;
-
-              res.json(book);
-            });
-          } else {
-            res.send("Error updating book: User not author");
-          }
-        });
-      } else {
-        throw "Error updating book: newAttrs not given";
+    if(!id) next("Error updating book: ID not given.");
+    if(!newAttrs) next("Error updating book: Attributes not given.");
+    
+    Book.findById(id, function (err, book) {
+      var attr;
+      
+      if (err) 
+        return next(err);
+      
+      if(!book) 
+        return next("Error updating book: Book not found with given ID");
+      
+      if(book.authors.indexOf(req.user.id) === -1) 
+        return next("Error updating book: User not author");
+      
+      for (attr in newAttrs) {
+        if (newAttrs.hasOwnProperty(attr)) {
+          book[attr] = newAttrs[attr];
+        }
       }
-    } else {
-      throw "Error updating book: ID not given";
-    }
+      
+      book.save(function (err, book) {
+        if (err) return next(err);
+        
+        res.json(book);
+      });
+    });
   });
 
-  app.delete('/book', isLoggedIn, function (req, res) {
-    if (req.query.id) {
+  app.delete('/book', isLoggedIn, function (req, res, next) {
+    var id = req.query.id;
+    
+    if (!id) return next("Error deleting book: No book ID given.");
+    
+    Book.findById(id, function (err, book) {
       
-      Book.findOne({_id: req.query.id}, function (err, book) {
-        if(book.authors.indexOf(req.user.id) > -1) {
-          book.remove(function(err) {
-            if(!err) {
-              res.send("Successfully deleted book.");
-            } else {
-              res.send("Error deleting book: " + err);
-            }
-          });
-        } else {
-          res.send("Error deleting book: User not author.");
-        }
+      if(book.authors.indexOf(req.user.id) === -1)
+        return next("Error deleting book: User not author.");
+      
+      book.remove(function(err) {
+        if(err) return next(err);
+        res.send("Successfully deleted book.");
       });
-    } else {
-      throw "Error deleting book: No book ID given";
-    }
+      
+    });
   });
   
-  app.get('/book/page', function (req, res) {
+  app.get('/books', function (req, res) {
+    var q = {};
+    
+    if (req.query.authorID) q.authors = req.query.authorID;
+    
+    Book.find(q, function (err, books) {
+      if (err) throw err;
+      res.json(books);
+    });
+  });
+  
+  app.get('/book/page', function (req, res, next) {
     if(req.query.bookTitle) {
       if(req.query.pageNumber) {
         Book.findOne({title: req.query.bookTitle}, function (err, book) {
+          if(err) return next(err);
+          
+          if(!book) return next("Error retrieving page: Book not found.");
+          
           var response = {};
 
           response.page = book.pages[req.query.pageNumber - 1];

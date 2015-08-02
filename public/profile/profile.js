@@ -2,10 +2,10 @@
 
 var profile = angular.module('crowdmath.profile', []);
 
-profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$location', 'User', 'Book',
-  function ($scope, $state, $stateParams, $location, User, Book) {
+profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$location', 'User', 'Book', 'Books',
+  function ($scope, $state, $stateParams, $location, User, Book, Books) {
     var getProfileBooks = function (userID) {
-      $scope.books = Book.query({
+      $scope.books = Books.query({
         authorID: userID
       });
     };
