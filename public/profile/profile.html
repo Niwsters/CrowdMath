@@ -8,12 +8,14 @@
       </li>
     </ul>
   </div>
-  <div>{{createNewBookError}}</div>
 </div>
 
-<form class="input-group col-xs-10 col-lg-8">
-  <input class="form-control" type="text" ng-model="newBookTitle" placeholder="Name of new book">
-  <div class="input-group-btn">
-    <button class="btn btn-primary" ng-click="createBook()">Create new book</button>
+<form class="col-xs-10 col-lg-8">
+  <label class="control-label has-error">{{createNewBookError}}</label>
+  <div class="input-group">
+    <input class="form-control" type="text" ng-model="newBook.title" placeholder="Name of new book">
+    <span class="input-group-btn">
+      <button class="btn btn-primary" ng-click="saveNewBook()">Create new book</button>
+    </span>
   </div>
 </form>

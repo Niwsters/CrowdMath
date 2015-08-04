@@ -11,6 +11,7 @@
       <li ng-repeat="component in page"
           dnd-draggable="component"
           dnd-moved="moveComponent($index)"
+          dnd-disable-if="component.editMode"
           >
         <page-component></page-component>
       </li>
@@ -21,6 +22,8 @@
     <page-navigation></page-navigation>
     
     <page-edit-toolbar class="col-xs-12" ng-if="isUserAuthor"></page-edit-toolbar>
+    
+    <div ng-if="isUserAuthor && page.editMode" class="page-edit-toolbar-filler"></div>
 
   </div>
   

@@ -4,7 +4,7 @@
     <button class="btn btn-danger" ng-click="removeComponent()">X</button>
   </div>
   
-  <div ng-hide="editComponentMode" ng-click="toggleEditComponentMode()">
+  <div ng-hide="component.editMode" ng-click="toggleEditComponentMode()">
     <text-component ng-if="component.type === 'text'"></text-component>
     
     <math-component ng-if="component.type === 'math'"></math-component>
@@ -16,9 +16,11 @@
     <autocorrecting-component ng-if="component.type === 'autocorrecting'"></autocorrecting-component>
   </div>
   
-  <div ng-show="editComponentMode">
+  <div ng-show="component.editMode">
     
-    <textarea ng-if="component.type === 'text' || component.type === 'math'" ng-show="editComponentMode" ng-model="component.content"></textarea>
+    <text-component-editor ng-if="component.type === 'text'" ng-show="component.editMode"></text-component-editor>
+    
+    <math-component-editor ng-if="component.type === 'math'" ng-show="component.editMode"></math-component-editor>
     
     <question-component-editor ng-if="component.type === 'question'"></question-component-editor>
     
@@ -26,7 +28,7 @@
     
     <autocorrecting-component-editor ng-if="component.type === 'autocorrecting'"></autocorrecting-component-editor>
     
-    <button ng-show="editComponentMode" ng-click="saveComponent()">Done</button>
+    <button ng-show="component.editMode" ng-click="saveComponent()">Done</button>
   </div>
   
 </div>

@@ -131,22 +131,22 @@ page.directive('pageComponent', [function () {
     restrict: 'E',
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
-      scope.editComponentMode = false;
+      scope.component.editMode = false;
 
       scope.toggleEditComponentMode = function () {
         if (scope.page.editMode) {
-          scope.editComponentMode = !scope.editComponentMode;
+          scope.component.editMode = !scope.component.editMode;
         }
       };
 
       scope.$watch('editPageMode', function (newValue) {
         if (!newValue) {
-          scope.editComponentMode = false;
+          scope.component.editMode = false;
         }
       });
 
       scope.saveComponent = function () {
-        scope.editComponentMode = false;
+        scope.component.editMode = false;
 
         scope.savePage();
       };
@@ -205,12 +205,26 @@ page.directive('textComponent', [function () {
   };
 }]);
 
+page.directive('textComponentEditor', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'page/components/math-component-editor.html'
+  }
+}])
+
 page.directive('mathComponent', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/math-component.html'
   };
 }]);
+
+page.directive('mathComponentEditor', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'page/components/math-component-editor.html'
+  }
+}])
 
 page.directive('youtubeComponent', ['$sce', function ($sce) {
   return {

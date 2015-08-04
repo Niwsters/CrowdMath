@@ -45,12 +45,13 @@
       </form>
       
       <ul class="nav navbar-nav">
-        <li><a ui-sref="profile">Home</a></li>
+        <li><a ng-if="isLoggedIn" ui-sref="profile">Profile</a></li>
         <li><a ui-sref="books">Browse books</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/logout">Log out</a></li>
+        <li><a ng-if="isLoggedIn" href="/logout">Log out</a></li>
+        <li><a ng-if="!isLoggedIn" href="/login">Log in</a></li>
       </ul>
       
     </div>

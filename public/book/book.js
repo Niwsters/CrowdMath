@@ -65,12 +65,12 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   }
 ]);
 
-book.controller('BookListCtrl', ['$scope', 'Book',
-  function ($scope, Book) {
+book.controller('BookListCtrl', ['$scope', 'Books',
+  function ($scope, Books) {
     $scope.books = [];
 
     // Retrieve all books from database.
-    Book.query({}, function (res) {
+    Books.query({}, function (res) {
       $scope.books = res;
     });
   }

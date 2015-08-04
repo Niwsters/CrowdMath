@@ -192,6 +192,7 @@ describe('/book', function () {
             })
             .end(function (err, res) {
               res.status.should.equal(500);
+              res.text.should.equal("Error creating book: Title already taken.");
               done();
             });
         });

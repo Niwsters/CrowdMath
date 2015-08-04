@@ -29,14 +29,14 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
         }
       });
     }
-
-    $scope.createBook = function () {
-      var newBook = new Book();
-      newBook.title = $scope.newBookTitle;
-      newBook.$save(function (book) {
+    
+    $scope.newBook = new Book();
+    $scope.saveNewBook = function () {
+      $scope.newBook.$save(function (book) {
         $scope.books.push(book);
+        $scope.newBook = new Book();
         $scope.createNewBookError = '';
-      }, function (res) {
+      }, function(res) {
         $scope.createNewBookError = res.data;
       });
     };

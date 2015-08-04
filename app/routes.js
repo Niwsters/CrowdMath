@@ -96,11 +96,19 @@ module.exports = function (app, passport) {
     book.authors = [req.user.id];
     book.pages = [];
     
-    book.save(function (err) {
+    // Check if book with given title already exists (for error checking reasons).
+    Book.findOne({title: book.title}, function(err, b) {
       if (err) return next(err);
       
-      res.json(book);
-    })
+      // Return error if title already taken.
+      if (b) return next("Error creating book: Title already taken.");
+      
+      book.save(function (err) {
+        if(err) return next(err);
+        
+        res.json(book);
+      });
+    });
   });
 
   app.put('/book', isLoggedIn, function (req, res, next) {
