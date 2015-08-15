@@ -6,7 +6,7 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
   function ($scope, $state, $stateParams, $location, User, Book, Books) {
     var getProfileBooks = function (userID) {
       $scope.books = Books.query({
-        authorID: userID
+        ownerID: userID
       });
     };
 

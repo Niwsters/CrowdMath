@@ -15,11 +15,3 @@ bookService.factory('Book', ['$resource', 'User', function ($resource, User) {
 bookService.factory('Books', ['$resource', function($resource) {
   return $resource('books', {});
 }]);
-
-bookService.factory('Page', ['$resource',function ($resource) {
-  return $resource('book/page', {}, {
-    'update': {
-      method: 'PUT'
-    }
-  });
-}]);

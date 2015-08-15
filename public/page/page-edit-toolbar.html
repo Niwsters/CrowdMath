@@ -1,13 +1,13 @@
 <div class="page-edit-toolbar">
-  <button class="btn btn-default" ng-hide="page.editMode" ng-click="page.editMode = true">Edit page</button>
+  <button class="btn btn-default" ng-hide="pageEditMode" ng-click="togglePageEditMode()">Edit page</button>
   
-  <div ng-show="page.editMode">
-    <button class="btn btn-default" ng-click="page.editMode = false">X</button><br><br>
+  <div ng-show="pageEditMode">
+    <button class="btn btn-default" ng-click="togglePageEditMode()">X</button><br><br>
     
-    <button class="btn btn-default" ng-click="addMath()">$$\sum$$Add math</button>
-    <button class="btn btn-default" ng-click="addText()"><h2>F</h2>Add text</button>
-    <button class="btn btn-default" ng-click="addQuestion()"><h2>?</h2>Add question</button>
-    <button class="btn btn-default" ng-click="addYouTube()"><h2>YouTube</h2>Add YouTube video</button>
-    <button class="btn btn-default" ng-click="addAutocorrecting()"><h2>&#10003;&#10007;</h2>Add autocorrecting question</button>
+    <button class="btn btn-default" ng-click="page.addMathComponent(); pageEditMode = true">$$\sum$$Add math</button>
+    <button class="btn btn-default" ng-click="page.addTextComponent()"><h2>F</h2>Add text</button>
+    <button class="btn btn-default" ng-click="page.addQuestionComponent()"><h2>?</h2>Add question</button>
+    <button class="btn btn-default" ng-click="page.addYouTubeComponent()"><h2>YouTube</h2>Add YouTube video</button>
+    <button class="btn btn-default" ng-click="page.addAutocorrectingComponent()"><h2>&#10003;&#10007;</h2>Add autocorrecting question</button>
   </div>
 </div>

@@ -1,6 +1,6 @@
-<div ng-class="{'panel panel-default': page.editMode}">
+<div ng-class="{'panel panel-default': pageEditMode}">
 
-  <div class="text-right" ng-show="page.editMode">
+  <div class="text-right" ng-show="pageEditMode">
     <button class="btn btn-danger" ng-click="removeComponent()">X</button>
   </div>
   
@@ -28,7 +28,7 @@
     
     <autocorrecting-component-editor ng-if="component.type === 'autocorrecting'"></autocorrecting-component-editor>
     
-    <button ng-show="component.editMode" ng-click="saveComponent()">Done</button>
+    <button ng-show="component.editMode" ng-click="page.$update()">Done</button>
   </div>
   
 </div>

@@ -4,19 +4,26 @@ var book = angular.module('crowdmath.book', []);
 
 book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page',
   function ($scope, $state, $stateParams, $window, User, Book, Page) {
-    var bookTitle;
-
-    // If no book title is given, send the user to a 404 error page.
-    if ($stateParams.bookTitle) {
-      bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
+    var bookTitle,
+        bookID,
+        bookQuery;
+    
+    // If no book title given, send to 404 error page.
+    if (!$stateParams.bookTitle) $state.transitionTo('404notfound');
+    
+    // Retrieve and decode params
+    bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
+    bookID = $stateParams.bookID;
+    
+    // If no book ID given, use book title in the query instead.
+    if (bookID) {
+      bookQuery = { id: bookID };
     } else {
-      $state.transitionTo('404notfound');
+      bookQuery = { title: bookTitle };
     }
 
     // Retrieve book from database using the book title in the route
-    Book.get({
-      title: bookTitle
-    }, function (book) {
+    Book.get(bookQuery, function (book) {
 
       // If no book was retrieved, send the user to a 404 error page.
       if (book._id) {
@@ -33,19 +40,15 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
         $state.transitionTo('404notfound');
       }
     });
-
-    // Create a createPage function for creating a page in the view
+    
     $scope.createPage = function () {
       var page = new Page();
-      page.bookTitle = $scope.book.title;
-      page.$save({
-        bookTitle: $scope.book.title
-      }, function (page) {
+      page.bookID = $scope.book.id;
+      page.$save(function (page) {
         $scope.book.pages.push(page);
       });
     };
-
-    // Create a deletePage function for deleting a page in the view
+    
     $scope.deletePage = function (pageNumber) {
       Page.delete({
         bookTitle: $scope.book.title,

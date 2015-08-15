@@ -1,8 +1,10 @@
-var factory = require('./factory'),
+var Book = require('../app/models/book.js'),
+  factory = require('./factory'),
   initAgent = require('./initAgent'),
   should = require('should'),
   app = require('../server.js'),
   request = require('supertest'),
+  mongoose = require('mongoose'),
   assert = require('assert');
 
 describe('/book', function () {
@@ -13,31 +15,12 @@ describe('/book', function () {
       var book, book2, user, user2;
 
       beforeEach(function (done) {
-        user = factory.User();
-        user.save(function (err) {
-          should.not.exist(err);
-          book = factory.Book(user.id);
-          book.save(function (err, dbBook) {
-            should.not.exist(err);
 
-            user2 = factory.User();
-            user2.save(function (err) {
-              should.not.exist(err);
+        factory.CreateUserWithBook(function (models) {
+          book = models.book;
+          user = models.user;
 
-              book2 = factory.Book(user2.id);
-              book2.save(function (err, dbBook) {
-                should.not.exist(err);
-
-                // Fixes annoying issue with comparing the _id attribute
-                book = book.toObject();
-                book._id = book._id.toString();
-                book2 = book2.toObject();
-                book2._id = book2._id.toString();
-
-                done();
-              });
-            });
-          });
+          done();
         });
       });
 
@@ -45,7 +28,7 @@ describe('/book', function () {
         request(app)
           .get('/book')
           .query({
-            id: book._id
+            id: book.id
           })
           .end(function (err, res) {
             res.body.title.should.equal(book.title);
@@ -91,6 +74,7 @@ describe('/book', function () {
             done();
           });
       });
+      
     });
   });
 
@@ -153,7 +137,7 @@ describe('/book', function () {
 
     describe('POST', function () {
 
-      it('should create a new book with given title', function (done) {
+      it('should create a new book with given title and owner', function (done) {
         var title = "Bookie";
 
         agent
@@ -244,7 +228,7 @@ describe('/book', function () {
       });
 
       it('should throw error if logged in user is not author of the book', function (done) {
-        book.authors = [user2.id];
+        book.owner = user2.id;
         book.save(function (err) {
           var newTitle = "A different title";
 
@@ -336,7 +320,7 @@ describe('/book', function () {
       });
 
       it('should return error if user is not author of book', function (done) {
-        book.authors = [user.id];
+        book.owner = user.id;
         book.save(function (err, book) {
           should.not.exist(err);
           agent
@@ -349,7 +333,7 @@ describe('/book', function () {
               res.text.should.equal("Error deleting book: User not author.");
               done();
             });
-        })
+        });
       });
 
       it('should throw 500 error when not given ID', function (done) {

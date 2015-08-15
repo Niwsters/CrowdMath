@@ -2,6 +2,7 @@ var request = require('supertest'),
     app = require('../server.js'),
     assert = require('assert'),
     should = require('should'),
+    User = require('../app/models/user.js');
     
     password = 'lolpan';
 

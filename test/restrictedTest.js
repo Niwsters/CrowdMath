@@ -1,23 +1,25 @@
 var should = require('should'),
-    assert = require('assert'),
-    app = require('../server.js'),
-    request = require('supertest');
+  assert = require('assert'),
+  app = require('../server.js'),
+  request = require('supertest');
 
 describe('restricted', function () {
   var restrictedRoutes = {
       get: [
 
-   ],
+      ],
       post: [
-    '/book',
-    '/book/page'
-   ],
+        '/book',
+        '/page'
+      ],
       put: [
-    '/book'
-   ],
+        '/book',
+        '/page'
+      ],
       delete: [
-    '/book'
-   ]
+        '/book',
+        '/page'
+      ]
     },
     method, routes, route,
     redirectTest = function (route, method) {

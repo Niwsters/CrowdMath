@@ -7,9 +7,8 @@ var app = angular.module('crowdmath', [
   'ngCookies',
   'crowdmath.profile',
   'crowdmath.book',
-  'crowdmath.bookService',
+  'crowdmath.services',
   'crowdmath.page',
-  'crowdmath.userService',
   'crowdmath.mathjax',
   'crowdmath.directives',
   'crowdmath.filters'
@@ -27,6 +26,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
     
     .state('book', {
       url: '/book/:bookTitle',
+      params: { bookID: { value: false } },
       templateUrl: 'book/book.html',
       controller: 'BookCtrl'
     })
@@ -39,6 +39,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
     
     .state('page', {
       url: '/book/:bookTitle/page/:pageNumber',
+      params: { bookID: { value: false }},
       templateUrl: '/page/page.html',
       controller: 'PageCtrl'
     })

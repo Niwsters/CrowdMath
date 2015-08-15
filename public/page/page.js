@@ -3,89 +3,58 @@ page = angular.module('crowdmath.page', []);
 page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
   var baseUrl,
     bookTitle,
-    pageNumber = parseInt($stateParams.pageNumber);
-
-  if ($stateParams.bookTitle) {
-    bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
-  } else {
-    $state.transitionTo('404notfound');
+    pageNumber,
+    bookQuery,
+    getPage,
+    getBook;
+  
+  // Enable toggling of page editing mode
+  $scope.pageEditMode = false;
+  $scope.togglePageEditMode = function () {
+    $scope.pageEditMode = !$scope.pageEditMode;
   }
 
-  // Retrieve page using route parameters.
-  Page.get({
-    bookTitle: bookTitle,
-    pageNumber: pageNumber
-  }, function (res) {
-    $scope.page = res.page;
-    $scope.page.editMode = false;
-    $scope.pageCount = parseInt(res.pageCount);
-    
-    User.get({}, function(user) {
-      Book.get({title: bookTitle}, function(book) {
-        $scope.isUserAuthor = book.authors.indexOf(user._id) > -1;
-      });
+  // Retrieves all page and book data
+  getData = function (bookQuery, pageNumber) {
+    Book.get(bookQuery, function (book) {
+      var pageID;
+      
+      // Count the book's pages (for pagination)
+      $scope.pageCount = book.pages.length;
+      
+      // Get page data
+      pageID = book.pages[pageNumber - 1];
+      $scope.page = Page.get({pageID: pageID});
+      
+      // Check if user is author of book
+      User.get(function (user) {
+        $scope.isUserAuthor = book.owner === user._id || book.authors.indexOf(user._id) > -1;
+      })
     });
-  });
+  };
 
-  // Set bookTitle and pageNumber scope variables using route parameters.
+  // Send to error page if neither book title nor book ID given.
+  if (!$stateParams.bookTitle && !$stateParams.bookID) $state.transitionTo('404notfound');
+  
+  // Retrieve parameter variables
+  bookID = $stateParams.bookID;
+  bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
+  pageID = $stateParams.pageID;
+  pageNumber = parseInt($stateParams.pageNumber);
+  
+  // Set bookTitle and pageNumber scope variables.
   $scope.bookTitle = bookTitle;
-  $scope.pageNumber = parseInt($stateParams.pageNumber);
-
-  // Create a savePage function for saving the edited content.
-  $scope.savePage = function () {
-    Page.update(null, {
-        bookTitle: $scope.bookTitle,
-        pageNumber: $scope.pageNumber,
-        content: $scope.page
-      },
-      function (res) {});
-  };
+  $scope.pageNumber = pageNumber;
   
-  $scope.moveComponent = function (pos) {
-    $scope.page.splice(pos, 1);
-    $scope.savePage();
-  };
-
-  $scope.addMath = function () {
-    $scope.page.push({
-      type: 'math',
-      content: 'New math'
-    });
-  };
-
-  $scope.addText = function () {
-    $scope.page.push({
-      type: 'text',
-      content: 'New text'
-    });
-  };
-
-  $scope.addQuestion = function () {
-    $scope.page.push({
-      type: 'question',
-      content: {
-        question: 'question',
-        correctAnswer: 'answer'
-      }
-    });
-  };
-
-  $scope.addYouTube = function () {
-    $scope.page.push({
-      type: 'youtube',
-      content: ''
-    });
-  };
-  
-  $scope.addAutocorrecting = function () {
-    $scope.page.push({
-      type: 'autocorrecting',
-      content: {
-        question: 'What is 1 + 1?',
-        correctAnswer: '2'
-      }
-    });
+  // Query book by title if ID not given.
+  if(!bookID) {
+    bookQuery = { title: bookTitle };
+  } else {
+    bookQuery = { id: bookID };
   }
+
+  // Retrieve page and book data.
+  getData(bookQuery, pageNumber);
 }]);
 
 page.directive('compileMath', ['$compile', function ($compile) {
@@ -132,29 +101,22 @@ page.directive('pageComponent', [function () {
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
       scope.component.editMode = false;
-
+      
       scope.toggleEditComponentMode = function () {
-        if (scope.page.editMode) {
+        if (scope.pageEditMode) {
           scope.component.editMode = !scope.component.editMode;
         }
       };
-
-      scope.$watch('editPageMode', function (newValue) {
-        if (!newValue) {
+      
+      // Stop editing component if user stops editing page
+      scope.$watch('pageEditMode', function (pageEditMode) {
+        if (!pageEditMode) {
           scope.component.editMode = false;
         }
       });
 
-      scope.saveComponent = function () {
-        scope.component.editMode = false;
-
-        scope.savePage();
-      };
-
       scope.removeComponent = function () {
-        scope.page.splice(scope.page.indexOf(scope.component), 1);
-
-        scope.savePage();
+        scope.page.removeComponent(scope.component);
       };
     }
   };
@@ -169,7 +131,7 @@ page.directive('questionComponent', [function () {
       scope.question = scope.component.content;
 
       scope.toggleShowAnswer = function () {
-        if (!scope.page.editMode) {
+        if (!scope.pageEditMode) {
           scope.showAnswer = !scope.showAnswer;
         }
       };
@@ -184,14 +146,14 @@ page.directive('questionComponentEditor', [function () {
   };
 }]);
 
-page.directive('autocorrectingComponent', [function() {
+page.directive('autocorrectingComponent', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/autocorrecting-component.html'
   }
 }]);
 
-page.directive('autocorrectingComponentEditor', [function() {
+page.directive('autocorrectingComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/autocorrecting-component-editor.html'
@@ -205,7 +167,7 @@ page.directive('textComponent', [function () {
   };
 }]);
 
-page.directive('textComponentEditor', [function() {
+page.directive('textComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/math-component-editor.html'
@@ -219,7 +181,7 @@ page.directive('mathComponent', [function () {
   };
 }]);
 
-page.directive('mathComponentEditor', [function() {
+page.directive('mathComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/math-component-editor.html'
@@ -234,7 +196,6 @@ page.directive('youtubeComponent', ['$sce', function ($sce) {
       scope.$watch('component.content', function (newValue, oldValue) {
         if (newValue) {
           scope.videoID = newValue.match(/https:\/\/(?:www.youtube.com|youtu.be)\/(?:watch\?v=|embed\/|)([\w\-]*)/)[1];
-          console.log(scope.videoID);
         }
       });
     }

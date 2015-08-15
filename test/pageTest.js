@@ -1,85 +1,67 @@
 var factory = require('./factory'),
-    helper = require('./helper'),
+  helper = require('./helper'),
   initAgent = require('./initAgent'),
   should = require('should'),
   app = require('../server.js'),
   request = require('supertest'),
   assert = require('assert'),
-  Book = require('../app/models/book.js');
+  Book = require('../app/models/book.js'),
+  Page = require('../app/models/page.js'),
+  mongoose = require('mongoose');
 
-describe('/book/page', function () {
-  var book, user;
+describe('/page', function () {
+  var book, user, page, page2;
 
   beforeEach(function (done) {
-    user = factory.User();
-    user.save(function (err) {
-      should.not.exist(err);
-      book = factory.Book(user.id);
-      book.save(function (err) {
-        should.not.exist(err);
-        done();
-      });
+    factory.CreateUserWithBook(function (models) {
+      book = models.book;
+      user = models.user;
+      page = models.page;
+      page2 = models.page2;
+
+      done();
     });
   });
 
   describe('GET', function () {
 
-    it('should return page and pagecount when given book and number', function (done) {
-      var pageNumber = 1;
+    it('should return page given page ID', function (done) {
       request(app)
-        .get('/book/page')
+        .get('/page')
         .query({
-          bookTitle: book.title,
-          pageNumber: pageNumber
+          pageID: page.id
         })
         .end(function (err, res) {
           should.not.exist(err);
-          res.body.page.should.eql(book.pages[pageNumber - 1]);
-          res.body.pageCount.should.equal(book.pages.length);
+          res.body.should.eqlModel(page);
           done();
         });
     });
 
-    it('should return error when not given book title', function (done) {
-      var pageNumber = 1;
+    it('should return error if page not found', function (done) {
       request(app)
-        .get('/book/page')
+        .get('/page')
         .query({
-          pageNumber: pageNumber
+          pageID: 'id that does not exist'
         })
         .end(function (err, res) {
           should.not.exist(err);
-          res.text.should.equal("Error retrieving page: Book title not given.");
+          res.status.should.equal(500);
+          res.text.should.equal("Error retrieving page: Page not found.");
           done();
         });
     });
 
-    it('should return error when not given page number', function (done) {
+    it('should return error if page ID not given', function (done) {
       request(app)
-        .get('/book/page')
-        .query({
-          bookTitle: book.title
-        })
+        .get('/page')
+        .query()
         .end(function (err, res) {
           should.not.exist(err);
-          res.text.should.equal("Error retrieving page: Page number not given.");
+          res.status.should.equal(500);
+          res.text.should.equal("Error retrieving page: Page ID not given.");
           done();
         });
-    });
-    
-    it('should return error when book not found', function (done) {
-      request(app)
-      .get('/book/page')
-      .query({
-        bookTitle: 'nonexistant book title',
-        pageNumber: 1
-      })
-      .end(function (err, res) {
-        should.not.exist(err);
-        res.status.should.equal(500);
-        res.text.should.equal("Error retrieving page: Book not found.");
-        done();
-      });
     });
 
   });
@@ -92,76 +74,82 @@ describe('/book/page', function () {
 
     describe('POST', function () {
 
+      it('should return error if user is not author of book', function (done) {
+        agent
+          .post('/page')
+          .send({
+            bookID: book.id
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+
+            res.status.should.equal(500);
+            res.text.should.equal("Error creating page: User not author of book.");
+            done();
+          });
+      });
+
       describe('User is author', function () {
         beforeEach(function (done) {
-          book.authors.push(agent.user._id);
+          book.owner = agent.user._id;
           book.save(function (err) {
             should.not.exist(err);
             done();
           });
         });
 
-        it('should create new empty page at the end of book with given book title', function (done) {
-          var expectedPageCount = book.pages.length + 1,
-            expectedPage = [];
+        it('should create new empty page at the end of book with given book ID', function (done) {
+          var expectedPageCount = book.pages.length + 1;
 
           agent
-            .post('/book/page')
+            .post('/page')
             .send({
-              bookTitle: book.title
+              bookID: book.id
             })
             .end(function (err, res) {
               should.not.exist(err);
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
+
+              // Look up the book and check if the page was created
+              Book.findById(book.id, function (err, book) {
                 should.not.exist(err);
+                
                 book.pages.length.should.equal(expectedPageCount);
-                book.pages[expectedPageCount - 1].should.eql(expectedPage);
+                book.pages.should.containEql(mongoose.Types.ObjectId(res.body._id));
+                
                 done();
               });
             });
         });
 
-        it('should return error if book title not given', function (done) {
-          var expectedPageCount = book.pages.length;
-
+        it('should return error if bookID not given', function (done) {
           agent
-            .post('/book/page')
-            .send({})
+            .post('/page')
             .end(function (err, res) {
               should.not.exist(err);
-              res.text.should.equal("Error creating page: Book title not given.");
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
-                should.not.exist(err);
-                book.pages.length.should.equal(expectedPageCount);
-                done();
-              });
-            });
-        });
-      });
 
-      it('should not create new page if user is not author', function (done) {
-        var expectedPageCount = book.pages.length;
+              res.status.should.equal(500);
+              res.text.should.equal("Error creating page: Book ID not given.");
 
-        agent
-          .post('/book/page')
-          .send({
-            bookTitle: book.title
-          })
-          .end(function (err, res) {
-            res.text.should.equal("Error creating page: User not author of book");
-
-            Book.findOne({
-              title: book.title
-            }, function (err, book) {
-              should.not.exist(err);
-              book.pages.length.should.equal(expectedPageCount);
               done();
             });
-          });
+        });
+
+        it('should return error if book not found with ID', function (done) {
+          agent
+            .post('/page')
+            .send({
+              bookID: 'id that does not exist'
+            })
+            .end(function (err, res) {
+              should.not.exist(err);
+
+              res.status.should.equal(500);
+              res.text.should.equal("Error creating page: Book not found with given ID.");
+
+              done();
+            });
+        });
+
       });
     });
 
@@ -169,105 +157,63 @@ describe('/book/page', function () {
 
       describe('User is author', function () {
         beforeEach(function (done) {
-          book.authors.push(agent.user._id);
+          book.owner = agent.user._id;
           book.save(function (err, book) {
             should.not.exist(err);
             done();
           });
         });
 
-        it('should delete page given book title and page number', function (done) {
-          var expectedPageCount;
-
-          book.pages.push("Blarghity");
-          expectedPageCount = book.pages.length - 1;
-          book.save(function (err, book) {
-            agent
-              .delete('/book/page')
-              .query({
-                bookTitle: book.title,
-                pageNumber: book.pages.length
-              })
-              .end(function (err, res) {
-                should.not.exist(err);
-                Book.findOne({
-                  title: book.title
-                }, function (err, book) {
-                  should.not.exist(err);
-                  book.pages.length.should.equal(expectedPageCount);
-                  done();
-                });
-              });
-          });
-        });
-
-        it('should return error if book title is not given', function (done) {
-          var expectedPageCount = book.pages.length;
+        it('should delete page given page ID', function (done) {
+          var expectedPageCount = book.pages.length - 1;
 
           agent
-            .delete('/book/page')
+            .delete('/page')
             .query({
-              pageNumber: book.pages.length
+              pageID: page.id
             })
             .end(function (err, res) {
               should.not.exist(err);
-              res.text.should.equal("Error deleting page: Book title not given.");
 
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
-                should.not.exist(err);
+              res.text.should.equal("Successfully deleted page.");
+
+              Book.findById(book.id, function (err, book) {
+                book.pages.should.not.containEql(page.id);
                 book.pages.length.should.equal(expectedPageCount);
+
                 done();
               });
             });
         });
 
-        it('should return error if page number is not given', function (done) {
-          var expectedPageCount = book.pages.length;
-
+        it('should return error if page ID not given', function (done) {
           agent
-            .delete('/book/page')
+            .delete('/page')
             .query({
-              bookTitle: book.title
             })
             .end(function (err, res) {
               should.not.exist(err);
-              res.text.should.equal("Error deleting page: Page number not given.");
 
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
-                should.not.exist(err);
-                book.pages.length.should.equal(expectedPageCount);
-                done();
-              })
+              res.status.should.equal(500);
+              res.text.should.equal("Error deleting page: Page ID not given.");
+
+              done();
             });
         });
-      });
 
-      it('should not delete page if user is not author', function (done) {
-        var expectedPageCount;
-
-        book.pages.push("Blarghity");
-        expectedPageCount = book.pages.length;
-        book.save(function (err, book) {
+        it('should return error if page not found', function (done) {
           agent
-            .delete('/book/page')
+            .delete('/page')
             .query({
-              bookTitle: book.title,
-              pageNumber: book.pages.length
+              pageID: mongoose.Types.ObjectId().toString()
             })
             .end(function (err, res) {
               should.not.exist(err);
-              res.text.should.equal("Error deleting page: User not author of book.");
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
-                should.not.exist(err);
-                book.pages.length.should.equal(expectedPageCount);
-                done();
-              });
+
+              res.status.should.equal(500);
+              res.text.should.equal("Error deleting page: Page not found with given ID.");
+
+              done();
             });
         });
       });
@@ -275,6 +221,28 @@ describe('/book/page', function () {
     });
 
     describe('PUT', function () {
+      
+      it('should not update page if user is not author', function (done) {
+        var components = factory.Components();
+        
+        page.components = components;
+
+        agent
+          .put('/page')
+          .send(page)
+          .end(function (err, res) {
+          should.not.exist(err);
+
+          res.status.should.equal(500);
+          res.text.should.equal("Error updating page: User not author.");
+
+          Page.findById(page.id, function (err, page) {
+            page.components.toObject().should.not.eql(components);
+
+            done();
+          });
+        });
+      });
 
       describe('User is author', function () {
         beforeEach(function (done) {
@@ -284,8 +252,9 @@ describe('/book/page', function () {
             done();
           });
         });
-        
+
         afterEach(function (done) {
+          // Empty the book
           Book.findOne({
             title: book.title
           }, function (err, book) {
@@ -297,131 +266,57 @@ describe('/book/page', function () {
             })
           })
         });
-        
-        it('should update page given book title, page number and content', function (done) {
-          var pageNumber = book.pages.length,
-            content = factory.Content();
-          
+
+        it('should update page given page ID and components', function (done) {
+          page.components = factory.Components();
+
           agent
-            .put('/book/page')
-            .send({
-              bookTitle: book.title,
-              pageNumber: pageNumber,
-              content: content
-            })
+            .put('/page')
+            .send(page)
             .end(function (err, res) {
               should.not.exist(err);
-              Book.findOne({
-                title: book.title
-              }, function (err, book) {
-                book.pages[pageNumber - 1].should.eql(content);
+
+              Page.findById(page.id, function (err, page) {
+                page.components.should.eql(page.components);
+
                 done();
               });
             });
         });
-        
-        it('should update page given question component', function (done) {
-          var pageNumber = book.pages.length,
-              component = factory.questionComponent();
-          
+
+        it('should return error if pageID not given', function (done) {
+          page.components = factory.Components();
+          page._id = undefined;
+
           agent
-          .put('/book/page')
-          .send({
-            bookTitle: book.title,
-            pageNumber: pageNumber,
-            content: component
-          })
-          .end(function (err, res) {
-            should.not.exist(err);
-            
-            res.text.substr(0,5).should.not.equal('Error');
-            
-            Book.findOne({
-              title: book.title
-            }, function (err, book) {
-              book.pages[pageNumber - 1].should.eql(component);
+            .put('/page')
+            .send(page)
+            .end(function (err, res) {
+              should.not.exist(err);
+
+              res.status.should.equal(500);
+              res.text.should.equal("Error updating page: Page ID not given.");
+
               done();
             });
-          });
         });
-
-        it('should return error if given content is not an array', function (done) {
-          var pageNumber = book.pages.length,
-              content = 'Blargh honk';
+        
+        it('should return error if page not found', function (done) {
+          page.components = factory.Components();
+          page._id = mongoose.Types.ObjectId().toString();
           
           agent
-          .put('/book/page')
-          .send({
-            bookTitle: book.title,
-            pageNumber: pageNumber,
-            content: content
-          })
+          .put('/page')
+          .send(page)
           .end(function (err, res) {
             should.not.exist(err);
-            res.text.should.equal("Error updating page: Given content is not an array.");
+            
+            res.status.should.equal(500);
+            res.text.should.equal("Error updating page: Page not found.");
+            
             done();
           });
         });
-
-        it('should return error if book title not given', function (done) {
-          var pageNumber = book.pages.length,
-            content = {
-              type: 'text',
-              content: 'New content'
-            };
-
-          agent
-            .put('/book/page')
-            .send({
-              pageNumber: pageNumber,
-              content: content
-            })
-            .end(function (err, res) {
-              should.not.exist(err);
-              res.text.should.equal("Error updating page: Book title not given.");
-              done();
-            });
-        });
-
-        it('should return error if page number not given', function (done) {
-          var content = 'New content';
-
-          agent
-            .put('/book/page')
-            .send({
-              bookTitle: book.title,
-              content: content
-            })
-            .end(function (err, res) {
-              should.not.exist(err);
-              res.text.should.equal("Error updating page: Page number not given.");
-              done();
-            });
-        });
-      });
-
-      it('should not update page if user is not author', function (done) {
-        var pageNumber = book.pages.length,
-          originalContent = book.pages[pageNumber - 1];
-        content = factory.Content();
-
-        agent
-          .put('/book/page')
-          .send({
-            bookTitle: book.title,
-            pageNumber: pageNumber,
-            content: content
-          })
-          .end(function (err, res) {
-            should.not.exist(err);
-            res.text.should.equal("Error updating page: User not author of book.");
-            Book.findOne({
-              title: book.title
-            }, function (err, book) {
-              book.pages[pageNumber - 1].should.eql(originalContent);
-              done();
-            });
-          });
       });
 
     });
