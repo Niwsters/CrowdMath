@@ -1,9 +1,15 @@
 <div class="page-edit-toolbar">
+  
+  <!-- Enter edit mode button -->
   <button class="btn btn-default" ng-hide="pageEditMode" ng-click="togglePageEditMode()">Edit page</button>
   
+  <!-- Page editing toolbar -->
   <div ng-show="pageEditMode">
+    
+    <!-- Exit edit mode button -->
     <button class="btn btn-default" ng-click="togglePageEditMode()">X</button><br><br>
     
+    <!-- Buttons that add components to the page -->
     <button class="btn btn-default" ng-click="page.addMathComponent(); pageEditMode = true">$$\sum$$Add math</button>
     <button class="btn btn-default" ng-click="page.addTextComponent()"><h2>F</h2>Add text</button>
     <button class="btn btn-default" ng-click="page.addQuestionComponent()"><h2>?</h2>Add question</button>

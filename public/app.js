@@ -39,7 +39,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
     
     .state('page', {
       url: '/book/:bookTitle/page/:pageNumber',
-      params: { bookID: { value: false }},
+      params: { pageID: { value: false }, bookID: { value: false } },
+      templateUrl: '/page/page.html',
+      controller: 'PageCtrl'
+    })
+    
+    .state('pageByID', {
+      url: 'page/:pageID',
+      params: { bookTitle: { value: false }, bookID: { value: false } },
       templateUrl: '/page/page.html',
       controller: 'PageCtrl'
     })

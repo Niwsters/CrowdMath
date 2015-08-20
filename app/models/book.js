@@ -11,10 +11,16 @@ var bookSchema = mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
-  authors: [ mongoose.Schema.Types.ObjectId ],
-  pages: [ mongoose.Schema.Types.ObjectId ]
+  authors: [ { type: mongoose.Schema.Types.ObjectId, ref: 'User' } ],
+  pages: [
+    {
+      id: { type: mongoose.Schema.Types.ObjectId, ref: 'Page' },
+      title: String
+    }
+  ]
 });
 
 // Create a local isUserAuthor variable that is not saved in the database

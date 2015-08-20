@@ -19,6 +19,9 @@ page-component > div {
   page-component > div textarea {
     margin: 10px 0; }
 
+.page-path-content {
+  padding: 25px; }
+
 ul[dnd-list] {
   position: relative;
   min-height: 50px;

@@ -29,7 +29,11 @@ emptyDatabase = function (done) {
     should.not.exist(err);
     Book.remove({}, function (err) {
       should.not.exist(err);
-      done();
+      
+      Page.remove({}, function (err) {
+        should.not.exist(err);
+        done();
+      });
     });
   });
 };

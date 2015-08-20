@@ -14,6 +14,8 @@
     <youtube-component ng-if="component.type === 'youtube'"></youtube-component>
     
     <autocorrecting-component ng-if="component.type === 'autocorrecting'"></autocorrecting-component>
+    
+    <path-component ng-if="component.type === 'path'"></path-component>
   </div>
   
   <div ng-show="component.editMode">
@@ -27,6 +29,8 @@
     <youtube-component-editor ng-if="component.type === 'youtube'"></youtube-component-editor>
     
     <autocorrecting-component-editor ng-if="component.type === 'autocorrecting'"></autocorrecting-component-editor>
+    
+    <path-component-editor ng-if="component.type === 'path'"></path-component-editor>
     
     <button ng-show="component.editMode" ng-click="page.$update()">Done</button>
   </div>

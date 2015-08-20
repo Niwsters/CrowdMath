@@ -4,57 +4,93 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   var baseUrl,
     bookTitle,
     pageNumber,
-    bookQuery,
-    getPage,
-    getBook;
-  
+    query,
+    getData,
+    getDataByBook,
+    getDataByPage;
+
   // Enable toggling of page editing mode
   $scope.pageEditMode = false;
   $scope.togglePageEditMode = function () {
     $scope.pageEditMode = !$scope.pageEditMode;
   }
 
-  // Retrieves all page and book data
-  getData = function (bookQuery, pageNumber) {
+  getDataByBook = function (bookQuery, pageNumber) {
     Book.get(bookQuery, function (book) {
       var pageID;
-      
+
+      $scope.book = book;
+
       // Count the book's pages (for pagination)
       $scope.pageCount = book.pages.length;
-      
+
       // Get page data
-      pageID = book.pages[pageNumber - 1];
-      $scope.page = Page.get({pageID: pageID});
-      
+      pageID = book.pages[pageNumber - 1].id;
+      $scope.page = Page.get({
+        pageID: pageID
+      });
+
       // Check if user is author of book
       User.get(function (user) {
         $scope.isUserAuthor = book.owner === user._id || book.authors.indexOf(user._id) > -1;
-      })
+      });
     });
   };
 
-  // Send to error page if neither book title nor book ID given.
-  if (!$stateParams.bookTitle && !$stateParams.bookID) $state.transitionTo('404notfound');
-  
+  getDataByPage = function (pageQuery) {
+    $scope.page = Page.get(pageQuery, function (page) {
+      $scope.book = Book.get({
+        id: page.bookID
+      }, function (book) {
+
+        // Set page count and page number for pagination
+        $scope.pageCount = book.pages.length;
+        $scope.pageNumber = _.findIndex(book.pages, function (pageRef) {
+          return pageRef.id === page.id;
+        });
+
+        $scope.bookTitle = book.title;
+
+        // Check if user is author of book
+        User.get(function (user) {
+          $scope.isUserAuthor = book.owner === user._id || book.authors.indexOf(user._id) > -1;
+        });
+
+      });
+    });
+  };
+
+  // Retrieves all page and book data
+  getData = function (query, pageNumber) {
+    if (query.pageID) getDataByPage(query);
+    if (pageNumber) getDataByBook(query, pageNumber);
+  };
+
   // Retrieve parameter variables
   bookID = $stateParams.bookID;
   bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
   pageID = $stateParams.pageID;
   pageNumber = parseInt($stateParams.pageNumber);
-  
+
   // Set bookTitle and pageNumber scope variables.
   $scope.bookTitle = bookTitle;
   $scope.pageNumber = pageNumber;
-  
-  // Query book by title if ID not given.
-  if(!bookID) {
-    bookQuery = { title: bookTitle };
-  } else {
-    bookQuery = { id: bookID };
-  }
+
+  if (bookID) query = {
+    id: bookID
+  };
+  if (bookTitle) query = {
+    title: bookTitle
+  };
+  if (pageID) query = {
+    pageID: pageID
+  };
+
+  // Send to error page if query not set (as in, lacking parameters)
+  if (!query) $state.transitionTo('404notfound');
 
   // Retrieve page and book data.
-  getData(bookQuery, pageNumber);
+  getData(query, pageNumber);
 }]);
 
 page.directive('compileMath', ['$compile', function ($compile) {
@@ -101,13 +137,13 @@ page.directive('pageComponent', [function () {
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
       scope.component.editMode = false;
-      
+
       scope.toggleEditComponentMode = function () {
         if (scope.pageEditMode) {
           scope.component.editMode = !scope.component.editMode;
         }
       };
-      
+
       // Stop editing component if user stops editing page
       scope.$watch('pageEditMode', function (pageEditMode) {
         if (!pageEditMode) {
@@ -227,3 +263,107 @@ page.directive('youtube', function ($sce) {
     }
   };
 });
+
+page.directive('pathComponent', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'page/components/path-component.html'
+  };
+}]);
+
+page.directive('pathComponentEditor', [function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: 'page/components/path-component-editor.html'
+  };
+}]);
+
+page.directive('pagePath', [function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'page/page-path.html',
+    link: function (scope) {
+      scope.page.path.editMode = false;
+      
+      scope.setNextPageID = function (pageID) {
+        scope.nextPageID = pageID;
+      };
+
+      if (scope.page.path.type === 'question') {
+        scope.questionPath = scope.page.path;
+      } else {
+        scope.questionPath = {
+          question: 'What is love?',
+          answers: [
+            {
+              text: "Baby don't hurt me",
+              pageID: ''
+            },
+            {
+              text: "Don't hurt me",
+              pageID: ''
+            },
+            {
+              text: "No more",
+              pageID: ''
+            }
+          ]
+        };
+      }
+
+      if (scope.page.path.type === 'simple') {
+        scope.simplePath = scope.page.path;
+      } else {
+        scope.simplePath = {
+          text: 'What is love?',
+          pageID: ''
+        };
+      }
+
+      scope.$watch('questionPath', function (questionPath) {
+        if (scope.page.path.type === 'question') {
+          scope.page.path = questionPath;
+        }
+      });
+
+      scope.$watch('simplePath', function (simplePath) {
+        if (scope.page.path.type === 'simple') {
+          scope.page.path = simplePath;
+        }
+      });
+
+      scope.toggleEditPathMode = function () {
+        if (scope.pageEditMode) {
+          scope.page.path.editMode = !scope.page.path.editMode;
+        }
+      };
+
+      // Stop editing path if user stops editing page
+      scope.$watch('pageEditMode', function (pageEditMode) {
+        if (!pageEditMode) {
+          scope.page.path.editMode = false;
+        }
+      });
+
+      scope.savePath = function () {
+        scope.page.$update(function () {
+          scope.page.path.editMode = false;
+        });
+      };
+
+      scope.addPathQuestion = function () {
+        scope.questionPath.answers.push({
+          text: 'What is love?',
+          pageID: ''
+        });
+      };
+      
+      scope.setPathType = function (type) {
+        scope.page.path.type = type;
+        scope.page.$update();
+      };
+    }
+  };
+}]);

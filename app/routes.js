@@ -1,6 +1,7 @@
 var User = require('../app/models/user'),
   Book = require('../app/models/book'),
   Page = require('../app/models/page'),
+  _ = require('underscore'),
   isContentCorrectForm;
 
 module.exports = function (app, passport) {
@@ -97,6 +98,8 @@ module.exports = function (app, passport) {
     book.title = req.body.title;
     book.owner = req.user.id;
     book.pages = [];
+    
+    if (req.body.dynamic !== undefined) book.dynamic = req.body.dynamic;
 
     // Check if book with given title already exists (for error checking reasons).
     Book.findOne({
@@ -206,8 +209,24 @@ module.exports = function (app, passport) {
 
       page = new Page();
       page.bookID = book.id;
+      
+      if (book.dynamic === true) {
+        page.path = {
+          type: 'simple',
+          pageID: ''
+        };
+      }
 
-      book.pages.push(page.id);
+      // Set the page's title to for example "Page 2" if it's the 
+      // second page in the book.
+      page.title = "Page " + (book.pages.length + 1).toString();
+
+      // Add reference to page's ID and title in the book
+      book.pages.push({
+        id: page.id,
+        title: page.title
+      });
+
       book.save(function (err, book) {
         if (err) return next(err);
 
@@ -227,14 +246,18 @@ module.exports = function (app, passport) {
     Page.findById(req.query.pageID, function (err, page) {
       if (err) return next(err);
       if (!page) return next("Error deleting page: Page not found with given ID.");
-      
+
       Book.findById(page.bookID, function (err, book) {
+        var pageIndex;
+        
         if (err) return next(err);
 
         // Remove page reference in book
-        var i = book.pages.indexOf(req.query.pageID);
-        if (i > -1) book.pages.splice(i, 1);
-
+        pageIndex = _.findIndex(book.pages, function (pageRef) {
+          return pageRef.id.toString() === page.id;
+        });
+        book.pages.splice(pageIndex, 1);
+        
         // Update book
         book.save(function (err) {
           if (err) return next(err);
@@ -265,8 +288,10 @@ module.exports = function (app, passport) {
           return next("Error updating page: User not author.");
         }
 
-        // Update the page's components.
+        // Update the page's properties
+        page.title = req.body.title;
         page.components = req.body.components;
+        page.path = req.body.path;
 
         // Save changes.
         page.save(function (err, page) {

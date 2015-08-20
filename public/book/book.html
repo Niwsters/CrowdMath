@@ -7,9 +7,9 @@
   <h2>Page list</h2>
 
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="pageID in book.pages track by $index">
+    <li class="list-group-item" ng-repeat="page in book.pages track by $index">
       <a ui-sref="page({bookID: book.id, bookTitle: book.title, pageNumber: $index + 1})">
-        Page {{$index+1}}
+        {{page.title}}
       </a>
       <span ng-if="book.isUserAuthor" class="pull-right">
         <button class="btn btn-xs btn-warning" ng-click="deletePage($index + 1)">

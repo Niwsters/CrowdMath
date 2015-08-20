@@ -66,6 +66,13 @@ services.factory('Page', ['$resource', function ($resource) {
   page.addAutocorrectingComponent = function () {
     this.addComponent('autocorrecting', {question: 'What is 1 + 1?', answer: 2});
   };
+  page.addPathComponent = function () {
+    this.addComponent('path', { question: 'What is love?', answers: [
+      { text: "Baby don't hurt me", path: '' },
+      { text: "Don't hurt me", path: '' },
+      { text: "No more", path: '' },
+    ]});
+  };
   
   return Page;
 }]);

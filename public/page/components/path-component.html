@@ -1,0 +1,8 @@
+<div>
+  <p ng-bind-html="component.content.question"></p>
+  <div class="input-group" ng-repeat="answer in component.content.answers">
+    <label class="radio">
+      <input type="radio" name="path">{{answer.text}}
+    </label>
+  </div>
+</div>

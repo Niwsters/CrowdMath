@@ -51,8 +51,7 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     
     $scope.deletePage = function (pageNumber) {
       Page.delete({
-        bookTitle: $scope.book.title,
-        pageNumber: pageNumber
+        pageID: $scope.book.pages[pageNumber - 1].id
       }, function (res) {
         $scope.book.pages.splice(pageNumber - 1, 1)
       });

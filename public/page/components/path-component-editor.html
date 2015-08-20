@@ -1,0 +1,17 @@
+<div>
+  <label>Question: <input ng-model="component.content.question"></label>
+  <label>
+    Answers:
+    <ul>
+      <li ng-repeat="answer in component.content.answers track by $index">
+        <label>
+          <input ng-model="component.content.answers[$index].text">
+          Path:
+          <select ng-options="page.id as page.title for page in book.pages" ng-model="component.content.answers[$index].path">
+            <option value="">Select a page</option>
+          </select>
+        </label>
+      </li>
+    </ul>
+  </label>
+</div>

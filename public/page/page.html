@@ -5,7 +5,7 @@
   <div class="col-xs-12">
     <h1>{{bookTitle}}</h1>
 
-    <page-navigation></page-navigation>
+    <page-navigation ng-if="!book.dynamic"></page-navigation>
     
     <ul ng-if="pageEditMode" dnd-list="page">
       <li ng-repeat="component in page.components"
@@ -19,7 +19,9 @@
     
     <page-component ng-if="!pageEditMode" ng-repeat="component in page.components"></page-component>
     
-    <page-navigation></page-navigation>
+    <page-path ng-if="page.path && book.dynamic"></page-path>
+    
+    <page-navigation ng-if="!book.dynamic"></page-navigation>
     
     <page-edit-toolbar class="col-xs-12" ng-if="isUserAuthor"></page-edit-toolbar>
     

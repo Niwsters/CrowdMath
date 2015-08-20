@@ -114,11 +114,44 @@ describe('/page', function () {
                 should.not.exist(err);
                 
                 book.pages.length.should.equal(expectedPageCount);
-                book.pages.should.containEql(mongoose.Types.ObjectId(res.body._id));
                 
-                done();
+                Page.findById(res.body._id, function (err, page) {
+                  should.exist(page);
+                  
+                  // Page's default title should be something like "Page 2" depending 
+                  // on how many pages the book has.
+                  page.title.should.equal("Page " + book.pages.length.toString());
+                  
+                  page.bookID.equals(book.id).should.equal(true);
+                  page.components.toObject().should.eql([]);
+                  
+                  // Make sure the book's page reference contains the right ID and title
+                  book.pages[book.pages.length - 1].id.equals(page.id).should.equal(true);
+                  book.pages[book.pages.length - 1].title.should.equal(page.title);
+                  
+                  done();
+                });
               });
             });
+        });
+        
+        it('should create empty page with default path if book is dynamic', function (done) {
+          var expectedPathObject = factory.DefaultPath();
+          
+          book.dynamic = true;
+          book.save(function (err, book) {
+            agent
+            .post('/page')
+            .send({
+              bookID: book.id
+            })
+            .end(function (err, res) {
+              should.not.exist(err);
+              
+              res.body.path.should.eql(expectedPathObject);
+              done();
+            });
+          });
         });
 
         it('should return error if bookID not given', function (done) {
@@ -267,8 +300,10 @@ describe('/page', function () {
           })
         });
 
-        it('should update page given page ID and components', function (done) {
+        it('should update page components and path', function (done) {
+          page.title = factory.RandomString(10);
           page.components = factory.Components();
+          page.path = factory.Path();
 
           agent
             .put('/page')
@@ -276,8 +311,10 @@ describe('/page', function () {
             .end(function (err, res) {
               should.not.exist(err);
 
-              Page.findById(page.id, function (err, page) {
-                page.components.should.eql(page.components);
+              Page.findById(page.id, function (err, dbPage) {
+                dbPage.title.should.equal(page.title);
+                dbPage.components.toObject().should.eql(page.components.toObject());
+                dbPage.path.should.eql(page.path);
 
                 done();
               });

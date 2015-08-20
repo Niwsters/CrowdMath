@@ -2,6 +2,7 @@ var Book = require('../app/models/book.js'),
   User = require('../app/models/user.js'),
   Page = require('../app/models/page.js'),
   should = require('should'),
+  mongoose = require('mongoose'),
   randomString,
   saveAll,
   modelToObject;
@@ -86,15 +87,17 @@ var factory = {
   },
   Page: function (bookID, attrs) {
     var page;
-    
+
     if (!bookID) throw "The page constructor needs a book ID";
 
     attrs = attrs || {};
 
     page = new Page();
-    
+
+    page.title = randomString(10);
+
     page.bookID = bookID;
-    
+
     page.components = attrs.components || [];
 
     if (attrs.paths) {
@@ -115,7 +118,16 @@ var factory = {
     // Create pages and attach it to the book
     page = factory.Page(book.id);
     page2 = factory.Page(book.id);
-    book.pages = [page.id, page2.id];
+    book.pages = [
+      {
+        id: page.id,
+        title: page.title
+      },
+      {
+        id: page2.id,
+        title: page2.title
+      }
+    ];
 
     // Save everything
     saveAll({
@@ -155,16 +167,20 @@ var factory = {
       }
     ];
   },
-  questionComponent: function () {
-    return [
-      {
-        type: 'question',
-        content: {
-          question: 'What is love?',
-          answer: "Baby don't hurt me"
-        }
-      }
-    ];
+  Path: function () {
+    return {
+      type: 'simple',
+      pageID: mongoose.Types.ObjectId().toString()
+    };
+  },
+  DefaultPath: function () {
+    return {
+      type: 'simple',
+      pageID: ''
+    }
+  },
+  RandomString: function (length) {
+    return randomString(length);
   }
 };
 

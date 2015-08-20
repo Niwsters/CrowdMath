@@ -74,7 +74,7 @@ describe('/book', function () {
             done();
           });
       });
-      
+
     });
   });
 
@@ -137,7 +137,7 @@ describe('/book', function () {
 
     describe('POST', function () {
 
-      it('should create a new book with given title and owner', function (done) {
+      it('should create a new book with given title', function (done) {
         var title = "Bookie";
 
         agent
@@ -148,6 +148,24 @@ describe('/book', function () {
           .end(function (err, res) {
             should.not.exist(err);
             res.body.title.should.equal(title);
+            done();
+          });
+      });
+
+      it('should create a new book with given title and dynamic', function (done) {
+        var title = "Bookie",
+          dynamic = true;
+
+        agent
+          .post('/book')
+          .send({
+            title: title,
+            dynamic: dynamic
+          })
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.body.title.should.equal(title);
+            res.body.dynamic.should.equal(dynamic);
             done();
           });
       });

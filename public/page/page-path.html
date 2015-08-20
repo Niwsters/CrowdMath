@@ -1,0 +1,62 @@
+<div ng-class="{ 'input-group panel panel-default' : pageEditMode }">
+  
+  <div class="page-path-content" ng-if="!page.path.editMode" ng-click="toggleEditPathMode()">
+    
+    <!-- Simple path -->
+    <a ng-if="page.path.type === 'simple'" ui-sref="pageByID({pageID: page.path.pageID})">Next page</a>
+    
+    <!-- Question path -->
+    <div ng-if="page.path.type === 'question'">
+      <label>{{page.path.question}}</label>
+      <ul>
+        <li class="input-group" ng-repeat="answer in page.path.answers track by $index">
+          <label class="radio">
+            <!-- Apparently Angular's radio buttons are FUCKED UP,
+                 so we need to call ng-change rather than setting a model. -->
+            <input type="radio" ng-model="$parent.answerID" ng-value="$index" ng-change="$parent.setNextPageID(answer.pageID)">{{answer.text}}
+          </label>
+        </li>
+      </ul>
+      
+      <a ng-if="nextPageID" ui-sref="pageByID({pageID: nextPageID})">Next page</a>
+    </div>
+  </div>
+
+  <!-- Editing stuff -->
+  <div ng-if="page.path.editMode">
+    
+    <!-- Path type selector -->
+    <div class="btn-group">
+      <button class="btn" ng-class="{ 'btn-primary' : page.path.type === 'simple' }" ng-click="setPathType('simple')">Simple path</button>
+      <button class="btn" ng-class="{ 'btn-primary' : page.path.type === 'question' }" ng-click="setPathType('question')">Question path</button>
+    </div>
+    
+    <!-- Simple path -->
+    <div ng-if="page.path.type === 'simple'">
+      <label>
+        Next page:
+        <select ng-options="page.id as page.title for page in book.pages" ng-model="page.path.pageID">
+          <option value="">Select a page</option>
+        </select>
+      </label>
+    </div>
+    
+    <!-- Question path -->
+    <div ng-if="page.path.type === 'question'">
+      <label>
+        Question: <input type="text" ng-model="questionPath.question">
+        <ul>
+          <li ng-repeat="question in questionPath.answers track by $index">
+            <input type="text" ng-model="page.path.answers[$index].text">
+            <select ng-options="page.id as page.title for page in book.pages" ng-model="page.path.answers[$index].pageID">
+              <option value="">Select a page</option>
+            </select>
+          </li>
+        </ul>
+        <button ng-click="addPathQuestion()">Add question</button>
+      </label>
+    </div>
+    
+    <button ng-click="savePath()">Done</button>
+  </div>
+</div>
