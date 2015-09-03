@@ -44,6 +44,15 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     $scope.createPage = function () {
       var page = new Page();
       page.bookID = $scope.book.id;
+      
+      // Add a simple path if book is dynamic
+      if($scope.book.dynamic) {
+        page.path = {
+          type: 'simple',
+          pageID: ''
+        };
+      }
+      
       page.$save(function (page) {
         $scope.book.pages.push(page);
       });

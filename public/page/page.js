@@ -295,6 +295,7 @@ page.directive('pagePath', [function () {
         scope.questionPath = scope.page.path;
       } else {
         scope.questionPath = {
+          type: 'question',
           question: 'What is love?',
           answers: [
             {
@@ -317,7 +318,7 @@ page.directive('pagePath', [function () {
         scope.simplePath = scope.page.path;
       } else {
         scope.simplePath = {
-          text: 'What is love?',
+          type: 'simple',
           pageID: ''
         };
       }
@@ -326,7 +327,7 @@ page.directive('pagePath', [function () {
         if (scope.page.path.type === 'question') {
           scope.page.path = questionPath;
         }
-      });
+      }, true);
 
       scope.$watch('simplePath', function (simplePath) {
         if (scope.page.path.type === 'simple') {
@@ -337,6 +338,8 @@ page.directive('pagePath', [function () {
       scope.toggleEditPathMode = function () {
         if (scope.pageEditMode) {
           scope.page.path.editMode = !scope.page.path.editMode;
+          scope.simplePath.editMode = scope.page.path.editMode;
+          scope.questionPath.editMode = scope.page.path.editMode;
         }
       };
 
@@ -353,7 +356,7 @@ page.directive('pagePath', [function () {
         });
       };
 
-      scope.addPathQuestion = function () {
+      scope.addPathAnswer = function () {
         scope.questionPath.answers.push({
           text: 'What is love?',
           pageID: ''
@@ -361,8 +364,11 @@ page.directive('pagePath', [function () {
       };
       
       scope.setPathType = function (type) {
-        scope.page.path.type = type;
-        scope.page.$update();
+        if(type === 'simple') {
+          scope.page.path = scope.simplePath;
+        } else if(type === 'question') {
+          scope.page.path = scope.questionPath;
+        }
       };
     }
   };

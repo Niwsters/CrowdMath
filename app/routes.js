@@ -226,13 +226,13 @@ module.exports = function (app, passport) {
         id: page.id,
         title: page.title
       });
-
-      book.save(function (err, book) {
-        if (err) return next(err);
-
-        page.save(function (err, page) {
-          if (err) return next(err);
-
+      
+      page.save(function (err, page) {
+        if(err) return next(err);
+        
+        book.save(function (err, book) {
+          if(err) return next(err);
+          
           res.json(page);
         });
       });

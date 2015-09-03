@@ -46,14 +46,14 @@
       <label>
         Question: <input type="text" ng-model="questionPath.question">
         <ul>
-          <li ng-repeat="question in questionPath.answers track by $index">
-            <input type="text" ng-model="page.path.answers[$index].text">
-            <select ng-options="page.id as page.title for page in book.pages" ng-model="page.path.answers[$index].pageID">
+          <li ng-repeat="answer in questionPath.answers track by $index">
+            <input type="text" ng-model="questionPath.answers[$index].text">
+            <select ng-options="page.id as page.title for page in book.pages" ng-model="questionPath.answers[$index].pageID">
               <option value="">Select a page</option>
             </select>
           </li>
         </ul>
-        <button ng-click="addPathQuestion()">Add question</button>
+        <button ng-click="addPathAnswer()">Add answer</button>
       </label>
     </div>
     
