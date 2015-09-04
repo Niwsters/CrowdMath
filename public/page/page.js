@@ -363,6 +363,10 @@ page.directive('pagePath', [function () {
         });
       };
       
+      scope.deletePathAnswer = function (index) {
+        scope.questionPath.answers.splice(index, 1);
+      };
+      
       scope.setPathType = function (type) {
         if(type === 'simple') {
           scope.page.path = scope.simplePath;

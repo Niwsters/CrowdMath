@@ -51,6 +51,7 @@
             <select ng-options="page.id as page.title for page in book.pages" ng-model="questionPath.answers[$index].pageID">
               <option value="">Select a page</option>
             </select>
+            <button ng-click="deletePathAnswer($index)">X</button>
           </li>
         </ul>
         <button ng-click="addPathAnswer()">Add answer</button>
