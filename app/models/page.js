@@ -43,6 +43,8 @@ Page.schema.path('components').validate(function (components) {
   };
   
   validations.youtube = function (component) {
+    if (component.content.constructor !== String) return false;
+    
     return true;
   };
   

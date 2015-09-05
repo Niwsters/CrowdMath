@@ -220,6 +220,14 @@ describe('Page model', function () {
         type: 'youtube'
       },
       {
+        type: 'youtube',
+        content: {}
+      },
+      {
+        type: 'youtube',
+        content: 9105
+      },
+      {
         type: 'autocorrecting'
       }
     ];
