@@ -29,7 +29,7 @@ bookSchema.virtual('isUserAuthor')
     return this._isUserAuthor;
   })
   .set(function (isUserAuthor) {
-    return this._isUserAuthor = isUserAuthor;
+    this._isUserAuthor = isUserAuthor;
   });
 
 bookSchema.set('toObject', {

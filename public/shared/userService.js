@@ -8,4 +8,4 @@ userService.factory('User', ['$resource',
     var User = $resource('user', {}, {});
     return User;
   }
-])
+]);

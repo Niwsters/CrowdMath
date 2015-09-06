@@ -1,3 +1,5 @@
+/* jshint -W079 */
+
 var User = require('../app/models/user'),
   Book = require('../app/models/book'),
   Page = require('../app/models/page'),
@@ -87,7 +89,7 @@ module.exports = function (app, passport) {
       }
 
       res.json(book);
-    })
+    });
   });
 
   app.post('/book', isLoggedIn, function (req, res, next) {

@@ -1,0 +1,8 @@
+{
+  "node": true,
+  "predef": [
+    "angular",
+    "_",
+    "MathJax"
+  ]
+}

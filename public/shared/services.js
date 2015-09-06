@@ -48,20 +48,20 @@ services.factory('Page', ['$resource', function ($resource) {
   page.moveComponent = function (pos) {
     this.components.splice(pos, 1);
     this.$update();
-  }
+  };
   
   // Function that removes components
   page.removeComponent = function (component) {
     this.components.splice(this.components.indexOf(component), 1);
     this.$update();
-  }
+  };
   
   // More specific components
-  page.addMathComponent = function () { this.addComponent('math', 'New math') };
-  page.addTextComponent = function () { this.addComponent('text', 'New text') };
-  page.addYouTubeComponent = function () { this.addComponent('youtube', '') };
+  page.addMathComponent = function () { this.addComponent('math', 'New math'); };
+  page.addTextComponent = function () { this.addComponent('text', 'New text'); };
+  page.addYouTubeComponent = function () { this.addComponent('youtube', ''); };
   page.addQuestionComponent = function () {
-    this.addComponent('question', {question: 'Question', answer: 'Answer'})
+    this.addComponent('question', {question: 'Question', answer: 'Answer'});
   };
   page.addAutocorrectingComponent = function () {
     this.addComponent('autocorrecting', {question: 'What is 1 + 1?', answer: 2});

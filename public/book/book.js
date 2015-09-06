@@ -33,7 +33,7 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
         // Check if user is author of book
         User.get({}, function (user) {
           if(user._id) {
-            $scope.isUserAuthor = book.authors.indexOf(user._id) > -1
+            $scope.isUserAuthor = book.authors.indexOf(user._id) > -1;
           }
         });
       } else {
@@ -62,7 +62,7 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
       Page.delete({
         pageID: $scope.book.pages[pageNumber - 1].id
       }, function (res) {
-        $scope.book.pages.splice(pageNumber - 1, 1)
+        $scope.book.pages.splice(pageNumber - 1, 1);
       });
     };
     

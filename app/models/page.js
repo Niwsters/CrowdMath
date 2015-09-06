@@ -114,7 +114,7 @@ Page.schema.path('path').validate(function (path) {
     if (!path.pageID && path.pageID !== '') return false;
     
     return true;
-  }
+  };
   
   validations.question = function (path) {
     var i,
@@ -148,13 +148,13 @@ Page.schema.path('path').validate(function (path) {
     }
     
     return true;
-  }
+  };
   
   validate = function (path) {
     if(!path.type) return false;
     
     return validations[path.type](path);
-  }
+  };
   
   return validate(path);
 }, 'Invalid path');

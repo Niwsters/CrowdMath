@@ -1,4 +1,6 @@
-page = angular.module('crowdmath.page', []);
+'use strict';
+
+var page = angular.module('crowdmath.page', []);
 
 page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
   var baseUrl,
@@ -7,15 +9,20 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     query,
     getData,
     getDataByBook,
-    getDataByPage;
+    getDataByPage,
+    bookID,
+    pageID;
 
   // Enable toggling of page editing mode
   $scope.pageEditMode = false;
   $scope.togglePageEditMode = function () {
     $scope.pageEditMode = !$scope.pageEditMode;
-  }
+  };
 
   getDataByBook = function (bookQuery, pageNumber) {
+    var bookID,
+      pageID;
+
     Book.get(bookQuery, function (book) {
       var pageID;
 
@@ -38,6 +45,9 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   };
 
   getDataByPage = function (pageQuery) {
+    var bookID,
+      pageID;
+
     $scope.page = Page.get(pageQuery, function (page) {
       $scope.book = Book.get({
         id: page.bookID
@@ -186,14 +196,14 @@ page.directive('autocorrectingComponent', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/autocorrecting-component.html'
-  }
+  };
 }]);
 
 page.directive('autocorrectingComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/autocorrecting-component-editor.html'
-  }
+  };
 }]);
 
 page.directive('textComponent', [function () {
@@ -207,8 +217,8 @@ page.directive('textComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/math-component-editor.html'
-  }
-}])
+  };
+}]);
 
 page.directive('mathComponent', [function () {
   return {
@@ -221,8 +231,8 @@ page.directive('mathComponentEditor', [function () {
   return {
     restrict: 'E',
     templateUrl: 'page/components/math-component-editor.html'
-  }
-}])
+  };
+}]);
 
 page.directive('youtubeComponent', ['$sce', function ($sce) {
   return {
@@ -286,7 +296,7 @@ page.directive('pagePath', [function () {
     templateUrl: 'page/page-path.html',
     link: function (scope) {
       scope.pathEditMode = false;
-      
+
       scope.setNextPageID = function (pageID) {
         scope.nextPageID = pageID;
       };
@@ -350,7 +360,7 @@ page.directive('pagePath', [function () {
 
       scope.savePath = function () {
         console.log(scope.page.path);
-        
+
         scope.page.$update(function () {
           scope.pathEditMode = false;
         });
@@ -362,15 +372,15 @@ page.directive('pagePath', [function () {
           pageID: ''
         });
       };
-      
+
       scope.deletePathAnswer = function (index) {
         scope.questionPath.answers.splice(index, 1);
       };
-      
+
       scope.setPathType = function (type) {
-        if(type === 'simple') {
+        if (type === 'simple') {
           scope.page.path = scope.simplePath;
-        } else if(type === 'question') {
+        } else if (type === 'question') {
           scope.page.path = scope.questionPath;
         }
       };
