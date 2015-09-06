@@ -60,6 +60,9 @@ describe('Page model', function () {
     ];
     
     improperPaths = [
+      { // Path without type
+        pageID: mongoose.Types.ObjectId()
+      },
       { // Simple path lacks pageID
         type: 'simple',
       },
@@ -71,12 +74,22 @@ describe('Page model', function () {
         type: 'question',
         question: 'What is love?'
       },
+      { // Question path that lacks question
+        type: 'question',
+        answers: []
+      },
+      { // Question path where question is not a string
+        type: 'question',
+        question: 8,
+        answers: []
+      },
       { // Question path where answers is not array
         type: 'question',
         answers: 'lolpan'
       },
       { // Question path where an answer lacks PageID
         type: 'question',
+        question: 'What is love?',
         answers: [
           {
             text: "Baby don't hurt me"
@@ -87,8 +100,9 @@ describe('Page model', function () {
           }
         ]
       },
-      { // Question path wher an answer lacks text
+      { // Question path where an answer lacks text
         type: 'question',
+        question: 'What is love?',
         answers: [
           {
             text: "Baby don't hurt me",
@@ -98,6 +112,28 @@ describe('Page model', function () {
             pageID: mongoose.Types.ObjectId()
           }
         ]
+      },
+      { // Question path answer contains unnecessary property
+        type: 'question',
+        question: 'What is love?',
+        answers: [
+          {
+            text: "Baby don't hurt me",
+            pageID: mongoose.Types.ObjectId(),
+            haxorz: 'Unnecesary property'
+          }
+        ]
+      },
+      { // Question path contains unnecessary property
+        type: 'question',
+        question: 'What is love?',
+        answers: [
+          {
+            text: "Baby don't hurt me",
+            pageID: mongoose.Types.ObjectId()
+          }
+        ],
+        haxorz: 'Unnecessary property'
       }
     ];
     
@@ -195,40 +231,120 @@ describe('Page model', function () {
     ];
 
     improperComponents = [
-      {
+      { // Component without type
+        content: 'lol I have no type'
+      },
+      { // Text without content
         type: 'text'
       },
-      {
+      { // Text with object content
+        type: 'text',
+        content: {}
+      },
+      { // Text with number content
+        type: 'text',
+        content: 9105
+      },
+      { // Math without content
         type: 'math'
       },
-      {
+      { // Text with object content
+        type: 'math',
+        content: {}
+      },
+      { // Text with number content
+        type: 'math',
+        content: 9105
+      },
+      { // Question without content
         type: 'question'
       },
-      {
+      { // Question without question
         type: 'question',
         content: {
           answer: "Baby don't hurt me"
         }
       },
-      {
+      { // Question without answer
         type: 'question',
         content: {
           question: 'What is love?'
         }
       },
-      {
-        type: 'youtube'
+      { // Question with non-string question
+        type: 'question',
+        content: {
+          question: 8,
+          answer: "Baby don't hurt me"
+        }
+      },
+      { // Question with non-string answer
+        type: 'question',
+        content: {
+          question: 'What is love?',
+          answer: 8
+        }
       },
       {
+        type: 'question',
+        content: {
+          question: 'What is love?',
+          answer: "Baby don't hurt me",
+          haxorz: 'not allowed property'
+        }
+      },
+      { // YouTube without content
+        type: 'youtube'
+      },
+      { // YouTube with object content
         type: 'youtube',
         content: {}
       },
-      {
+      { // YouTube with number content
         type: 'youtube',
         content: 9105
       },
-      {
+      { // Autocorrecting without content
         type: 'autocorrecting'
+      },
+      { // Autocorrecting without question
+        type: 'autocorrecting',
+        content: {
+          answer: 4
+        }
+      },
+      { // Autocorrecting without answer
+        type: 'autocorrecting',
+        content: {
+          question: 'What is 2 + 2?'
+        }
+      },
+      { // Autocorrecting with unnecessary content property
+        type: 'autocorrecting',
+        content: {
+          question: 'What is 2 + 2?',
+          answer: 4,
+          haxorz: 'not allowed property'
+        }
+      },
+      { // Autocorrecting with non-string question
+        type: 'autocorrecting',
+        content: {
+          question: 4,
+          answer: 4,
+        }
+      },
+      { // Autocorrecting with non-number answer
+        type: 'autocorrecting',
+        content: {
+          question: 'What is 2 + 2?',
+          answer: 'lolpan'
+        }
+      },
+      { // Text with unnecessary property
+        type: 'text',
+        content: 'Blargh',
+        haxorz: 'not allowed property'
       }
     ];
 
@@ -272,9 +388,14 @@ describe('Page model', function () {
     // Automatically test the improperly formed components 
     // defined in the array above.
     helper.asyncLoop(improperComponents.length, function (loop) {
-      var component = improperComponents[loop.iteration()];
+      var component = improperComponents[loop.iteration()],
+          componentType;
+      
+      // In case component.type is not defined, set it as unknown type 
+      // WITHOUT affecting the component object.
+      componentType = component.type || '(unknown type)';
 
-      it('should not save when an improper ' + component.type + ' component is given.', function (done) {
+      it('should not save when an improper ' + componentType + ' component is given.', function (done) {
         testImproperComponent(component, function () {
           done();
         });

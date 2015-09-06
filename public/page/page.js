@@ -136,18 +136,18 @@ page.directive('pageComponent', [function () {
     restrict: 'E',
     templateUrl: 'page/components/page-component.html',
     link: function (scope, elem, attrs) {
-      scope.component.editMode = false;
+      scope.componentEditMode = false;
 
       scope.toggleEditComponentMode = function () {
         if (scope.pageEditMode) {
-          scope.component.editMode = !scope.component.editMode;
+          scope.componentEditMode = !scope.componentEditMode;
         }
       };
 
       // Stop editing component if user stops editing page
       scope.$watch('pageEditMode', function (pageEditMode) {
         if (!pageEditMode) {
-          scope.component.editMode = false;
+          scope.componentEditMode = false;
         }
       });
 
@@ -285,7 +285,7 @@ page.directive('pagePath', [function () {
     restrict: 'E',
     templateUrl: 'page/page-path.html',
     link: function (scope) {
-      scope.page.path.editMode = false;
+      scope.pathEditMode = false;
       
       scope.setNextPageID = function (pageID) {
         scope.nextPageID = pageID;
@@ -337,22 +337,22 @@ page.directive('pagePath', [function () {
 
       scope.toggleEditPathMode = function () {
         if (scope.pageEditMode) {
-          scope.page.path.editMode = !scope.page.path.editMode;
-          scope.simplePath.editMode = scope.page.path.editMode;
-          scope.questionPath.editMode = scope.page.path.editMode;
+          scope.pathEditMode = !scope.pathEditMode;
         }
       };
 
       // Stop editing path if user stops editing page
       scope.$watch('pageEditMode', function (pageEditMode) {
         if (!pageEditMode) {
-          scope.page.path.editMode = false;
+          scope.pathEditMode = false;
         }
       });
 
       scope.savePath = function () {
+        console.log(scope.page.path);
+        
         scope.page.$update(function () {
-          scope.page.path.editMode = false;
+          scope.pathEditMode = false;
         });
       };
 

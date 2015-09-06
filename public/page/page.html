@@ -11,7 +11,7 @@
       <li ng-repeat="component in page.components"
           dnd-draggable="component"
           dnd-moved="page.moveComponent($index)"
-          dnd-disable-if="component.editMode"
+          dnd-disable-if="componentEditMode"
           >
         <page-component></page-component>
       </li>

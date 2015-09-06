@@ -4,7 +4,7 @@
     <button class="btn btn-danger" ng-click="removeComponent()">X</button>
   </div>
   
-  <div ng-hide="component.editMode" ng-click="toggleEditComponentMode()">
+  <div ng-hide="componentEditMode" ng-click="toggleEditComponentMode()">
     <text-component ng-if="component.type === 'text'"></text-component>
     
     <math-component ng-if="component.type === 'math'"></math-component>
@@ -18,11 +18,11 @@
     <path-component ng-if="component.type === 'path'"></path-component>
   </div>
   
-  <div ng-show="component.editMode">
+  <div ng-show="componentEditMode">
     
-    <text-component-editor ng-if="component.type === 'text'" ng-show="component.editMode"></text-component-editor>
+    <text-component-editor ng-if="component.type === 'text'" ng-show="componentEditMode"></text-component-editor>
     
-    <math-component-editor ng-if="component.type === 'math'" ng-show="component.editMode"></math-component-editor>
+    <math-component-editor ng-if="component.type === 'math'" ng-show="componentEditMode"></math-component-editor>
     
     <question-component-editor ng-if="component.type === 'question'"></question-component-editor>
     
@@ -32,7 +32,7 @@
     
     <path-component-editor ng-if="component.type === 'path'"></path-component-editor>
     
-    <button ng-show="component.editMode" ng-click="page.$update()">Done</button>
+    <button ng-show="componentEditMode" ng-click="page.$update()">Done</button>
   </div>
   
 </div>

@@ -1,6 +1,6 @@
 <div ng-class="{ 'input-group panel panel-default' : pageEditMode }">
   
-  <div class="page-path-content" ng-if="!page.path.editMode" ng-click="toggleEditPathMode()">
+  <div class="page-path-content" ng-if="!pathEditMode" ng-click="toggleEditPathMode()">
     
     <!-- Simple path -->
     <a ng-if="page.path.type === 'simple'" ui-sref="pageByID({pageID: page.path.pageID})">Next page</a>
@@ -23,7 +23,7 @@
   </div>
 
   <!-- Editing stuff -->
-  <div ng-if="page.path.editMode">
+  <div ng-if="pathEditMode">
     
     <!-- Path type selector -->
     <div class="btn-group">
