@@ -8,4 +8,3 @@ tmp
 .DS_Store
 .idea
 .sass-cache/
-config/database.js
