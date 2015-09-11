@@ -7,7 +7,7 @@
 
     <page-navigation ng-if="!book.dynamic"></page-navigation>
     
-    <ul ng-if="pageEditMode" dnd-list="page">
+    <ul ng-if="pageEditMode" dnd-list="page.components">
       <li ng-repeat="component in page.components"
           dnd-draggable="component"
           dnd-moved="page.moveComponent($index)"
