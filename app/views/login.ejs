@@ -16,10 +16,19 @@
 
     <h1><span class="fa fa-sign-in"></span> Login</h1>
 
+<<<<<<< HEAD
     <!-- show any messages that come back with authentication -->
     <% if (message.length > 0) { %>
         <div class="alert alert-danger"><%= message %></div>
     <% } %>
+=======
+      <!-- show any messages that come back with authentication -->
+      <% if (message.length> 0) { %>
+        <div class="alert alert-danger">
+          <%= message %>
+        </div>
+        <% } %>
+>>>>>>> fba2d62fe1d04e84577190cbffffa0f0d3f3abc3
 
     <!-- LOGIN FORM -->
     <form action="/login" method="post">
