@@ -216,7 +216,7 @@ page.directive('textComponent', [function () {
 page.directive('textComponentEditor', [function () {
   return {
     restrict: 'E',
-    templateUrl: 'page/components/math-component-editor.html'
+    templateUrl: 'page/components/text-component-editor.html'
   };
 }]);
 
