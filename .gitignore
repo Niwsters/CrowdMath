@@ -9,3 +9,4 @@ tmp
 .idea
 .sass-cache/
 config/database.js
+config/session-secret.js

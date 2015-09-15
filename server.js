@@ -10,7 +10,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
-var configDB = require('./config/database.js');
+var configDB = require('./config/database');
+var sessionSecret = require('./config/session-secret');
 
 mongoose.connect(configDB.url);
 
@@ -25,7 +26,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 app.set('views', './app/views'); // change the views folder path
 
 // required for passport
-app.use(session({ secret: 'kourosh hakhamaneshi' })); // session secret
+app.use(session(sessionSecret)); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

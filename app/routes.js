@@ -3,8 +3,7 @@
 var User = require('../app/models/user'),
   Book = require('../app/models/book'),
   Page = require('../app/models/page'),
-  _ = require('underscore'),
-  isContentCorrectForm;
+  _ = require('underscore');
 
 module.exports = function (app, passport) {
   app.get('/', function (req, res) {
