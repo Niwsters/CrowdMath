@@ -20,6 +20,8 @@
   
   <div ng-show="componentEditMode">
     
+    <div ng-if="backendError" class="error-message">{{backendError}}</div>
+    
     <text-component-editor ng-if="component.type === 'text'" ng-show="componentEditMode"></text-component-editor>
     
     <math-component-editor ng-if="component.type === 'math'" ng-show="componentEditMode"></math-component-editor>
@@ -32,7 +34,7 @@
     
     <path-component-editor ng-if="component.type === 'path'"></path-component-editor>
     
-    <button ng-show="componentEditMode" ng-click="page.$update()">Done</button>
+    <button class="btn btn-primary" ng-show="componentEditMode" ng-click="saveComponent()">Done</button>
   </div>
   
 </div>
