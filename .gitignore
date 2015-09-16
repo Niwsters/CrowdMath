@@ -7,4 +7,10 @@ bower_components/
 tmp
 .DS_Store
 .idea
+<<<<<<< HEAD
 .sass-cache/
+=======
+.sass-cache/
+config/database.js
+config/session-secret.js
+>>>>>>> master

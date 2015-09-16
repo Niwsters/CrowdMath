@@ -67,15 +67,15 @@ Page.schema.path('components').validate(function (components) {
   };
   
   validations.autocorrecting = function (component) {
-    var allowedContentProperties = ['question', 'answer'];
+    var allowedContentProperties = ['question', 'correctAnswer'];
     
     // Make sure content contains both question and answer
     if (!component.content.question) return false;
-    if (!component.content.answer) return false;
+    if (!component.content.correctAnswer) return false;
     
     // Make sure question is string and answer is number
     if (component.content.question.constructor !== String) return false;
-    if (component.content.answer.constructor !== Number) return false;
+    if (component.content.correctAnswer.constructor !== Number) return false;
     
     if (containsOtherPropertiesThan(component.content, allowedContentProperties))
       return false;

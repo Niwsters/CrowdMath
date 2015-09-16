@@ -64,7 +64,7 @@ services.factory('Page', ['$resource', function ($resource) {
     this.addComponent('question', {question: 'Question', answer: 'Answer'});
   };
   page.addAutocorrectingComponent = function () {
-    this.addComponent('autocorrecting', {question: 'What is 1 + 1?', answer: 2});
+    this.addComponent('autocorrecting', {question: 'What is 1 + 1?', correctAnswer: 2});
   };
   page.addPathComponent = function () {
     this.addComponent('path', { question: 'What is love?', answers: [

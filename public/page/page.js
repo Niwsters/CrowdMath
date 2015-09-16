@@ -3,8 +3,7 @@
 var page = angular.module('crowdmath.page', []);
 
 page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page', function ($scope, $state, $stateParams, $window, User, Book, Page) {
-  var baseUrl,
-    bookTitle,
+  var bookTitle,
     pageNumber,
     query,
     getData,
@@ -101,6 +100,24 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
 
   // Retrieve page and book data.
   getData(query, pageNumber);
+  
+  $scope.savePage = function () {
+    $scope.globalMessages.saving = true;
+    
+    $scope.page.$update(
+      function () {
+        $scope.globalMessages.saving = false;
+      },
+      function () {
+        $scope.globalMessages.saving = false;
+      }
+    );
+  };
+  
+  // Allows sending global messages throughout the directives, such as when 
+  // the page is saving or an error occurred.
+  $scope.globalMessages = {};
+  $scope.globalMessages.saving = false;
 }]);
 
 page.directive('compileMath', ['$compile', function ($compile) {
@@ -164,6 +181,23 @@ page.directive('pageComponent', [function () {
       scope.removeComponent = function () {
         scope.page.removeComponent(scope.component);
       };
+      
+      // Handle errors when saving component
+      scope.backendError = '';
+      scope.saveComponent = function () {
+        scope.globalMessages.saving = true;
+        
+        scope.page.$update(
+          function () {
+            scope.backendError = '';
+            scope.globalMessages.saving = false;
+          },
+          function () {
+            scope.backendError = 'Sorry, something went wrong when saving the component!';
+            scope.globalMessages.saving = false;
+          }
+        );
+      };
     }
   };
 }]);
@@ -195,7 +229,45 @@ page.directive('questionComponentEditor', [function () {
 page.directive('autocorrectingComponent', [function () {
   return {
     restrict: 'E',
-    templateUrl: 'page/components/autocorrecting-component.html'
+    templateUrl: 'page/components/autocorrecting-component.html',
+    link: function (scope, elem, attrs) {
+      scope.givenAnswer = ''
+      
+      // More strict version of parseInt. 
+      // Thanks to Mozzila at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+      var filterInt = function (value) {
+        if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+          return Number(value);
+        return NaN;
+      }
+      
+      // Give the user feedback depending on their answer
+      scope.$watch('givenAnswer', function (givenAnswer) {
+        if(givenAnswer) scope.feedbackStyle.visibility = 'visible';
+        if(!givenAnswer) scope.feedbackStyle.visibility = 'hidden';
+        
+        givenAnswer = filterInt(givenAnswer);
+        
+        if(givenAnswer === scope.component.content.correctAnswer) {
+          scope.isAnswerCorrect = true;
+        } else {
+          scope.isAnswerCorrect = false;
+        }
+      });
+      
+      // Make sure the correctAnswer is an integer
+      scope.$watch('component.content.correctAnswer', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          parsedValue = filterInt(newValue);
+          
+          if(parsedValue) scope.component.content.correctAnswer = parsedValue
+        }
+      });
+      
+      scope.feedbackStyle = {
+        visibility: 'hidden'
+      };
+    }
   };
 }]);
 
@@ -359,8 +431,6 @@ page.directive('pagePath', [function () {
       });
 
       scope.savePath = function () {
-        console.log(scope.page.path);
-
         scope.page.$update(function () {
           scope.pathEditMode = false;
         });
