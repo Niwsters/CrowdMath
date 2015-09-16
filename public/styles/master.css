@@ -7,6 +7,21 @@
 .saving-message {
   color: #CCC; }
 
+.autocorrecting-question {
+  float: left;
+  width: 500px;
+  margin-right: 2em; }
+
+.autocorrecting-feedback {
+  font-size: 1.5em; }
+  .autocorrecting-feedback .correct, .autocorrecting-feedback .incorrect {
+    display: inline-block;
+    width: 1em; }
+  .autocorrecting-feedback .correct {
+    color: green; }
+  .autocorrecting-feedback .incorrect {
+    color: red; }
+
 .page-edit-toolbar {
   background: rgba(133, 133, 133, 0.5);
   position: fixed;

@@ -1,7 +1,11 @@
-<div>{{component.content.question}}</div>
-<input ng-model="givenAnswer">
-
-<span ng-if="givenAnswer">
-  <span style="color: green" class="feedback-correct" ng-show="givenAnswer === component.content.correctAnswer">&#10003;</span>
-  <span style="color: red;" ng-show="givenAnswer !== component.content.correctAnswer">&#10007;</span>
-</span>
+<div>
+  <label>
+    {{component.content.question}}
+    <input class="form-control" ng-model="givenAnswer" type="text">
+  </label>
+  
+  <span class="autocorrecting-feedback" ng-style="feedbackStyle">
+    <span class="correct" ng-show="isAnswerCorrect">&#10003;</span>
+    <span class="incorrect" ng-show="!isAnswerCorrect">&#10007;</span>
+  </span>
+</div>

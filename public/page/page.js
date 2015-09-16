@@ -185,7 +185,6 @@ page.directive('pageComponent', [function () {
       // Handle errors when saving component
       scope.backendError = '';
       scope.saveComponent = function () {
-        console.log(scope.globalMessages);
         scope.globalMessages.saving = true;
         
         scope.page.$update(
@@ -230,7 +229,45 @@ page.directive('questionComponentEditor', [function () {
 page.directive('autocorrectingComponent', [function () {
   return {
     restrict: 'E',
-    templateUrl: 'page/components/autocorrecting-component.html'
+    templateUrl: 'page/components/autocorrecting-component.html',
+    link: function (scope, elem, attrs) {
+      scope.givenAnswer = ''
+      
+      // More strict version of parseInt. 
+      // Thanks to Mozzila at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+      var filterInt = function (value) {
+        if(/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+          return Number(value);
+        return NaN;
+      }
+      
+      // Give the user feedback depending on their answer
+      scope.$watch('givenAnswer', function (givenAnswer) {
+        if(givenAnswer) scope.feedbackStyle.visibility = 'visible';
+        if(!givenAnswer) scope.feedbackStyle.visibility = 'hidden';
+        
+        givenAnswer = filterInt(givenAnswer);
+        
+        if(givenAnswer === scope.component.content.correctAnswer) {
+          scope.isAnswerCorrect = true;
+        } else {
+          scope.isAnswerCorrect = false;
+        }
+      });
+      
+      // Make sure the correctAnswer is an integer
+      scope.$watch('component.content.correctAnswer', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          parsedValue = filterInt(newValue);
+          
+          if(parsedValue) scope.component.content.correctAnswer = parsedValue
+        }
+      });
+      
+      scope.feedbackStyle = {
+        visibility: 'hidden'
+      };
+    }
   };
 }]);
 
@@ -394,8 +431,6 @@ page.directive('pagePath', [function () {
       });
 
       scope.savePath = function () {
-        console.log(scope.page.path);
-
         scope.page.$update(function () {
           scope.pathEditMode = false;
         });

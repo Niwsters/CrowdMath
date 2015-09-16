@@ -158,7 +158,7 @@ var factory = {
         type: 'autocorrecting',
         content: {
           question: 'What is 2 + 2?',
-          answer: 4
+          correctAnswer: 4
         }
       },
       {
