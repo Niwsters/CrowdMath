@@ -11,6 +11,4 @@ tmp
 .sass-cache/
 =======
 .sass-cache/
-config/database.js
-config/session-secret.js
 >>>>>>> master
