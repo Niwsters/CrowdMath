@@ -1,28 +1,8 @@
 'use strict';
 
-var services = angular.module('crowdmath.services', ['ngResource']);
+var pageModel = angular.module('crowdmath.pageModel', ['ngResource']);
 
-services.factory('Book', ['$resource', 'User', function ($resource, User) {
-  var Book = $resource('book', {}, {
-    update: {
-      method: 'PUT'
-    }
-  });
-
-  return Book;
-}]);
-
-services.factory('Books', ['$resource', function ($resource) {
-  return $resource('books', {});
-}]);
-
-services.factory('User', ['$resource', function ($resource) {
-  var User = $resource('user', {}, {});
-  
-  return User;
-}]);
-
-services.factory('Page', ['$resource', function ($resource) {
+pageModel.factory('Page', ['$resource', function ($resource) {
   var Page, page;
     
   Page = $resource('page', {}, {

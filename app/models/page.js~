@@ -10,7 +10,6 @@ pageSchema = mongoose.Schema({
   title: String,
   bookID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Book',
     required: true
   },
   components: [ {} ], // Components are basically the content of the page; text, images, etc.

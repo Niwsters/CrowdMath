@@ -8,7 +8,7 @@ var app = angular.module('crowdmath', [
   'crowdmath.profile',
   'crowdmath.book',
   'crowdmath.bookModel',
-  'crowdmath.userModel',
+  'crowdmath.services',
   'crowdmath.page',
   'crowdmath.pageModel',
   'crowdmath.mathjax',
