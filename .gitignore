@@ -7,6 +7,11 @@ bower_components/
 tmp
 .DS_Store
 .idea
+*[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
 *~
 *.swp
 *.swo
