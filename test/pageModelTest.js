@@ -214,7 +214,7 @@ describe('Page model', function () {
         type: 'question',
         content: {
           question: 'What is love?',
-          answer: "Baby don't hurt me"
+          correctAnswer: "Baby don't hurt me"
         }
       },
       {
@@ -262,7 +262,7 @@ describe('Page model', function () {
       { // Question without question
         type: 'question',
         content: {
-          answer: "Baby don't hurt me"
+          correctAnswer: "Baby don't hurt me"
         }
       },
       { // Question without answer
@@ -275,21 +275,21 @@ describe('Page model', function () {
         type: 'question',
         content: {
           question: 8,
-          answer: "Baby don't hurt me"
+          correctAnswer: "Baby don't hurt me"
         }
       },
       { // Question with non-string answer
         type: 'question',
         content: {
           question: 'What is love?',
-          answer: 8
+          correctAnswer: 8
         }
       },
       {
         type: 'question',
         content: {
           question: 'What is love?',
-          answer: "Baby don't hurt me",
+          correctAnswer: "Baby don't hurt me",
           haxorz: 'not allowed property'
         }
       },

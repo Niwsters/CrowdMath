@@ -1,4 +1,4 @@
-<div>{{question.question}}</div>
+<div inline-math="question.question"></div>
 <button class="btn btn-default" ng-click="toggleShowAnswer()" ng-hide="showAnswer">Show answer</button>
 <button class="btn btn-default" ng-click="toggleShowAnswer()" ng-show="showAnswer">Hide answer</button>
-<div ng-show="showAnswer">{{component.content.correctAnswer}}</div>
+<div ng-show="showAnswer" inline-math="component.content.correctAnswer"></div>

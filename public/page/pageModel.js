@@ -46,7 +46,7 @@ pageModel.factory('Page', ['$resource', 'Book', function ($resource, Book) {
   page.addTextComponent = function () { this.addComponent('text', 'New text'); };
   page.addYouTubeComponent = function () { this.addComponent('youtube', ''); };
   page.addQuestionComponent = function () {
-    this.addComponent('question', {question: 'Question', answer: 'Answer'});
+    this.addComponent('question', {question: 'Question', correctAnswer: 'Answer'});
   };
   page.addAutocorrectingComponent = function () {
     this.addComponent('autocorrecting', {question: 'What is 1 + 1?', correctAnswer: 2});

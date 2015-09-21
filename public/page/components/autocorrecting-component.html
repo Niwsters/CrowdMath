@@ -1,11 +1,11 @@
 <div>
-  <label>
-    {{component.content.question}}
-    <input class="form-control" ng-model="givenAnswer" type="text">
-  </label>
-  
-  <span class="autocorrecting-feedback" ng-style="feedbackStyle">
-    <span class="correct" ng-show="isAnswerCorrect">&#10003;</span>
-    <span class="incorrect" ng-show="!isAnswerCorrect">&#10007;</span>
-  </span>
+<label>
+  <span inline-math="component.content.question">{{component.content.question}}</span>
+  <input class="form-control" ng-model="givenAnswer" type="text">
+</label>
+
+<span class="autocorrecting-feedback" ng-style="feedbackStyle">
+  <span class="correct" ng-show="isAnswerCorrect">&#10003;</span>
+  <span class="incorrect" ng-show="!isAnswerCorrect">&#10007;</span>
+</span>
 </div>

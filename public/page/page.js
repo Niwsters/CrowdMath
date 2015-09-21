@@ -70,17 +70,31 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   $scope.globalMessages.saving = false;
 }]);
 
-page.directive('compileMath', ['$compile', function ($compile) {
+page.directive('displayMath', ['$compile', function ($compile) {
   return function (scope, element, attrs) {
     scope.$watch(
       function (scope) {
-        // watch the 'compileMath' expression for changes
-        return scope.$eval(attrs.compileMath);
+        // watch the 'displayMath' expression for changes
+        return scope.$eval(attrs.displayMath);
       },
       function (value) {
-        // when the 'compile' expression changes
-        // assign it into the current DOM
         element.html('$$' + value + '$$');
+
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+      }
+    );
+  };
+}]);
+
+page.directive('inlineMath', ['$compile', function ($compile) {
+  return function (scope, element, attrs) {
+    scope.$watch(
+      function (scope) {
+        // watch the 'inlineMath' expression for changes
+        return scope.$eval(attrs.inlineMath);
+      },
+      function (value) {
+        element.html(value);
 
         MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
       }
@@ -159,6 +173,8 @@ page.directive('questionComponent', [function () {
     link: function (scope, elem, attrs) {
       scope.showAnswer = false;
       scope.question = scope.component.content;
+
+      console.log(scope.component);
 
       scope.toggleShowAnswer = function () {
         if (!scope.pageEditMode) {

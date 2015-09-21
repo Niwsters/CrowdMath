@@ -43,15 +43,15 @@ Page.schema.path('components').validate(function (components) {
   };
   
   validations.question = function (component) {
-    var allowedContentProperties = ['question', 'answer'];
+    var allowedContentProperties = ['question', 'correctAnswer'];
     
     // Make sure content contains question and answer
     if (!component.content.question) return false;
-    if (!component.content.answer) return false;
+    if (!component.content.correctAnswer) return false;
     
     // Make sure question and answer are both strings
     if (component.content.question.constructor !== String) return false;
-    if (component.content.answer.constructor !== String) return false;
+    if (component.content.correctAnswer.constructor !== String) return false;
     
     // Validate that content doesn't contain other properties 
     // than question and answer

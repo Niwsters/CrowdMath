@@ -63,7 +63,7 @@ describe('/page', function () {
 
     });
 
-    it('should return error if page not found', function (done) {
+    it('should return error if page with given ID not found', function (done) {
       request(app)
         .get('/page')
         .query({
@@ -87,6 +87,42 @@ describe('/page', function () {
           res.text.should.equal("Error retrieving page: Need either page ID or book title + page number.");
           done();
         });
+    });
+
+    it("should return error if page with given pageNumber doesn't exist", function (done) {
+      request(app)
+      .get('/page')
+      .query({ bookTitle: book.title, pageNumber: 109 })
+      .end(function (err, res) {
+        should.not.exist(err);
+        res.status.should.equal(500);
+        res.text.should.equal("Error retrieving page: Page with given page number not found.");
+        done();
+      });
+    });
+
+    it("should return error if pageNumber is less than 0", function (done) {
+      request(app)
+      .get('/page')
+      .query({ bookTitle: book.title, pageNumber: -1 })
+      .end(function (err, res) {
+        should.not.exist(err);
+        res.status.should.equal(500);
+        res.text.should.equal("Error retrieving page: Page number less than zero.");
+        done();
+      });
+    });
+
+    it("should return error if book with given title not found", function (done) {
+      request(app)
+      .get('/page')
+      .query({ bookTitle: "Nonexistant title", pageNumber: 0 })
+      .end(function (err, res) {
+        should.not.exist(err);
+        res.status.should.equal(500);
+        res.text.should.equal("Error retrieving page: Book with given title not found.");
+        done();
+      });
     });
 
   });

@@ -203,9 +203,13 @@ module.exports = function (app, passport) {
     // the page through its book. (should refactor the Page model 
     // so it contains the book's title as well)
     } else if (req.query.bookTitle && req.query.pageNumber) {
+      if (req.query.pageNumber < 0) return next("Error retrieving page: Page number less than zero.");
+
       Book.findOne({ title: req.query.bookTitle }, function (err, book) {
         var pageID;
         if (err) return next(err);
+        if (!book) return next("Error retrieving page: Book with given title not found.");
+        if (book.pages.length < req.query.pageNumber) return next("Error retrieving page: Page with given page number not found.");
 
         pageID = book.pages[req.query.pageNumber - 1].id;
 
