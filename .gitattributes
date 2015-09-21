@@ -1,1 +1,1 @@
-config/* merge=ours
+config/database.js merge=ours
