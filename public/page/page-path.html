@@ -3,7 +3,8 @@
   <div class="page-path-content" ng-if="!pathEditMode" ng-click="toggleEditPathMode()">
     
     <!-- Simple path -->
-    <a ng-if="page.path.type === 'simple'" ui-sref="pageByID({pageID: page.path.pageID})">Next page</a>
+    <a ng-if="page.path.type === 'simple' && page.path.pageID" ui-sref="pageByID({pageID: page.path.pageID})">Next page</a>
+    <span ng-if="!page.path.pageID">Edit page to set page path</span>
     
     <!-- Question path -->
     <div ng-if="page.path.type === 'question'">

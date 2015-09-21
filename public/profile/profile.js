@@ -31,9 +31,6 @@ profile.controller('ProfileCtrl', ['$scope', '$state', '$stateParams', '$locatio
     }
     
     $scope.newBook = new Book();
-    $scope.$watch('newBook.dynamic', function (value) {
-      console.log(value);
-    });
     $scope.saveNewBook = function () {
       $scope.newBook.$save(function (book) {
         $scope.books.push(book);

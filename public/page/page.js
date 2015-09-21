@@ -208,7 +208,7 @@ page.directive('autocorrectingComponent', [function () {
       // Make sure the correctAnswer is an integer
       scope.$watch('component.content.correctAnswer', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          parsedValue = filterInt(newValue);
+          var parsedValue = filterInt(newValue);
           
           if(parsedValue) scope.component.content.correctAnswer = parsedValue
         }
@@ -322,6 +322,8 @@ page.directive('pagePath', [function () {
       scope.setNextPageID = function (pageID) {
         scope.nextPageID = pageID;
       };
+
+      console.log(scope.page.path);
 
       if (scope.page.path.type === 'question') {
         scope.questionPath = scope.page.path;
