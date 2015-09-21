@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 
 pageSchema = mongoose.Schema({
   title: String,
-  bookID: {
+  book: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Book',
     required: true

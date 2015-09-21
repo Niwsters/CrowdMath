@@ -95,9 +95,7 @@ var factory = {
     page = new Page();
 
     page.title = randomString(10);
-
-    page.bookID = bookID;
-
+    page.book = bookID;
     page.components = attrs.components || [];
 
     if (attrs.paths) {

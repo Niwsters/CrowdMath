@@ -17,12 +17,12 @@ module.exports = function (app, passport) {
   });
 
   app.get('/signup', function (req, res) {
-    res.render('signup-disabled.ejs');
+    //res.render('signup-disabled.ejs');
 
     
-    /* res.render('signup.ejs', {
+    res.render('signup.ejs', {
       message: req.flash('signupMessage')
-    }); */
+    });
     
   });
 
@@ -187,14 +187,39 @@ module.exports = function (app, passport) {
 
   app.get('/page', function (req, res, next) {
 
-    if (!req.query.pageID) return next("Error retrieving page: Page ID not given.");
+    // If pageID is given, get page by ID as usual
+    if (req.query.pageID) {
+      Page
+      .findById(req.query.pageID)
+      .populate('book')
+      .exec(function (err, page) {
+        if (err) return next(err);
+        if (!page) return next("Error retrieving page: Page not found.");
+        
+        res.json(page);
+      });
 
-    Page.findById(req.query.pageID, function (err, page) {
-      if (!page) return next("Error retrieving page: Page not found.");
+    // If book title and page number are given instead, get
+    // the page through its book. (should refactor the Page model 
+    // so it contains the book's title as well)
+    } else if (req.query.bookTitle && req.query.pageNumber) {
+      Book.findOne({ title: req.query.bookTitle }, function (err, book) {
+        var pageID;
+        if (err) return next(err);
 
-      res.json(page);
-    });
-  });
+        pageID = book.pages[req.query.pageNumber - 1].id;
+
+        Page
+        .findById(pageID)
+        .populate('book')
+        .exec(function (err, page) {
+          res.json(page);
+        });
+      });
+    } else {
+      return next("Error retrieving page: Need either page ID or book title + page number.");
+    }
+});
 
   app.post('/page', isLoggedIn, function (req, res, next) {
 
@@ -209,7 +234,7 @@ module.exports = function (app, passport) {
       }
 
       page = new Page();
-      page.bookID = book.id;
+      page.book = book.id;
       
       if (book.dynamic === true) {
         page.path = {
@@ -248,7 +273,7 @@ module.exports = function (app, passport) {
       if (err) return next(err);
       if (!page) return next("Error deleting page: Page not found with given ID.");
 
-      Book.findById(page.bookID, function (err, book) {
+      Book.findById(page.book, function (err, book) {
         var pageIndex;
         
         if (err) return next(err);
@@ -281,7 +306,7 @@ module.exports = function (app, passport) {
       if (err) return next(err);
       if (!page) return next("Error updating page: Page not found.");
 
-      Book.findById(page.bookID, function (err, book) {
+      Book.findById(page.book, function (err, book) {
         if (err) return next(err);
 
         // Return error if user is not author the page's book.

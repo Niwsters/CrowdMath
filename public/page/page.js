@@ -6,9 +6,6 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   var bookTitle,
     pageNumber,
     query,
-    getData,
-    getDataByBook,
-    getDataByPage,
     bookID,
     pageID;
 
@@ -17,89 +14,42 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   $scope.togglePageEditMode = function () {
     $scope.pageEditMode = !$scope.pageEditMode;
   };
-
-  getDataByBook = function (bookQuery, pageNumber) {
-    var bookID,
-      pageID;
-
-    Book.get(bookQuery, function (book) {
-      var pageID;
-
-      $scope.book = book;
-
-      // Count the book's pages (for pagination)
-      $scope.pageCount = book.pages.length;
-
-      // Get page data
-      pageID = book.pages[pageNumber - 1].id;
-      $scope.page = Page.get({
-        pageID: pageID
-      });
-
-      // Check if user is author of book
-      User.get(function (user) {
-        $scope.isUserAuthor = book.owner === user._id || book.authors.indexOf(user._id) > -1;
-      });
-    });
-  };
-
-  getDataByPage = function (pageQuery) {
-    var bookID,
-      pageID;
-
-    $scope.page = Page.get(pageQuery, function (page) {
-      $scope.book = Book.get({
-        id: page.bookID
-      }, function (book) {
-
-        // Set page count and page number for pagination
-        $scope.pageCount = book.pages.length;
-        $scope.pageNumber = _.findIndex(book.pages, function (pageRef) {
-          return pageRef.id === page.id;
-        });
-
-        $scope.bookTitle = book.title;
-
-        // Check if user is author of book
-        User.get(function (user) {
-          $scope.isUserAuthor = book.owner === user._id || book.authors.indexOf(user._id) > -1;
-        });
-
-      });
-    });
-  };
-
-  // Retrieves all page and book data
-  getData = function (query, pageNumber) {
-    if (query.pageID) getDataByPage(query);
-    if (pageNumber) getDataByBook(query, pageNumber);
-  };
-
+  
   // Retrieve parameter variables
   bookID = $stateParams.bookID;
   bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
   pageID = $stateParams.pageID;
   pageNumber = parseInt($stateParams.pageNumber);
 
-  // Set bookTitle and pageNumber scope variables.
-  $scope.bookTitle = bookTitle;
-  $scope.pageNumber = pageNumber;
-
-  if (bookID) query = {
-    id: bookID
-  };
-  if (bookTitle) query = {
-    title: bookTitle
-  };
-  if (pageID) query = {
-    pageID: pageID
-  };
+  // Set up queries depending on parameters given
+  if (bookTitle && pageNumber ) query = { bookTitle: bookTitle, pageNumber: pageNumber };
+  if (pageID) query = { pageID: pageID };
 
   // Send to error page if query not set (as in, lacking parameters)
   if (!query) $state.transitionTo('404notfound');
 
   // Retrieve page and book data.
-  getData(query, pageNumber);
+  Page.get(query, function (page) {
+    $scope.page = page;
+    $scope.book = page.book;
+    $scope.bookTitle = page.book.title;
+    $scope.pageCount = page.book.pages.length;
+    
+    // Retrieve pageNumber if not given
+    if(pageNumber) {
+      $scope.pageNumber = pageNumber;
+    } else {
+      $scope.pageNumber = _.findIndex(page.book.pages, function (pageRef) {
+        return pageRef.id === page.id;
+      });
+    }
+
+    // Check if user is author of book
+    User.get(function (user) {
+      $scope.isUserAuthor = page.book.owner === user._id || page.book.authors.indexOf(user._id) > -1;
+    });
+
+  });
   
   $scope.savePage = function () {
     $scope.globalMessages.saving = true;

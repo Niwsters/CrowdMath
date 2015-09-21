@@ -2,7 +2,7 @@
 
 var pageModel = angular.module('crowdmath.pageModel', ['ngResource']);
 
-pageModel.factory('Page', ['$resource', function ($resource) {
+pageModel.factory('Page', ['$resource', 'Book', function ($resource, Book) {
   var Page, page;
     
   Page = $resource('page', {}, {
@@ -10,10 +10,15 @@ pageModel.factory('Page', ['$resource', function ($resource) {
       method: 'PUT'
     }
   });
-  
+
   page = Page.prototype;
   
+  // REMOVE THIS?? I seriously need to add testing for these models...
   page.editMode = false;
+
+  // -------------------------------------------
+  // ------------ COMPONENT METHODS ------------ 
+  // -------------------------------------------
   
   // Function that adds components
   page.addComponent = function (type, content) {

@@ -25,7 +25,7 @@ describe('/page', function () {
 
   describe('GET', function () {
 
-    it('should return page given page ID', function (done) {
+    it('should return page with populated book given page ID', function (done) {
       request(app)
         .get('/page')
         .query({
@@ -33,16 +33,41 @@ describe('/page', function () {
         })
         .end(function (err, res) {
           should.not.exist(err);
-          res.body.should.eqlModel(page);
+
+          // Should equal the page with ID given
+          res.body._id.toString().should.equal(page._id.toString());
+
+          // Should contain populated book
+          res.body.book._id.toString().should.equal(book._id.toString());
+
           done();
         });
+    });
+
+    it('should return page with populated book given book title and page number', function (done) {
+
+      request(app)
+      .get('/page')
+      .query({
+        bookTitle: book.title,
+        pageNumber: 1
+      })
+      .end(function (err, res) {
+        should.not.exist(err);
+
+        res.body._id.toString().should.equal(page._id.toString());
+        res.body.book._id.toString().should.equal(book._id.toString());
+
+        done();
+      });
+
     });
 
     it('should return error if page not found', function (done) {
       request(app)
         .get('/page')
         .query({
-          pageID: 'id that does not exist'
+          pageID: mongoose.Types.ObjectId().toString()
         })
         .end(function (err, res) {
           should.not.exist(err);
@@ -52,14 +77,14 @@ describe('/page', function () {
         });
     });
 
-    it('should return error if page ID not given', function (done) {
+    it('should return error if neither page ID nor book title + page number not given', function (done) {
       request(app)
         .get('/page')
         .query()
         .end(function (err, res) {
           should.not.exist(err);
           res.status.should.equal(500);
-          res.text.should.equal("Error retrieving page: Page ID not given.");
+          res.text.should.equal("Error retrieving page: Need either page ID or book title + page number.");
           done();
         });
     });
@@ -122,7 +147,7 @@ describe('/page', function () {
                   // on how many pages the book has.
                   page.title.should.equal("Page " + book.pages.length.toString());
                   
-                  page.bookID.equals(book.id).should.equal(true);
+                  page.book.equals(book.id).should.equal(true);
                   page.components.toObject().should.eql([]);
                   
                   // Make sure the book's page reference contains the right ID and title
