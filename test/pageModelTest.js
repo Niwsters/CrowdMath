@@ -407,7 +407,5 @@ describe('Page model', function () {
       // This works, anyways!
       loop.next();
     });
-  })
-
-
+  });
 });

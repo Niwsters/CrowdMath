@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Thu Apr 02 2015 20:48:01 GMT+0200 (CEST)
+// Generated on Wed Oct 07 2015 19:39:21 GMT+0200 (W. Europe Daylight Time)
 
 module.exports = function(config) {
   config.set({
@@ -10,17 +10,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
     files: [
-			'bower_components/angular/angular.min.js',
-			'bower_components/**/*.min.js',
-			'bower_components/angular-mocks/angular-mocks.js',
-      'public/**/*.js',
-			'tests/**/*.js',
-            'bower_components/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+      {pattern: 'public/**/*.js', included: false}
     ],
 
 
@@ -60,11 +55,11 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
-};
+  })
+}

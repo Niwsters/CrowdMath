@@ -15,6 +15,7 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     $scope.pageEditMode = !$scope.pageEditMode;
   };
   
+  // TODO: Refactor this stuff into the states thingy. See bookmark on Naomi.  
   // Retrieve parameter variables
   bookID = $stateParams.bookID;
   bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
@@ -69,6 +70,9 @@ page.controller('PageCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
   $scope.globalMessages = {};
   $scope.globalMessages.saving = false;
 }]);
+
+
+//TODO: Put all these directives in separate files.
 
 page.directive('displayMath', ['$compile', function ($compile) {
   return function (scope, element, attrs) {
@@ -173,8 +177,6 @@ page.directive('questionComponent', [function () {
     link: function (scope, elem, attrs) {
       scope.showAnswer = false;
       scope.question = scope.component.content;
-
-      console.log(scope.component);
 
       scope.toggleShowAnswer = function () {
         if (!scope.pageEditMode) {
@@ -328,6 +330,8 @@ page.directive('pathComponentEditor', [function () {
   };
 }]);
 
+// TODO: Refactor this. Seriously. Put the shit in the model or a factory,
+// or something.
 page.directive('pagePath', [function () {
   return {
     restrict: 'E',

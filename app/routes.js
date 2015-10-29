@@ -240,6 +240,7 @@ module.exports = function (app, passport) {
       page = new Page();
       page.book = book.id;
       
+      // Create a path for the page if its book is dynamic
       if (book.dynamic === true) {
         page.path = {
           type: 'simple',

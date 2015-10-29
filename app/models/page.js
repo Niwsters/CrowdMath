@@ -20,15 +20,15 @@ pageSchema = mongoose.Schema({
 
 Page = mongoose.model('Page', pageSchema);
 
+// **********
+// Component validation
+// **********
+
 Page.schema.path('components').validate(function (components) {
   var validations = {},
       validate,
       allowedContentProperties,
       i;
-  
-  // *******
-  // Validation functions for each component type.
-  // *******
   
   validations.text = function (component) {
     if (component.content.constructor !== String) return false;
@@ -172,5 +172,11 @@ containsOtherPropertiesThan = function(object, allowedProps) {
   
   return false;
 };
+
+// **********
+// Method for uploading image components
+// **********
+
+// TODO: Code goes here ._.
 
 module.exports = Page;
