@@ -29,35 +29,22 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
       if (book._id) {
         
         $scope.book = book;
-        
-        // Check if user is author of book
-        User.get({}, function (user) {
-          if(user._id) {
-            $scope.isUserAuthor = book.authors.indexOf(user._id) > -1;
-          }
+
+        User.isAuthor(book, function (isAuthor) {
+          $scope.isUserAuthor = isAuthor;
         });
+       
       } else {
         $state.transitionTo('404notfound');
       }
     });
-    
+
     $scope.createPage = function () {
-      var page = new Page();
-      page.bookID = $scope.book.id;
-      
-      // Add a simple path if book is dynamic
-      if($scope.book.dynamic) {
-        page.path = {
-          type: 'simple',
-          pageID: ''
-        };
-      }
-      
-      page.$save(function (page) {
+      Book.createPage().then(function (page) {
         $scope.book.pages.push(page);
       });
     };
-    
+     
     $scope.deletePage = function (pageNumber) {
       Page.delete({
         pageID: $scope.book.pages[pageNumber - 1].id
