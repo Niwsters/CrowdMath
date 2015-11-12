@@ -1,6 +1,6 @@
 'use strict';
 
-var book = angular.module('crowdmath.book', []);
+var book = angular.module('crowdmath.bookCtrl', ['ui.router']);
 
 book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'User', 'Book', 'Page',
   function ($scope, $state, $stateParams, $window, User, Book, Page) {
@@ -15,6 +15,11 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     bookTitle = $window.decodeURIComponent($stateParams.bookTitle);
     bookID = $stateParams.bookID;
     
+    // Initialize book and pages
+    $scope.book = {
+      pages: []
+    }; 
+
     // If no book ID given, use book title in the query instead.
     if (bookID) {
       bookQuery = { id: bookID };
@@ -23,17 +28,16 @@ book.controller('BookCtrl', ['$scope', '$state', '$stateParams', '$window', 'Use
     }
 
     // Retrieve book from database using the book title in the route
-    Book.get(bookQuery, function (book) {
+    Book.one(bookQuery, function (book) {
 
-      // If no book was retrieved, send the user to a 404 error page.
       if (book._id) {
-        
         $scope.book = book;
 
         User.isAuthor(book, function (isAuthor) {
           $scope.isUserAuthor = isAuthor;
         });
        
+      // If no book was retrieved, send the user to a 404 error page.
       } else {
         $state.transitionTo('404notfound');
       }

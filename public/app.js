@@ -6,7 +6,7 @@ var app = angular.module('crowdmath', [
   'dndLists',
   'ngCookies',
   'crowdmath.profile',
-  'crowdmath.book',
+  'crowdmath.bookCtrl',
   'crowdmath.bookModel',
   'crowdmath.userModel',
   'crowdmath.page',
